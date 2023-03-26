@@ -8,7 +8,7 @@ const config: CodegenConfig = {
       plugins: ['typescript', 'typescript-resolvers'],
       config: {
         mappers: {
-          prismaUser: '@prisma/client/index.d#User',
+          PrismaUser: '@prisma/client/index.d#User',
         },
       },
     },

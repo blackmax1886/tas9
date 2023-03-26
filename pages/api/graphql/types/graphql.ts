@@ -27,7 +27,7 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation'
   createTask: Task
-  createUser: User
+  createUser: PrismaUser
 }
 
 export type MutationCreateTaskArgs = {
@@ -49,11 +49,18 @@ export type NewUser = {
   name?: InputMaybe<Scalars['String']>
 }
 
+export type PrismaUser = {
+  __typename?: 'PrismaUser'
+  email: Scalars['String']
+  id: Scalars['ID']
+  name?: Maybe<Scalars['String']>
+}
+
 export type Query = {
   __typename?: 'Query'
   task: Task
   tasks: Array<Task>
-  user?: Maybe<User>
+  user?: Maybe<PrismaUser>
 }
 
 export type QueryTaskArgs = {
@@ -82,13 +89,6 @@ export type Task = {
   start?: Maybe<Scalars['String']>
   type?: Maybe<Scalars['String']>
   userId?: Maybe<Scalars['Int']>
-}
-
-export type User = {
-  __typename?: 'User'
-  email: Scalars['String']
-  id: Scalars['ID']
-  name?: Maybe<Scalars['String']>
 }
 
 export type ResolverTypeWrapper<T> = Promise<T> | T
@@ -204,10 +204,10 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>
   NewTask: NewTask
   NewUser: NewUser
+  PrismaUser: ResolverTypeWrapper<User>
   Query: ResolverTypeWrapper<{}>
   String: ResolverTypeWrapper<Scalars['String']>
   Task: ResolverTypeWrapper<Task>
-  User: ResolverTypeWrapper<User>
 }
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -218,10 +218,10 @@ export type ResolversParentTypes = {
   Mutation: {}
   NewTask: NewTask
   NewUser: NewUser
+  PrismaUser: User
   Query: {}
   String: Scalars['String']
   Task: Task
-  User: User
 }
 
 export type MutationResolvers<
@@ -235,11 +235,21 @@ export type MutationResolvers<
     RequireFields<MutationCreateTaskArgs, 'input'>
   >
   createUser?: Resolver<
-    ResolversTypes['User'],
+    ResolversTypes['PrismaUser'],
     ParentType,
     ContextType,
     RequireFields<MutationCreateUserArgs, 'input'>
   >
+}
+
+export type PrismaUserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PrismaUser'] = ResolversParentTypes['PrismaUser']
+> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
 export type QueryResolvers<
@@ -259,7 +269,7 @@ export type QueryResolvers<
     RequireFields<QueryTasksArgs, 'userId'>
   >
   user?: Resolver<
-    Maybe<ResolversTypes['User']>,
+    Maybe<ResolversTypes['PrismaUser']>,
     ParentType,
     ContextType,
     RequireFields<QueryUserArgs, 'id'>
@@ -285,19 +295,9 @@ export type TaskResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type UserResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
-> = {
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}
-
 export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>
+  PrismaUser?: PrismaUserResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   Task?: TaskResolvers<ContextType>
-  User?: UserResolvers<ContextType>
 }
