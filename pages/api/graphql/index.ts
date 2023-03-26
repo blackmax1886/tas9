@@ -13,4 +13,5 @@ const server = new ApolloServer({
   resolvers,
 })
 
+//TODO: add context to fix ts error
 export default startServerAndCreateNextHandler(server)

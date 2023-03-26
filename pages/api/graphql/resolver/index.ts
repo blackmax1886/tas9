@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 
 export const resolvers: Resolvers = {
   Query: {
-    user: async (_, args, ___, ____) => {
+    user: async (_, args) => {
       const result = await prisma.user.findUnique({
         where: {
           id: Number(args.id),
@@ -15,7 +15,7 @@ export const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    createUser: async (_, args, ___, ____) => {
+    createUser: async (_, args) => {
       const { name, email } = args.input
       const result = await prisma.user.create({
         data: {
