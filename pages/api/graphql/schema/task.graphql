@@ -1,0 +1,20 @@
+type Task {
+  id: ID!
+  userId: int
+  name: String!
+  content: String
+  done: Boolean!
+  due: String
+  start: String
+  end: String
+  group: String
+  type: String
+  priority: String
+  archived: Boolean!
+}
+
+input NewTask {
+  name: String!
+  content: String
+  userId: int!
+}

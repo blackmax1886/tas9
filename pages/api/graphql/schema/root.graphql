@@ -1,0 +1,13 @@
+#import User, NewUser from "user.graphql"
+#import Task, NewTask from "task.graphql"
+
+type Query {
+  user(id: int!): User
+  tasks(userId: int!): [Task!]!
+  task(id: int!): Task!
+}
+
+type Mutation {
+  createUser(input: NewUser!): User!
+  createTask(input: NewTask!): Task!
+}
