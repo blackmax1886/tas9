@@ -2,9 +2,9 @@
 #import Task, NewTask from "task.graphql"
 
 type Query {
-  user(id: int!): User
-  tasks(userId: int!): [Task!]!
-  task(id: int!): Task!
+  user(id: Int!): User
+  tasks(userId: Int!): [Task!]!
+  task(id: Int!): Task!
 }
 
 type Mutation {

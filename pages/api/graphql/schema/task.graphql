@@ -1,6 +1,6 @@
 type Task {
   id: ID!
-  userId: int
+  userId: Int
   name: String!
   content: String
   done: Boolean!
@@ -16,5 +16,5 @@ type Task {
 input NewTask {
   name: String!
   content: String
-  userId: int!
+  userId: Int!
 }
