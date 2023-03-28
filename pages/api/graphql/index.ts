@@ -13,5 +13,6 @@ const server = new ApolloServer({
   resolvers,
 })
 
-//TODO: add context to fix ts error
+//TODO: GraphQLResolveInfo does not match BaseContext
+// @ts-expect-error to be fixed
 export default startServerAndCreateNextHandler(server)
