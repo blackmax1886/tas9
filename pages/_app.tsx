@@ -6,7 +6,7 @@ const apiBaseURI =
   process.env.NEXT_PUBLIC_VERCEL_URL || 'http://localhost:3000/'
 
 const client = new ApolloClient({
-  uri: apiBaseURI + 'api/graphql',
+  uri: new URL('/api/graphql', apiBaseURI).href,
   cache: new InMemoryCache(),
 })
 
