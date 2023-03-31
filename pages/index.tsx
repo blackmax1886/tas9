@@ -1,20 +1,21 @@
 import Head from 'next/head'
-import { useQuery, gql } from '@apollo/client'
+// import { useQuery, gql } from '@apollo/client'
+import LoginButton from '@/components/login-btn'
 
-const TEST_QUERY = gql`
-  query GetUserById {
-    user(id: 1) {
-      id
-      name
-      email
-    }
-  }
-`
+// const TEST_QUERY = gql`
+//   query GetUserById {
+//     user(id: 1) {
+//       id
+//       name
+//       email
+//     }
+//   }
+// `
 
 export default function Home() {
-  const { loading, error, data } = useQuery(TEST_QUERY)
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error.message}</p>
+  // const { loading, error, data } = useQuery(TEST_QUERY)
+  // if (loading) return <p>Loading...</p>
+  // if (error) return <p>Error: {error.message}</p>
   return (
     <>
       <Head>
@@ -23,9 +24,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>ID: {data.user.id}</h1>
+      <LoginButton />
+      {/* <h1>ID: {data.user.id}</h1>
       <p>name: {data.user.name}</p>
-      <p>email: {data.user.email}</p>
+      <p>email: {data.user.email}</p> */}
     </>
   )
 }

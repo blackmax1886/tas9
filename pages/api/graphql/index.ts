@@ -2,6 +2,7 @@ import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { resolvers } from './resolver'
 
+//TODO: User id is string & add models for nextauth
 const typeDefs = `#graphql
 type PrismaUser {
   id: ID!
