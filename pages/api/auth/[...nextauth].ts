@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
     maxAge: 60 * 60 * 24 * 30, // 30 days
     updateAge: 60 * 60 * 24, // 24 hours
   },
-
+  secret: process.env.SECRET,
   useSecureCookies: process.env.NODE_ENV === 'production',
 
   callbacks: {
