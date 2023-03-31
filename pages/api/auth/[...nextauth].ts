@@ -13,9 +13,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
-
-  // secret: process.env.SECRET,
-
   session: {
     strategy: 'database',
     maxAge: 60 * 60 * 24 * 30, // 30 days
