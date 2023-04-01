@@ -8,7 +8,7 @@ export const resolvers: Resolvers = {
     user: async (_, args) => {
       const result = await prisma.user.findUnique({
         where: {
-          id: Number(args.id),
+          id: String(args.id),
         },
       })
       return result

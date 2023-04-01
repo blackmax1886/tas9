@@ -36,7 +36,7 @@ input NewTask {
 }
 
 type Query {
-  user(id: Int!): PrismaUser
+  user(id: String!): PrismaUser
   tasks(userId: Int!): [Task!]!
   task(id: Int!): Task!
 }
