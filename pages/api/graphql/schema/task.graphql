@@ -1,20 +1,22 @@
+#import Date from "scalar.graphql"
+
 type Task {
   id: ID!
-  userId: Int
-  name: String!
+  userId: String!
+  title: String!
   content: String
   done: Boolean!
-  due: String
-  start: String
-  end: String
+  due: Date
+  start: Date
+  end: Date
   group: String
   type: String
-  priority: String
+  priority: Int
   archived: Boolean!
 }
 
 input NewTask {
-  name: String!
+  userId: String!
+  title: String!
   content: String
-  userId: Int!
 }
