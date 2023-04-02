@@ -33,15 +33,15 @@ type Task {
 }
 
 input NewTask {
+  userId: String!
   name: String!
   content: String
-  userId: Int!
 }
 
 type Query {
   user(id: String!): PrismaUser
   tasks(userId: String!): [Task!]!
-  task(id: String!): Task!
+  task(id: String!): Task
 }
 
 type Mutation {

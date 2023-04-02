@@ -13,6 +13,7 @@ export const resolvers: Resolvers = {
       })
       return result
     },
+    // TODO: Fix ts error, or maybe issue? ref: https://github.com/dotansimha/graphql-code-generator/issues/3174
     task: async (_, args) => {
       const result = await prisma.task.findUnique({
         where: {

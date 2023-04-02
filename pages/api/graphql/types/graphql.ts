@@ -65,7 +65,7 @@ export type QueryTaskArgs = {
 
 
 export type QueryTasksArgs = {
-  userId: Scalars['Int'];
+  userId: Scalars['String'];
 };
 
 
