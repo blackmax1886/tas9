@@ -19,22 +19,22 @@ input NewUser {
 
 type Task {
   id: ID!
-  userId: String
-  name: String!
+  userId: String!
+  title: String!
   content: String
   done: Boolean!
-  due: String
-  start: String
-  end: String
+  due: Date
+  start: Date
+  end: Date
   group: String
   type: String
-  priority: String
+  priority: Int
   archived: Boolean!
 }
 
 input NewTask {
   userId: String!
-  name: String!
+  title: String!
   content: String
 }
 
