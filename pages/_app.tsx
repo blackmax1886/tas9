@@ -17,6 +17,8 @@ const global = css`
   body {
     font-family: sans-serif;
     font-size: 1rem;
+    background-color: #343541;
+    color: white;
   }
 `
 

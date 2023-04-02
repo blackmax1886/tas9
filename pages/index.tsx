@@ -22,9 +22,7 @@ const heading = css`
   font-family: inherit;
   margin: 0 0 1rem;
   padding: 0;
-  color: #fff;
   text-align: center;
-  color: #202124;
   font-size: 3rem;
   font-weight: 400;
 `
@@ -32,7 +30,6 @@ const heading = css`
 const Button = css`
   background-color: #4caf50; /* Green */
   border: none;
-  color: white;
   padding: 0.5rem;
   margin: 1rem;
   text-align: center;
