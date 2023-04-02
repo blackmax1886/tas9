@@ -15,7 +15,7 @@ const config: CodegenConfig = {
           PrismaUser: '@prisma/client/index.d#User',
         },
         scalars: {
-          Date: 'string',
+          Date: 'Date',
         },
       },
     },

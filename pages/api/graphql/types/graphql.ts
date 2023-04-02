@@ -14,7 +14,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: string;
+  Date: Date;
 };
 
 export type Mutation = {
