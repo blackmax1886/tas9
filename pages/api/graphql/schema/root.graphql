@@ -4,7 +4,7 @@
 type Query {
   user(id: String!): PrismaUser
   tasks(userId: Int!): [Task!]!
-  task(id: Int!): Task!
+  task(id: String!): Task
 }
 
 type Mutation {

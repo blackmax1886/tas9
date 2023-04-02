@@ -13,6 +13,14 @@ export const resolvers: Resolvers = {
       })
       return result
     },
+    task: async (_, args) => {
+      const result = await prisma.task.findUnique({
+        where: {
+          id: String(args.id),
+        },
+      })
+      return result
+    },
   },
   Mutation: {
     createUser: async (_, args) => {
