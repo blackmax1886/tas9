@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { User } from '@prisma/client/index.d';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: Date;
 };
 
 export type Mutation = {
@@ -34,8 +35,8 @@ export type MutationCreateUserArgs = {
 
 export type NewTask = {
   content?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-  userId: Scalars['Int'];
+  title: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type NewUser = {
@@ -52,19 +53,19 @@ export type PrismaUser = {
 
 export type Query = {
   __typename?: 'Query';
-  task: Task;
+  task?: Maybe<Task>;
   tasks: Array<Task>;
   user?: Maybe<PrismaUser>;
 };
 
 
 export type QueryTaskArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
 export type QueryTasksArgs = {
-  userId: Scalars['Int'];
+  userId: Scalars['String'];
 };
 
 
@@ -77,15 +78,15 @@ export type Task = {
   archived: Scalars['Boolean'];
   content?: Maybe<Scalars['String']>;
   done: Scalars['Boolean'];
-  due?: Maybe<Scalars['String']>;
-  end?: Maybe<Scalars['String']>;
+  due?: Maybe<Scalars['Date']>;
+  end?: Maybe<Scalars['Date']>;
   group?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  name: Scalars['String'];
-  priority?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['String']>;
+  priority?: Maybe<Scalars['Int']>;
+  start?: Maybe<Scalars['Date']>;
+  title: Scalars['String'];
   type?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['Int']>;
+  userId: Scalars['String'];
 };
 
 
@@ -159,6 +160,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Date: ResolverTypeWrapper<Scalars['Date']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -173,6 +175,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  Date: Scalars['Date'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Mutation: {};
@@ -183,6 +186,10 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Task: Task;
 };
+
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationCreateTaskArgs, 'input'>>;
@@ -197,7 +204,7 @@ export type PrismaUserResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  task?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<QueryTaskArgs, 'id'>>;
+  task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTaskArgs, 'id'>>;
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'userId'>>;
   user?: Resolver<Maybe<ResolversTypes['PrismaUser']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 };
@@ -206,19 +213,20 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
   archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   done?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  due?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  end?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  due?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  end?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   group?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  priority?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  start?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  priority?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  start?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  userId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  Date?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   PrismaUser?: PrismaUserResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

@@ -13,6 +13,15 @@ export const resolvers: Resolvers = {
       })
       return result
     },
+    // TODO: Fix ts error, or maybe issue? ref: https://github.com/dotansimha/graphql-code-generator/issues/3174
+    task: async (_, args) => {
+      const result = await prisma.task.findUnique({
+        where: {
+          id: String(args.id),
+        },
+      })
+      return result
+    },
   },
   Mutation: {
     createUser: async (_, args) => {
@@ -21,6 +30,19 @@ export const resolvers: Resolvers = {
         data: {
           name,
           email,
+        },
+      })
+      return result
+    },
+    createTask: async (_, args) => {
+      const { userId, title, content } = args.input
+      const result = await prisma.task.create({
+        data: {
+          userId,
+          title,
+          content,
+          done: false,
+          archived: false,
         },
       })
       return result

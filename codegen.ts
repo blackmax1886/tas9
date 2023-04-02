@@ -14,6 +14,9 @@ const config: CodegenConfig = {
         mappers: {
           PrismaUser: '@prisma/client/index.d#User',
         },
+        scalars: {
+          Date: 'Date',
+        },
       },
     },
   },

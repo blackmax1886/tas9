@@ -3,8 +3,8 @@
 
 type Query {
   user(id: String!): PrismaUser
-  tasks(userId: Int!): [Task!]!
-  task(id: Int!): Task!
+  tasks(userId: String!): [Task!]!
+  task(id: String!): Task
 }
 
 type Mutation {
