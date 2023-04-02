@@ -34,5 +34,18 @@ export const resolvers: Resolvers = {
       })
       return result
     },
+    createTask: async (_, args) => {
+      const { userId, title, content } = args.input
+      const result = await prisma.task.create({
+        data: {
+          userId,
+          title,
+          content,
+          done: false,
+          archived: false,
+        },
+      })
+      return result
+    },
   },
 }
