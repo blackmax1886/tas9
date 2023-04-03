@@ -1,8 +1,13 @@
-import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { SessionProvider } from 'next-auth/react'
 import { css, Global } from '@emotion/react'
+import { NextComponentType } from 'next'
+import { RootLayout, GuardLayout } from '@/components/layout'
+
+type CustomAppProps = AppProps & {
+  Component: NextComponentType & { isRootPage?: boolean }
+}
 
 const apiBaseURI = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
@@ -25,12 +30,15 @@ const global = css`
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps) {
+}: CustomAppProps) {
+  const LayoutComponent = Component.isRootPage ? RootLayout : GuardLayout
   return (
     <SessionProvider session={session}>
       <ApolloProvider client={client}>
-        <Global styles={global} />
-        <Component {...pageProps} />
+        <LayoutComponent>
+          <Global styles={global} />
+          <Component {...pageProps} />
+        </LayoutComponent>
       </ApolloProvider>
     </SessionProvider>
   )
