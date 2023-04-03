@@ -26,6 +26,11 @@ const config: CodegenConfig = {
         'typescript-operations',
         'typescript-react-apollo',
       ],
+      config: {
+        scalars: {
+          Date: 'string',
+        },
+      },
     },
   },
 }
