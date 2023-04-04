@@ -55,5 +55,20 @@ export const resolvers: Resolvers = {
       })
       return result
     },
+    deleteTask: async (_, args) => {
+      const result = await prisma.task.delete({
+        where: {
+          id: String(args.id),
+        },
+      })
+      return result
+    },
+    updateTaskIsDone: async (_, args) => {
+      const result = await prisma.task.update({
+        where: { id: String(args.id) },
+        data: { done: Boolean(args.isDone) },
+      })
+      return result
+    },
   },
 }
