@@ -21,6 +21,7 @@ const Home: NextPage = () => {
           <p>id:{task.id}</p>
           <p>name:{task.title}</p>
           <p>content:{task.content}</p>
+          {task.start ? new Date(task.start).toString() : 'start is undefined'}
         </div>
       ))}
     </div>
