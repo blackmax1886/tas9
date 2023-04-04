@@ -26,6 +26,7 @@ const global = css`
     color: white;
     width: 100%;
     min-width: 100rem;
+    margin: auto;
   }
 `
 
