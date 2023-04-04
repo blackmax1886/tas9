@@ -11,11 +11,7 @@ query getTasks($userId: String!) {
   tasks(userId: $userId) {
     id
     title
-    content
     done
-    due
-    start
-    end
     group
     type
     priority

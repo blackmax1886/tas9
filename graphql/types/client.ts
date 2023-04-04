@@ -100,7 +100,7 @@ export type GetTasksQueryVariables = Exact<{
 }>;
 
 
-export type GetTasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, title: string, content?: string | null, done: boolean, due?: number | null, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean }> };
+export type GetTasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, title: string, done: boolean, group?: string | null, type?: string | null, priority?: number | null, archived: boolean }> };
 
 
 export const CreateTaskDocument = gql`
@@ -144,11 +144,7 @@ export const GetTasksDocument = gql`
   tasks(userId: $userId) {
     id
     title
-    content
     done
-    due
-    start
-    end
     group
     type
     priority
