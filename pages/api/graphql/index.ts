@@ -1,8 +1,11 @@
 import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { resolvers } from './resolver'
+import dateScalar from './resolver/dateScalar'
 
 const typeDefs = `#graphql
+scalar Date
+
 type PrismaUser {
   id: ID!
   name: String
@@ -13,31 +16,32 @@ input NewUser {
   name: String
   email: String!
 }
+
 type Task {
   id: ID!
-  userId: Int
-  name: String!
+  userId: String!
+  title: String!
   content: String
   done: Boolean!
-  due: String
-  start: String
-  end: String
+  due: Date
+  start: Date
+  end: Date
   group: String
   type: String
-  priority: String
+  priority: Int
   archived: Boolean!
 }
 
 input NewTask {
-  name: String!
+  userId: String!
+  title: String!
   content: String
-  userId: Int!
 }
 
 type Query {
-  user(id: Int!): PrismaUser
-  tasks(userId: Int!): [Task!]!
-  task(id: Int!): Task!
+  user(id: String!): PrismaUser
+  tasks(userId: String!): [Task!]!
+  task(id: String!): Task
 }
 
 type Mutation {
@@ -48,7 +52,10 @@ type Mutation {
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers: {
+    Date: dateScalar,
+    ...resolvers,
+  },
 })
 
 //TODO: GraphQLResolveInfo does not match BaseContext

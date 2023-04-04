@@ -1,0 +1,24 @@
+mutation createTask($task: NewTask!) {
+  createTask(input: $task) {
+    id
+    title
+    done
+    archived
+  }
+}
+
+query getTasks($userId: String!) {
+  tasks(userId: $userId) {
+    id
+    title
+    content
+    done
+    due
+    start
+    end
+    group
+    type
+    priority
+    archived
+  }
+}

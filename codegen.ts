@@ -3,6 +3,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli'
 const config: CodegenConfig = {
   overwrite: true,
   schema: 'pages/api/graphql/schema/root.graphql',
+  documents: 'graphql/query/*.graphql',
   generates: {
     'pages/api/graphql/types/graphql.ts': {
       plugins: [
@@ -13,6 +14,21 @@ const config: CodegenConfig = {
       config: {
         mappers: {
           PrismaUser: '@prisma/client/index.d#User',
+        },
+        scalars: {
+          Date: 'Date',
+        },
+      },
+    },
+    'graphql/types/client.ts': {
+      plugins: [
+        'typescript',
+        'typescript-operations',
+        'typescript-react-apollo',
+      ],
+      config: {
+        scalars: {
+          Date: 'number',
         },
       },
     },
