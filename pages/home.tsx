@@ -5,6 +5,13 @@ import { GetTasksDocument } from '@/graphql/types/client'
 import { GetTasksQuery } from '@/graphql/types/client'
 import { useSession } from 'next-auth/react'
 import Header from '@/components/header'
+import Board from '@/components/board'
+import { css } from '@emotion/react'
+
+const boards = css`
+  display: flex;
+  min-height: 50rem;
+`
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession()
@@ -13,17 +20,19 @@ const Home: NextPage = () => {
     skip: status === 'loading',
   })
   return (
-    <div style={{ margin: '0 auto', width: '1600px' }}>
+    <div>
       <Header />
-      {data?.tasks?.map((task) => (
-        <div key={task.id}>
-          <h1>{task.content}</h1>
-          <p>id:{task.id}</p>
-          <p>name:{task.title}</p>
-          <p>content:{task.content}</p>
-          {task.start ? new Date(task.start).toString() : 'start is undefined'}
-        </div>
-      ))}
+      <div css={boards}>
+        <Board>
+          <h1>developing task-list here</h1>
+        </Board>
+        <Board>
+          <h1>task detail</h1>
+        </Board>
+        <Board>
+          <h1>subtask detail</h1>
+        </Board>
+      </div>
     </div>
   )
 }
