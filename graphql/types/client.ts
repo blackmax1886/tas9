@@ -13,7 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: string;
+  Date: number;
 };
 
 export type Mutation = {
@@ -100,7 +100,7 @@ export type GetTasksQueryVariables = Exact<{
 }>;
 
 
-export type GetTasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, title: string, content?: string | null, done: boolean, due?: string | null, start?: string | null, end?: string | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean }> };
+export type GetTasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, title: string, content?: string | null, done: boolean, due?: number | null, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean }> };
 
 
 export const CreateTaskDocument = gql`

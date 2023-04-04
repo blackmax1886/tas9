@@ -28,7 +28,7 @@ const config: CodegenConfig = {
       ],
       config: {
         scalars: {
-          Date: 'string',
+          Date: 'number',
         },
       },
     },

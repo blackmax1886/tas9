@@ -22,6 +22,14 @@ export const resolvers: Resolvers = {
       })
       return result
     },
+    tasks: async (_, args) => {
+      const result = await prisma.task.findMany({
+        where: {
+          userId: String(args.userId),
+        },
+      })
+      return result
+    },
   },
   Mutation: {
     createUser: async (_, args) => {
