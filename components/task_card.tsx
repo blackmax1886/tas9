@@ -145,29 +145,25 @@ const TaskCard = (props: taskCardProps) => {
   )
 }
 
-const TaskCards = ({
-  data,
-  refetch,
-  openTaskDetail,
-  selectedTaskId,
-  setSelectedTaskId,
-}: {
+type taskCardsProps = {
   data: GetTasksQuery | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
   openTaskDetail: (taskId: string | undefined) => void
   selectedTaskId: string
   setSelectedTaskId: (taskId: string) => void
-}) => {
+}
+
+const TaskCards = (props: taskCardsProps) => {
   return (
     <>
-      {data?.tasks.map((task: Partial<Task>) => (
+      {props.data?.tasks.map((task: Partial<Task>) => (
         <TaskCard
           key={task.id}
           task={task}
-          refetch={refetch}
-          openTaskDetail={openTaskDetail}
-          isSelected={task.id === selectedTaskId}
-          setSelectedTaskId={setSelectedTaskId}
+          refetch={props.refetch}
+          openTaskDetail={props.openTaskDetail}
+          isSelected={task.id === props.selectedTaskId}
+          setSelectedTaskId={props.setSelectedTaskId}
         ></TaskCard>
       ))}
     </>
