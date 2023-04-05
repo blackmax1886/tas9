@@ -20,7 +20,6 @@ const Home: NextPage = () => {
     variables: { userId: session?.user?.id },
     skip: status === 'loading',
   })
-  //TODO: rename newTaskTitle
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [selectedTaskId, setSelectedTaskId] = useState('')
 
