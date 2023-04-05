@@ -83,7 +83,9 @@ const TaskCard = (props: taskCardProps) => {
     display: flex;
     font-size: 1.5rem;
     align-items: center;
+    margin-bottom: 0.25rem;
     border: 2px solid white;
+    border-radius: 4px;
     ${props.isSelected &&
     css`
       border: 2px solid #66bb6a;
