@@ -34,31 +34,27 @@ const deleteButton = css`
   border: none;
 `
 
-const TaskCard = ({
-  task,
-  refetch,
-  openTaskDetail,
-  isSelected,
-  setSelectedTaskId,
-}: {
+type taskCardProps = {
   task: Partial<Task> | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
   openTaskDetail: (taskId: string | undefined) => void
   isSelected: boolean
   setSelectedTaskId: (taskId: string) => void
-}) => {
-  const [isDone, setIsDone] = useState(task?.done)
+}
+
+const TaskCard = (props: taskCardProps) => {
+  const [isDone, setIsDone] = useState(props.task?.done)
   const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
     UpdateTaskIsDoneDocument,
     {
       onCompleted() {
-        refetch()
+        props.refetch()
       },
     }
   )
   const [deleteTask] = useMutation<DeleteTaskMutation>(DeleteTaskDocument, {
     onCompleted() {
-      refetch()
+      props.refetch()
     },
   })
 
@@ -66,20 +62,20 @@ const TaskCard = ({
     setIsDone(!isDone)
     updateTaskIsDone({
       variables: {
-        taskId: task?.id,
+        taskId: props.task?.id,
         isDone: !isDone,
       },
     })
   }
 
   const handleClickTask = () => {
-    openTaskDetail(task?.id)
+    props.openTaskDetail(props.task?.id)
   }
 
   const handleDeleteTask = () => {
-    deleteTask({ variables: { taskId: task?.id } })
-    if (isSelected) {
-      setSelectedTaskId('')
+    deleteTask({ variables: { taskId: props.task?.id } })
+    if (props.isSelected) {
+      props.setSelectedTaskId('')
     }
   }
 
@@ -88,7 +84,7 @@ const TaskCard = ({
     font-size: 1.5rem;
     align-items: center;
     border: 2px solid white;
-    ${isSelected &&
+    ${props.isSelected &&
     css`
       border: 2px solid #66bb6a;
     `}
@@ -128,13 +124,13 @@ const TaskCard = ({
 
   return (
     <>
-      <div key={task?.id} css={taskCard}>
+      <div key={props.task?.id} css={taskCard}>
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>
         </div>
         <label css={taskLabel} onClick={handleClickTask}>
-          {task?.title}
+          {props.task?.title}
         </label>
         <button css={deleteButton} onClick={handleDeleteTask}>
           <Image
@@ -149,29 +145,25 @@ const TaskCard = ({
   )
 }
 
-const TaskCards = ({
-  data,
-  refetch,
-  openTaskDetail,
-  selectedTaskId,
-  setSelectedTaskId,
-}: {
+type taskCardsProps = {
   data: GetTasksQuery | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
   openTaskDetail: (taskId: string | undefined) => void
   selectedTaskId: string
   setSelectedTaskId: (taskId: string) => void
-}) => {
+}
+
+const TaskCards = (props: taskCardsProps) => {
   return (
     <>
-      {data?.tasks.map((task: Partial<Task>) => (
+      {props.data?.tasks.map((task: Partial<Task>) => (
         <TaskCard
           key={task.id}
           task={task}
-          refetch={refetch}
-          openTaskDetail={openTaskDetail}
-          isSelected={task.id === selectedTaskId}
-          setSelectedTaskId={setSelectedTaskId}
+          refetch={props.refetch}
+          openTaskDetail={props.openTaskDetail}
+          isSelected={task.id === props.selectedTaskId}
+          setSelectedTaskId={props.setSelectedTaskId}
         ></TaskCard>
       ))}
     </>
