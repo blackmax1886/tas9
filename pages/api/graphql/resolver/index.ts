@@ -73,5 +73,19 @@ export const resolvers: Resolvers = {
       })
       return result
     },
+    updateTaskContent: async (_, args) => {
+      const result = await prisma.task.update({
+        where: { id: String(args.id) },
+        data: { content: String(args.content) },
+      })
+      return result
+    },
+    updateTaskStartEnd: async (_, args) => {
+      const result = await prisma.task.update({
+        where: { id: String(args.id) },
+        data: { start: args.start, end: args.end },
+      })
+      return result
+    },
   },
 }
