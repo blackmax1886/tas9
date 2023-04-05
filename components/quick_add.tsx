@@ -18,14 +18,14 @@ const addTask = css`
   width: 100%;
   font-size: inherit;
 `
-type propsType = {
+type quickAddProps = {
   newTaskTitle: string
   setNewTaskTitle: (newTaskTitle: string) => void
   userId: string | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
 }
 
-const QuickAdd = (props: propsType) => {
+const QuickAdd = (props: quickAddProps) => {
   const [createTask] = useMutation<CreateTaskMutation>(CreateTaskDocument, {
     onCompleted() {
       props.refetch()
