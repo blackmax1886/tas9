@@ -20,8 +20,8 @@ const Home: NextPage = () => {
     variables: { userId: session?.user?.id },
     skip: status === 'loading',
   })
-  //TODO: rename inputValue
-  const [inputValue, setInputValue] = useState('')
+  //TODO: rename newTaskTitle
+  const [newTaskTitle, setNewTaskTitle] = useState('')
   const [selectedTaskId, setSelectedTaskId] = useState('')
 
   const openTaskDetail = (taskId: string | undefined) => {
@@ -36,8 +36,8 @@ const Home: NextPage = () => {
       <div css={boards}>
         <Board>
           <QuickAdd
-            inputValue={inputValue}
-            setInputValue={setInputValue}
+            newTaskTitle={newTaskTitle}
+            setNewTaskTitle={setNewTaskTitle}
             userId={session?.user?.id}
             refetch={refetch}
           />

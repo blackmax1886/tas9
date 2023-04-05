@@ -19,8 +19,8 @@ const addTask = css`
   font-size: inherit;
 `
 type propsType = {
-  inputValue: string
-  setInputValue: (inputValue: string) => void
+  newTaskTitle: string
+  setNewTaskTitle: (newTaskTitle: string) => void
   userId: string | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
 }
@@ -29,15 +29,15 @@ const QuickAdd = (props: propsType) => {
   const [createTask] = useMutation<CreateTaskMutation>(CreateTaskDocument, {
     onCompleted() {
       props.refetch()
-      props.setInputValue('')
+      props.setNewTaskTitle('')
     },
   })
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && props.inputValue) {
+    if (event.key === 'Enter' && props.newTaskTitle) {
       createTask({
         variables: {
           task: {
-            title: props.inputValue,
+            title: props.newTaskTitle,
             userId: props.userId,
           },
         },
@@ -49,9 +49,9 @@ const QuickAdd = (props: propsType) => {
     <div>
       <input
         type="text"
-        value={props.inputValue}
+        value={props.newTaskTitle}
         placeholder="+ add new task"
-        onChange={(e) => props.setInputValue(e.target.value)}
+        onChange={(e) => props.setNewTaskTitle(e.target.value)}
         onKeyDown={handleKeyDown}
         css={addTask}
       ></input>
