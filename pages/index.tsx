@@ -28,6 +28,7 @@ const heading = css`
 `
 
 const Button = css`
+  color: inherit;
   background-color: #4caf50; /* Green */
   border: none;
   padding: 0.5rem;
