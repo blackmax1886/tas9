@@ -30,6 +30,7 @@ type Task {
   type: String
   priority: Int
   archived: Boolean!
+  createdAt: Date!
 }
 
 input NewTask {

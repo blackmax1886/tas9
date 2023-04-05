@@ -90,6 +90,7 @@ export type Task = {
   __typename?: 'Task';
   archived: Scalars['Boolean'];
   content?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
   done: Scalars['Boolean'];
   due?: Maybe<Scalars['Date']>;
   end?: Maybe<Scalars['Date']>;
@@ -227,6 +228,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
   archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   done?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   due?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   end?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;

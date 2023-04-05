@@ -89,6 +89,7 @@ export type Task = {
   __typename?: 'Task';
   archived: Scalars['Boolean'];
   content?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
   done: Scalars['Boolean'];
   due?: Maybe<Scalars['Date']>;
   end?: Maybe<Scalars['Date']>;

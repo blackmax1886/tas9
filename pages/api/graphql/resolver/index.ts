@@ -27,6 +27,8 @@ export const resolvers: Resolvers = {
         where: {
           userId: String(args.userId),
         },
+        // TODO:
+        orderBy: { createdAt: 'desc' },
       })
       return result
     },
@@ -51,6 +53,7 @@ export const resolvers: Resolvers = {
           content,
           done: false,
           archived: false,
+          createdAt: new Date(),
         },
       })
       return result
