@@ -26,14 +26,16 @@ const taskName = css`
 const taskContentWrapper = css`
   flex: 1 0 auto;
   display: flex;
+  margin-top: 1rem;
 `
 
 const taskContent = css`
   flex: 1 0 auto;
   border: none;
+  border-radius: 0.5rem;
   outline: none;
   resize: none;
-  background-color: rgba(26, 24, 29, 0.06);
+  background-color: #424242;
   padding: 1rem;
   font-size: inherit;
   font-family: inherit;
