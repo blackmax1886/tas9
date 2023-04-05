@@ -1,13 +1,19 @@
 import type { NextPage } from 'next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { GetTasksQuery, GetTasksDocument } from '@/graphql/types/client'
+import {
+  GetTaskQuery,
+  GetTaskDocument,
+  GetTasksQuery,
+  GetTasksDocument,
+} from '@/graphql/types/client'
 import { useSession } from 'next-auth/react'
 import Header from '@/components/header'
 import Board from '@/components/board'
 import { TaskCards } from '@/components/task_card'
 import { css } from '@emotion/react'
 import QuickAdd from '@/components/quick_add'
+import { TaskDetail } from '@/components/task_detail'
 
 const boards = css`
   display: flex;
@@ -22,6 +28,15 @@ const Home: NextPage = () => {
   })
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [selectedTaskId, setSelectedTaskId] = useState('')
+  const { data: selected, refetch: refetchSelectedTask } =
+    useQuery<GetTaskQuery>(GetTaskDocument, {
+      variables: { taskId: selectedTaskId },
+      skip: !selectedTaskId,
+      fetchPolicy: 'network-only',
+    })
+  useEffect(() => {
+    refetchSelectedTask()
+  }, [refetchSelectedTask, selectedTaskId])
 
   const openTaskDetail = (taskId: string | undefined) => {
     if (taskId) {
@@ -49,7 +64,12 @@ const Home: NextPage = () => {
           ></TaskCards>
         </Board>
         <Board>
-          <h1>task detail</h1>
+          {selected && (
+            <TaskDetail
+              selectedTask={selected.task}
+              key={selected.task?.id}
+            ></TaskDetail>
+          )}
         </Board>
         <Board>
           <h1>subtask detail</h1>

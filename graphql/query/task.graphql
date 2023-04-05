@@ -7,6 +7,24 @@ mutation createTask($task: NewTask!) {
   }
 }
 
+query getTask($taskId: String!) {
+  task(id: $taskId) {
+    id
+    userId
+    title
+    content
+    done
+    due
+    start
+    end
+    group
+    type
+    priority
+    archived
+    createdAt
+  }
+}
+
 query getTasks($userId: String!) {
   tasks(userId: $userId) {
     id
@@ -29,5 +47,20 @@ mutation UpdateTaskIsDone($taskId: String!, $isDone: Boolean!) {
 mutation DeleteTask($taskId: String!) {
   deleteTask(id: $taskId) {
     title
+  }
+}
+
+mutation UpdateTaskContent($taskId: String!, $content: String!) {
+  updateTaskContent(id: $taskId, content: $content) {
+    id
+    content
+  }
+}
+
+mutation UpdateTaskStartEnd($taskId: String!, $start: Date!, $end: Date!) {
+  updateTaskStartEnd(id: $taskId, start: $start, end: $end) {
+    id
+    start
+    end
   }
 }
