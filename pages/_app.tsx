@@ -24,6 +24,9 @@ const global = css`
     font-size: 1rem;
     background-color: #343541;
     color: white;
+    width: 100%;
+    min-width: 100rem;
+    margin: auto;
   }
 `
 

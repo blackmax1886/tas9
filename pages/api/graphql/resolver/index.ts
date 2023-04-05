@@ -27,6 +27,8 @@ export const resolvers: Resolvers = {
         where: {
           userId: String(args.userId),
         },
+        // TODO:
+        orderBy: { createdAt: 'desc' },
       })
       return result
     },
@@ -51,7 +53,23 @@ export const resolvers: Resolvers = {
           content,
           done: false,
           archived: false,
+          createdAt: new Date(),
         },
+      })
+      return result
+    },
+    deleteTask: async (_, args) => {
+      const result = await prisma.task.delete({
+        where: {
+          id: String(args.id),
+        },
+      })
+      return result
+    },
+    updateTaskIsDone: async (_, args) => {
+      const result = await prisma.task.update({
+        where: { id: String(args.id) },
+        data: { done: Boolean(args.isDone) },
       })
       return result
     },

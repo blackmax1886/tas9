@@ -21,6 +21,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   createTask: Task;
   createUser: PrismaUser;
+  deleteTask?: Maybe<Task>;
+  updateTaskIsDone: Task;
 };
 
 
@@ -31,6 +33,17 @@ export type MutationCreateTaskArgs = {
 
 export type MutationCreateUserArgs = {
   input: NewUser;
+};
+
+
+export type MutationDeleteTaskArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationUpdateTaskIsDoneArgs = {
+  id: Scalars['String'];
+  isDone: Scalars['Boolean'];
 };
 
 export type NewTask = {
@@ -77,6 +90,7 @@ export type Task = {
   __typename?: 'Task';
   archived: Scalars['Boolean'];
   content?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
   done: Scalars['Boolean'];
   due?: Maybe<Scalars['Date']>;
   end?: Maybe<Scalars['Date']>;
@@ -194,6 +208,8 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationCreateTaskArgs, 'input'>>;
   createUser?: Resolver<ResolversTypes['PrismaUser'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
+  deleteTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'id'>>;
+  updateTaskIsDone?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskIsDoneArgs, 'id' | 'isDone'>>;
 };
 
 export type PrismaUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['PrismaUser'] = ResolversParentTypes['PrismaUser']> = {
@@ -212,6 +228,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
   archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   done?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   due?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   end?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;

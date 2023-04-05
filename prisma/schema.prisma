@@ -18,18 +18,19 @@ model User {
 }
 
 model Task {
-  id       String    @id @default(cuid())
-  userId   String
-  title    String
-  content  String?
-  done     Boolean
-  due      DateTime?
-  start    DateTime?
-  end      DateTime?
-  group    String?
-  type     String?
-  priority Int?
-  archived Boolean
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  content   String?
+  done      Boolean
+  due       DateTime?
+  start     DateTime?
+  end       DateTime?
+  group     String?
+  type      String?
+  priority  Int?
+  archived  Boolean
+  createdAt DateTime
 }
 
 model Account {
