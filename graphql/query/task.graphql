@@ -31,3 +31,18 @@ mutation DeleteTask($taskId: String!) {
     title
   }
 }
+
+mutation UpdateTaskContent($taskId: String!, $content: String!) {
+  updateTaskContent(id: $taskId, content: $content) {
+    id
+    content
+  }
+}
+
+mutation UpdateTaskStartEnd($taskId: String!, $start: Date!, $end: Date!) {
+  updateTaskStartEnd(id: $taskId, start: $start, end: $end) {
+    id
+    start
+    end
+  }
+}
