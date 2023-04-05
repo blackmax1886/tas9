@@ -7,6 +7,24 @@ mutation createTask($task: NewTask!) {
   }
 }
 
+query getTask($taskId: String!) {
+  task(id: $taskId) {
+    id
+    userId
+    title
+    content
+    done
+    due
+    start
+    end
+    group
+    type
+    priority
+    archived
+    createdAt
+  }
+}
+
 query getTasks($userId: String!) {
   tasks(userId: $userId) {
     id
