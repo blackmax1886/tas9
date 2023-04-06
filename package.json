@@ -16,6 +16,7 @@
     "@apollo/client": "^3.7.10",
     "@as-integrations/next": "^1.2.0",
     "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.11.0",
     "@types/node": "18.15.10",
