@@ -14,6 +14,12 @@ import { TaskCards } from '@/components/task_card'
 import { css } from '@emotion/react'
 import QuickAdd from '@/components/quick_add'
 import { TaskDetail } from '@/components/task_detail'
+import Tabs from '@/components/tabs'
+
+const home = css`
+  display: flex;
+  flex-direction: column;
+`
 
 const boards = css`
   display: flex;
@@ -45,8 +51,9 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div>
+    <div css={home}>
       <Header />
+      <Tabs selected="TaskManager" />
       <div css={boards}>
         <Board>
           <QuickAdd
