@@ -24,7 +24,6 @@ const tasksAsEvents = (tasks: Partial<Task>[] | undefined) => {
     return {
       taskId: task.id,
       title: task.title,
-      // TODO: when start&end is null, thats ok?
       start: dayjs(task.start, formatString).toDate(),
       end: dayjs(task.end, formatString).toDate(),
     }
