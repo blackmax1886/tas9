@@ -6,6 +6,7 @@ import {
   GetTaskDocument,
   GetTasksQuery,
   GetTasksDocument,
+  Task,
 } from '@/graphql/types/client'
 import { useSession } from 'next-auth/react'
 import Header from '@/components/header'
@@ -15,6 +16,7 @@ import { css } from '@emotion/react'
 import QuickAdd from '@/components/quick_add'
 import { TaskDetail } from '@/components/task_detail'
 import Tabs from '@/components/tabs'
+import TaskTabs from '@/components/task_tabs'
 
 const home = css`
   display: flex;
@@ -34,6 +36,7 @@ const Home: NextPage = () => {
   })
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [selectedTaskId, setSelectedTaskId] = useState('')
+  const [activeTaskTab, setActiveTaskTab] = useState('tasks')
   const { data: selected, refetch: refetchSelectedTask } =
     useQuery<GetTaskQuery>(GetTaskDocument, {
       variables: { taskId: selectedTaskId },
@@ -43,6 +46,18 @@ const Home: NextPage = () => {
   useEffect(() => {
     refetchSelectedTask()
   }, [refetchSelectedTask, selectedTaskId])
+
+  let tasks: Partial<Task>[] | undefined = []
+  switch (activeTaskTab) {
+    case 'tasks':
+      tasks = data?.tasks.filter((task) => !task.done)
+      break
+    case 'done':
+      tasks = data?.tasks.filter((task) => task.done)
+      break
+    default:
+      tasks = data?.tasks
+  }
 
   const openTaskDetail = (taskId: string | undefined) => {
     if (taskId) {
@@ -56,6 +71,10 @@ const Home: NextPage = () => {
       <Tabs selected="TaskManager" />
       <div css={boards}>
         <Board>
+          <TaskTabs
+            activeTaskTab={activeTaskTab}
+            setActiveTaskTab={setActiveTaskTab}
+          />
           <QuickAdd
             newTaskTitle={newTaskTitle}
             setNewTaskTitle={setNewTaskTitle}
@@ -63,7 +82,7 @@ const Home: NextPage = () => {
             refetch={refetch}
           />
           <TaskCards
-            data={data}
+            tasks={tasks}
             refetch={refetch}
             openTaskDetail={openTaskDetail}
             selectedTaskId={selectedTaskId}

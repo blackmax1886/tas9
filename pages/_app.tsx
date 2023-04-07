@@ -27,6 +27,7 @@ const global = css`
     width: 100%;
     min-width: 100rem;
     margin: auto;
+    overflow-y: scroll;
   }
 `
 
