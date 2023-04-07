@@ -34,6 +34,15 @@ const deleteButton = css`
   border: none;
 `
 
+const taskCard = css`
+  display: flex;
+  font-size: 1.5rem;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  border: 2px solid white;
+  border-radius: 4px;
+`
+
 type taskCardProps = {
   task: Partial<Task> | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
@@ -79,13 +88,8 @@ const TaskCard = (props: taskCardProps) => {
     }
   }
 
-  const taskCard = css`
-    display: flex;
-    font-size: 1.5rem;
-    align-items: center;
-    margin-bottom: 0.25rem;
-    border: 2px solid white;
-    border-radius: 4px;
+  const selectableTaskCard = css`
+    ${taskCard}
     ${props.isSelected &&
     css`
       border: 2px solid #66bb6a;
@@ -126,7 +130,7 @@ const TaskCard = (props: taskCardProps) => {
 
   return (
     <>
-      <div key={props.task?.id} css={taskCard}>
+      <div key={props.task?.id} css={selectableTaskCard}>
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>
@@ -172,4 +176,125 @@ const TaskCards = (props: taskCardsProps) => {
   )
 }
 
-export { TaskCard, TaskCards }
+const DraggableTaskCard = ({
+  task,
+  refetch,
+  setDraggedTask,
+}: {
+  task: Partial<Task> | undefined
+  refetch: QueryResult<GetTasksQuery>['refetch']
+  setDraggedTask: (task: Partial<Task> | undefined) => void
+}) => {
+  const [isDone, setIsDone] = useState(task?.done)
+  const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
+    UpdateTaskIsDoneDocument,
+    {
+      onCompleted() {
+        refetch()
+      },
+    }
+  )
+  const [deleteTask] = useMutation<DeleteTaskMutation>(DeleteTaskDocument, {
+    onCompleted() {
+      refetch()
+    },
+  })
+
+  const handleTaskIsDone = () => {
+    setIsDone(!isDone)
+    updateTaskIsDone({
+      variables: {
+        taskId: task?.id,
+        isDone: !isDone,
+      },
+    })
+  }
+
+  const handleDeleteTask = () => {
+    deleteTask({ variables: { taskId: task?.id } })
+  }
+  const handleDragStart = () => {
+    console.log('drag start taskId:', task?.id)
+    setDraggedTask(task)
+  }
+
+  const checkboxWrapperLabel = css`
+    background: none repeat scroll 0 0 #eeeeee;
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 1.5rem;
+    width: 1.5rem;
+
+    &:after {
+      border: 2px solid #fff;
+      border-top: none;
+      border-right: none;
+      content: '';
+      height: 6px;
+      left: 0.4rem;
+      opacity: 0;
+      position: absolute;
+      top: 0.5rem;
+      transform: rotate(-45deg);
+      width: 12px;
+    }
+
+    ${isDone &&
+    css`
+      background-color: #66bb6a;
+      border-color: #66bb6a;
+      &:after {
+        opacity: 1;
+      }
+    `}
+  `
+
+  return (
+    <>
+      <div key={task?.id} draggable={true} css={taskCard}>
+        <div css={checkboxWrapper}>
+          <input type="checkbox" css={checkbox}></input>
+          <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>
+        </div>
+        <label css={taskLabel} onDragStart={handleDragStart} draggable>
+          {task?.title}
+        </label>
+        <button css={deleteButton} onClick={handleDeleteTask}>
+          <Image
+            src="/delete-button.png"
+            alt="delete"
+            height={24}
+            width={24}
+          ></Image>
+        </button>
+      </div>
+    </>
+  )
+}
+
+const DraggableTaskCards = ({
+  data,
+  refetch,
+  setDraggedTask,
+}: {
+  data: GetTasksQuery | undefined
+  refetch: QueryResult<GetTasksQuery>['refetch']
+  //TODO: not undefined, should be null?
+  setDraggedTask: (task: Partial<Task> | undefined) => void
+}) => {
+  return (
+    <>
+      {data?.tasks.map((task: Partial<Task>) => (
+        <DraggableTaskCard
+          key={task.id}
+          task={task}
+          refetch={refetch}
+          setDraggedTask={setDraggedTask}
+        ></DraggableTaskCard>
+      ))}
+    </>
+  )
+}
+
+export { TaskCard, TaskCards, DraggableTaskCard, DraggableTaskCards }

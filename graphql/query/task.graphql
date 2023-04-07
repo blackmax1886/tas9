@@ -30,6 +30,8 @@ query getTasks($userId: String!) {
     id
     title
     done
+    start
+    end
     group
     type
     priority
