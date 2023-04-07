@@ -26,6 +26,35 @@ const boards = css`
   min-height: 50rem;
 `
 
+const taskFilterTabs = css`
+  display: flex;
+  justify-content: start;
+  margin: 0 0 1rem 0;
+`
+
+const taskFilterTab = css`
+  cursor: pointer;
+  padding: 5px 30px;
+  color: inherit;
+  background-color: #339966;
+  font-size: 1rem;
+  text-decoration: none;
+  border-bottom: 1px solid white;
+  border-radius: 4px 4px 0 0;
+`
+
+const activetaskFilterTab = css`
+  ${taskFilterTab}
+  background-color: inherit;
+  border: 1px solid white;
+  border-bottom: none;
+`
+
+const space = css`
+  border-bottom: 1px solid white;
+  flex: 1 0 auto;
+`
+
 const Home: NextPage = () => {
   const { data: session, status } = useSession()
   const { data, refetch } = useQuery<GetTasksQuery>(GetTasksDocument, {
@@ -34,6 +63,7 @@ const Home: NextPage = () => {
   })
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [selectedTaskId, setSelectedTaskId] = useState('')
+  const [activeTaskTab, setActiveTaskTab] = useState('task')
   const { data: selected, refetch: refetchSelectedTask } =
     useQuery<GetTaskQuery>(GetTaskDocument, {
       variables: { taskId: selectedTaskId },
@@ -50,12 +80,32 @@ const Home: NextPage = () => {
     }
   }
 
+  const tasksTab =
+    activeTaskTab === 'task' ? activetaskFilterTab : taskFilterTab
+  const doneTab = activeTaskTab === 'done' ? activetaskFilterTab : taskFilterTab
+
+  const handleClickTaskFilterTab = (tab: string) => {
+    setActiveTaskTab(tab)
+  }
+
   return (
     <div css={home}>
       <Header />
       <Tabs selected="TaskManager" />
       <div css={boards}>
         <Board>
+          <div css={taskFilterTabs}>
+            <div
+              onClick={() => handleClickTaskFilterTab('task')}
+              css={tasksTab}
+            >
+              tasks
+            </div>
+            <div onClick={() => handleClickTaskFilterTab('done')} css={doneTab}>
+              done
+            </div>
+            <div css={space}></div>
+          </div>
           <QuickAdd
             newTaskTitle={newTaskTitle}
             setNewTaskTitle={setNewTaskTitle}
