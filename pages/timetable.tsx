@@ -27,7 +27,7 @@ const boards = css`
 `
 
 const calendarWrapper = css`
-  width: 67%;
+  width: 66%;
   margin: 1rem;
   padding: 8px;
   padding-bottom: 30px;
