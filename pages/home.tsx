@@ -16,6 +16,7 @@ import { css } from '@emotion/react'
 import QuickAdd from '@/components/quick_add'
 import { TaskDetail } from '@/components/task_detail'
 import Tabs from '@/components/tabs'
+import TaskTabs from '@/components/task_tabs'
 
 const home = css`
   display: flex;
@@ -25,36 +26,6 @@ const home = css`
 const boards = css`
   display: flex;
   min-height: 50rem;
-`
-
-const taskFilterTabs = css`
-  display: flex;
-  justify-content: start;
-  margin: 0 0 1rem 0;
-`
-
-const taskFilterTab = css`
-  cursor: pointer;
-  padding: 5px 30px;
-  color: inherit;
-  background-color: #339966;
-  font-size: 1rem;
-  text-decoration: none;
-  border-right: 1px solid white;
-  border-bottom: 1px solid white;
-  border-radius: 4px 4px 0 0;
-`
-
-const activetaskFilterTab = css`
-  ${taskFilterTab}
-  background-color: inherit;
-  border: 1px solid white;
-  border-bottom: none;
-`
-
-const space = css`
-  border-bottom: 1px solid white;
-  flex: 1 0 auto;
 `
 
 const Home: NextPage = () => {
@@ -94,36 +65,16 @@ const Home: NextPage = () => {
     }
   }
 
-  const tasksTab =
-    activeTaskTab === 'tasks' ? activetaskFilterTab : taskFilterTab
-  const doneTab = activeTaskTab === 'done' ? activetaskFilterTab : taskFilterTab
-  const allTab = activeTaskTab === 'all' ? activetaskFilterTab : taskFilterTab
-
-  const handleClickTaskFilterTab = (tab: string) => {
-    setActiveTaskTab(tab)
-  }
-
   return (
     <div css={home}>
       <Header />
       <Tabs selected="TaskManager" />
       <div css={boards}>
         <Board>
-          <div css={taskFilterTabs}>
-            <div
-              onClick={() => handleClickTaskFilterTab('tasks')}
-              css={tasksTab}
-            >
-              tasks
-            </div>
-            <div onClick={() => handleClickTaskFilterTab('done')} css={doneTab}>
-              done
-            </div>
-            <div onClick={() => handleClickTaskFilterTab('all')} css={allTab}>
-              all
-            </div>
-            <div css={space}></div>
-          </div>
+          <TaskTabs
+            activeTaskTab={activeTaskTab}
+            setActiveTaskTab={setActiveTaskTab}
+          />
           <QuickAdd
             newTaskTitle={newTaskTitle}
             setNewTaskTitle={setNewTaskTitle}
