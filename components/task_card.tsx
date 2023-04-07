@@ -34,6 +34,15 @@ const deleteButton = css`
   border: none;
 `
 
+const taskCard = css`
+  display: flex;
+  font-size: 1.5rem;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  border: 2px solid white;
+  border-radius: 4px;
+`
+
 type taskCardProps = {
   task: Partial<Task> | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
@@ -79,13 +88,8 @@ const TaskCard = (props: taskCardProps) => {
     }
   }
 
-  const taskCard = css`
-    display: flex;
-    font-size: 1.5rem;
-    align-items: center;
-    margin-bottom: 0.25rem;
-    border: 2px solid white;
-    border-radius: 4px;
+  const selectableTaskCard = css`
+    ${taskCard}
     ${props.isSelected &&
     css`
       border: 2px solid #66bb6a;
@@ -126,7 +130,7 @@ const TaskCard = (props: taskCardProps) => {
 
   return (
     <>
-      <div key={props.task?.id} css={taskCard}>
+      <div key={props.task?.id} css={selectableTaskCard}>
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>
@@ -213,13 +217,6 @@ const DraggableTaskCard = ({
     console.log('drag start taskId:', task?.id)
     setDraggedTask(task)
   }
-
-  const taskCard = css`
-    display: flex;
-    font-size: 1.5rem;
-    align-items: center;
-    border: 2px solid white;
-  `
 
   const checkboxWrapperLabel = css`
     background: none repeat scroll 0 0 #eeeeee;
