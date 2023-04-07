@@ -6,6 +6,7 @@ import {
   GetTaskDocument,
   GetTasksQuery,
   GetTasksDocument,
+  Task,
 } from '@/graphql/types/client'
 import { useSession } from 'next-auth/react'
 import Header from '@/components/header'
@@ -39,6 +40,7 @@ const taskFilterTab = css`
   background-color: #339966;
   font-size: 1rem;
   text-decoration: none;
+  border-right: 1px solid white;
   border-bottom: 1px solid white;
   border-radius: 4px 4px 0 0;
 `
@@ -63,7 +65,7 @@ const Home: NextPage = () => {
   })
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [selectedTaskId, setSelectedTaskId] = useState('')
-  const [activeTaskTab, setActiveTaskTab] = useState('task')
+  const [activeTaskTab, setActiveTaskTab] = useState('tasks')
   const { data: selected, refetch: refetchSelectedTask } =
     useQuery<GetTaskQuery>(GetTaskDocument, {
       variables: { taskId: selectedTaskId },
@@ -74,7 +76,17 @@ const Home: NextPage = () => {
     refetchSelectedTask()
   }, [refetchSelectedTask, selectedTaskId])
 
-  const tasks = data?.tasks
+  let tasks: Partial<Task>[] | undefined = []
+  switch (activeTaskTab) {
+    case 'tasks':
+      tasks = data?.tasks.filter((task) => !task.done)
+      break
+    case 'done':
+      tasks = data?.tasks.filter((task) => task.done)
+      break
+    default:
+      tasks = data?.tasks
+  }
 
   const openTaskDetail = (taskId: string | undefined) => {
     if (taskId) {
@@ -83,8 +95,9 @@ const Home: NextPage = () => {
   }
 
   const tasksTab =
-    activeTaskTab === 'task' ? activetaskFilterTab : taskFilterTab
+    activeTaskTab === 'tasks' ? activetaskFilterTab : taskFilterTab
   const doneTab = activeTaskTab === 'done' ? activetaskFilterTab : taskFilterTab
+  const allTab = activeTaskTab === 'all' ? activetaskFilterTab : taskFilterTab
 
   const handleClickTaskFilterTab = (tab: string) => {
     setActiveTaskTab(tab)
@@ -98,13 +111,16 @@ const Home: NextPage = () => {
         <Board>
           <div css={taskFilterTabs}>
             <div
-              onClick={() => handleClickTaskFilterTab('task')}
+              onClick={() => handleClickTaskFilterTab('tasks')}
               css={tasksTab}
             >
               tasks
             </div>
             <div onClick={() => handleClickTaskFilterTab('done')} css={doneTab}>
               done
+            </div>
+            <div onClick={() => handleClickTaskFilterTab('all')} css={allTab}>
+              all
             </div>
             <div css={space}></div>
           </div>
