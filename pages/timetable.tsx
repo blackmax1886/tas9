@@ -18,6 +18,7 @@ import 'dayjs/locale/ja'
 import { stringOrDate } from 'react-big-calendar'
 import Tabs from '@/components/tabs'
 import QuickAdd from '@/components/quick_add'
+import TaskTabs from '@/components/task_tabs'
 
 dayjs.locale('ja')
 
@@ -40,7 +41,7 @@ const TimeTable = () => {
     skip: status === 'loading',
   })
   const [newTaskTitle, setNewTaskTitle] = useState('')
-
+  const [activeTaskTab, setActiveTaskTab] = useState('tasks')
   const [draggedTask, setDraggedTask] = useState<Partial<Task> | null>()
   const [updateTaskStartEnd] = useMutation<UpdateTaskStartEndMutation>(
     UpdateTaskStartEndDocument,
@@ -51,7 +52,17 @@ const TimeTable = () => {
       },
     }
   )
-  const tasks = data?.tasks
+  let tasks: Partial<Task>[] | undefined = []
+  switch (activeTaskTab) {
+    case 'tasks':
+      tasks = data?.tasks.filter((task) => !task.done)
+      break
+    case 'done':
+      tasks = data?.tasks.filter((task) => task.done)
+      break
+    default:
+      tasks = data?.tasks
+  }
 
   const handleDropFromOutside = ({
     start,
@@ -113,6 +124,10 @@ const TimeTable = () => {
       <Tabs selected="Timetable" />
       <div css={boards}>
         <Board>
+          <TaskTabs
+            activeTaskTab={activeTaskTab}
+            setActiveTaskTab={setActiveTaskTab}
+          />
           <QuickAdd
             newTaskTitle={newTaskTitle}
             setNewTaskTitle={setNewTaskTitle}
