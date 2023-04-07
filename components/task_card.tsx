@@ -39,7 +39,7 @@ const taskCard = css`
   font-size: 1.5rem;
   align-items: center;
   margin-bottom: 0.25rem;
-  border: 2px solid white;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 4px;
 `
 
