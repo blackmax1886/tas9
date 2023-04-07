@@ -6,6 +6,7 @@ import {
 import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { css } from '@emotion/react'
 import { Task } from '@/graphql/types/client'
@@ -71,6 +72,7 @@ const Calendar = ({
   tasks,
   onDropFromOutside,
   onEventDrop,
+  onEventResize,
 }: {
   tasks: Partial<Task>[] | undefined
   onDropFromOutside: ({
@@ -81,6 +83,15 @@ const Calendar = ({
     end: stringOrDate
   }) => void
   onEventDrop: ({
+    event,
+    start,
+    end,
+  }: {
+    event: object
+    start: stringOrDate
+    end: stringOrDate
+  }) => void
+  onEventResize: ({
     event,
     start,
     end,
@@ -103,6 +114,8 @@ const Calendar = ({
         scrollToTime={scrollToTime}
         onDropFromOutside={onDropFromOutside}
         onEventDrop={onEventDrop}
+        onEventResize={onEventResize}
+        resizable
         components={{
           // @ts-expect-error to be fixed
           timeSlotWrapper: TimeSlotWrapper,

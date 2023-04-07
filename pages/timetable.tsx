@@ -87,6 +87,25 @@ const TimeTable = () => {
     })
   }
 
+  const resizeEvent = ({
+    event,
+    start,
+    end,
+  }: {
+    event: object
+    start: stringOrDate
+    end: stringOrDate
+  }) => {
+    updateTaskStartEnd({
+      variables: {
+        // @ts-expect-error to be fixed
+        taskId: event.taskId,
+        start: dayjs(start).valueOf(),
+        end: dayjs(end).valueOf(),
+      },
+    })
+  }
+
   return (
     <div>
       <Header />
@@ -110,6 +129,7 @@ const TimeTable = () => {
             tasks={data?.tasks}
             onDropFromOutside={handleDropFromOutside}
             onEventDrop={handleEventDrop}
+            onEventResize={resizeEvent}
           />
         </div>
       </div>
