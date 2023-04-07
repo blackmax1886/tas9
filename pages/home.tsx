@@ -74,6 +74,8 @@ const Home: NextPage = () => {
     refetchSelectedTask()
   }, [refetchSelectedTask, selectedTaskId])
 
+  const tasks = data?.tasks
+
   const openTaskDetail = (taskId: string | undefined) => {
     if (taskId) {
       setSelectedTaskId(taskId)
@@ -113,7 +115,7 @@ const Home: NextPage = () => {
             refetch={refetch}
           />
           <TaskCards
-            data={data}
+            tasks={tasks}
             refetch={refetch}
             openTaskDetail={openTaskDetail}
             selectedTaskId={selectedTaskId}
