@@ -176,15 +176,17 @@ const TaskCards = (props: taskCardsProps) => {
   )
 }
 
+type DraggableTaskCardProps = {
+  task: Partial<Task> | undefined
+  refetch: QueryResult<GetTasksQuery>['refetch']
+  setDraggedTask: (task: Partial<Task> | undefined) => void
+}
+
 const DraggableTaskCard = ({
   task,
   refetch,
   setDraggedTask,
-}: {
-  task: Partial<Task> | undefined
-  refetch: QueryResult<GetTasksQuery>['refetch']
-  setDraggedTask: (task: Partial<Task> | undefined) => void
-}) => {
+}: DraggableTaskCardProps) => {
   const [isDone, setIsDone] = useState(task?.done)
   const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
     UpdateTaskIsDoneDocument,
@@ -273,19 +275,21 @@ const DraggableTaskCard = ({
   )
 }
 
-const DraggableTaskCards = ({
-  data,
-  refetch,
-  setDraggedTask,
-}: {
-  data: GetTasksQuery | undefined
+type DraggableTaskCardsProps = {
+  tasks: Partial<Task>[] | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
   //TODO: not undefined, should be null?
   setDraggedTask: (task: Partial<Task> | undefined) => void
-}) => {
+}
+
+const DraggableTaskCards = ({
+  tasks,
+  refetch,
+  setDraggedTask,
+}: DraggableTaskCardsProps) => {
   return (
     <>
-      {data?.tasks.map((task: Partial<Task>) => (
+      {tasks?.map((task: Partial<Task>) => (
         <DraggableTaskCard
           key={task.id}
           task={task}

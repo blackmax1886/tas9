@@ -51,6 +51,7 @@ const TimeTable = () => {
       },
     }
   )
+  const tasks = data?.tasks
 
   const handleDropFromOutside = ({
     start,
@@ -119,7 +120,7 @@ const TimeTable = () => {
             refetch={refetch}
           />
           <DraggableTaskCards
-            data={data}
+            tasks={tasks}
             refetch={refetch}
             setDraggedTask={setDraggedTask}
           ></DraggableTaskCards>
