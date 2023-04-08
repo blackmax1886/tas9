@@ -13,14 +13,11 @@ import Board from '@/components/board'
 import { css } from '@emotion/react'
 import { DraggableTaskCards } from '@/components/task_card'
 import Calendar from '@/components/calendar'
-import dayjs from 'dayjs'
-import 'dayjs/locale/ja'
+import { dayjs } from '@/lib/day'
 import { stringOrDate } from 'react-big-calendar'
 import Tabs from '@/components/tabs'
 import QuickAdd from '@/components/quick_add'
 import TaskTabs from '@/components/task_tabs'
-
-dayjs.locale('ja')
 
 const boards = css`
   display: flex;

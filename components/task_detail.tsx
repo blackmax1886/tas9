@@ -8,10 +8,7 @@ import { useMutation } from '@apollo/client'
 import { useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
-import 'dayjs/locale/ja'
-import dayjs from 'dayjs'
-
-dayjs.locale('ja')
+import { dayjs, formatString } from '@/lib/day'
 
 const taskDetail = css`
   display: flex;
@@ -72,10 +69,10 @@ const TaskDetail = ({
   }
 
   const start = selectedTask?.start
-    ? dayjs(selectedTask.start).format('YYYY/MM/DD hh:mm')
+    ? dayjs(selectedTask.start).format(formatString)
     : ''
   const end = selectedTask?.end
-    ? dayjs(selectedTask.end).format('YYYY/MM/DD hh:mm')
+    ? dayjs(selectedTask.end).format(formatString)
     : ''
 
   return (
