@@ -1,8 +1,10 @@
-import type { AppProps } from 'next/app'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
-import { SessionProvider } from 'next-auth/react'
 import { css, Global } from '@emotion/react'
 import { NextComponentType } from 'next'
+import { SessionProvider } from 'next-auth/react'
+
+import type { AppProps } from 'next/app'
+
 import { RootLayout, GuardLayout } from '@/components/layout'
 
 type CustomAppProps = AppProps & {

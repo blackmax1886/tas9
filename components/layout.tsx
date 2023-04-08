@@ -1,5 +1,6 @@
-import AuthGuard from './auth_guard'
 import { ReactNode } from 'react'
+
+import AuthGuard from './auth_guard'
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return <>{children}</>

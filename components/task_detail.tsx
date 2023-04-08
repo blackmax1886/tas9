@@ -1,13 +1,14 @@
+import { useMutation } from '@apollo/client'
 import { css } from '@emotion/react'
+import { useState } from 'react'
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
+import { useUpdateEffect } from 'react-use'
+
 import {
   Task,
   UpdateTaskContentMutation,
   UpdateTaskContentDocument,
 } from '@/graphql/types/client'
-import { useMutation } from '@apollo/client'
-import { useState } from 'react'
-import { useUpdateEffect } from 'react-use'
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
 import { dayjs, formatString } from '@/lib/day'
 
 const taskDetail = css`

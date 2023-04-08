@@ -1,3 +1,8 @@
+import { useMutation, QueryResult } from '@apollo/client'
+import { css } from '@emotion/react'
+import Image from 'next/image'
+import { useState } from 'react'
+
 import {
   DeleteTaskDocument,
   DeleteTaskMutation,
@@ -6,10 +11,6 @@ import {
   UpdateTaskIsDoneDocument,
   UpdateTaskIsDoneMutation,
 } from '@/graphql/types/client'
-import { useMutation, QueryResult } from '@apollo/client'
-import { css } from '@emotion/react'
-import { useState } from 'react'
-import Image from 'next/image'
 
 const checkbox = css`
   display: none;
