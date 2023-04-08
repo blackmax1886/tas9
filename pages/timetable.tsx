@@ -18,6 +18,7 @@ import { stringOrDate } from 'react-big-calendar'
 import Tabs from '@/components/tabs'
 import QuickAdd from '@/components/quick_add'
 import TaskTabs from '@/components/task_tabs'
+import { filterByActiveTab } from '@/lib/task/filter'
 
 const boards = css`
   display: flex;
@@ -49,17 +50,7 @@ const TimeTable = () => {
       },
     }
   )
-  let tasks: Partial<Task>[] | undefined = []
-  switch (activeTaskTab) {
-    case 'tasks':
-      tasks = data?.tasks.filter((task) => !task.done)
-      break
-    case 'done':
-      tasks = data?.tasks.filter((task) => task.done)
-      break
-    default:
-      tasks = data?.tasks
-  }
+  const tasks = filterByActiveTab(activeTaskTab, data?.tasks)
 
   const handleDropFromOutside = ({
     start,

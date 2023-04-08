@@ -6,7 +6,6 @@ import {
   GetTaskDocument,
   GetTasksQuery,
   GetTasksDocument,
-  Task,
 } from '@/graphql/types/client'
 import { useSession } from 'next-auth/react'
 import Header from '@/components/header'
@@ -17,6 +16,7 @@ import QuickAdd from '@/components/quick_add'
 import { TaskDetail } from '@/components/task_detail'
 import Tabs from '@/components/tabs'
 import TaskTabs from '@/components/task_tabs'
+import { filterByActiveTab } from '@/lib/task/filter'
 
 const home = css`
   display: flex;
@@ -47,17 +47,7 @@ const Home: NextPage = () => {
     refetchSelectedTask()
   }, [refetchSelectedTask, selectedTaskId])
 
-  let tasks: Partial<Task>[] | undefined = []
-  switch (activeTaskTab) {
-    case 'tasks':
-      tasks = data?.tasks.filter((task) => !task.done)
-      break
-    case 'done':
-      tasks = data?.tasks.filter((task) => task.done)
-      break
-    default:
-      tasks = data?.tasks
-  }
+  const tasks = filterByActiveTab(activeTaskTab, data?.tasks)
 
   const openTaskDetail = (taskId: string | undefined) => {
     if (taskId) {
