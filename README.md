@@ -21,8 +21,8 @@ Tas9 is a task management tool that consists of Task Manager and Timetable so th
 
 ## Task Manager
 
-https://user-images.githubusercontent.com/69624999/230751050-e6ce5a32-620c-4174-864f-ac4c359968a0.png
+![task manager demo](https://user-images.githubusercontent.com/69624999/230751050-e6ce5a32-620c-4174-864f-ac4c359968a0.png)
 
 ## Timetable
 
-https://user-images.githubusercontent.com/69624999/230751186-74da6422-4602-4f09-93e4-5c0d42cfbdec.png
+![timetable demo](https://user-images.githubusercontent.com/69624999/230751186-74da6422-4602-4f09-93e4-5c0d42cfbdec.png)
