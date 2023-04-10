@@ -1,6 +1,6 @@
+import { css } from '@emotion/react'
 import { NextPage } from 'next'
 import { signIn } from 'next-auth/react'
-import { css } from '@emotion/react'
 
 const card = css`
   display: flex;

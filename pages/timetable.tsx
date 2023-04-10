@@ -1,5 +1,16 @@
-import { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
+import { css } from '@emotion/react'
+import { useSession } from 'next-auth/react'
+import { useState } from 'react'
+import { stringOrDate } from 'react-big-calendar'
+
+import Board from '@/components/board'
+import Calendar from '@/components/calendar'
+import Header from '@/components/header'
+import QuickAdd from '@/components/quick_add'
+import Tabs from '@/components/tabs'
+import { DraggableTaskCards } from '@/components/task_card'
+import TaskTabs from '@/components/task_tabs'
 import {
   GetTasksQuery,
   GetTasksDocument,
@@ -7,20 +18,8 @@ import {
   UpdateTaskStartEndDocument,
   Task,
 } from '@/graphql/types/client'
-import { useSession } from 'next-auth/react'
-import Header from '@/components/header'
-import Board from '@/components/board'
-import { css } from '@emotion/react'
-import { DraggableTaskCards } from '@/components/task_card'
-import Calendar from '@/components/calendar'
-import dayjs from 'dayjs'
-import 'dayjs/locale/ja'
-import { stringOrDate } from 'react-big-calendar'
-import Tabs from '@/components/tabs'
-import QuickAdd from '@/components/quick_add'
-import TaskTabs from '@/components/task_tabs'
-
-dayjs.locale('ja')
+import { dayjs } from '@/lib/day'
+import { filterByActiveTab } from '@/lib/task/filter'
 
 const boards = css`
   display: flex;
@@ -52,17 +51,7 @@ const TimeTable = () => {
       },
     }
   )
-  let tasks: Partial<Task>[] | undefined = []
-  switch (activeTaskTab) {
-    case 'tasks':
-      tasks = data?.tasks.filter((task) => !task.done)
-      break
-    case 'done':
-      tasks = data?.tasks.filter((task) => task.done)
-      break
-    default:
-      tasks = data?.tasks
-  }
+  const tasks = filterByActiveTab(activeTaskTab, data?.tasks)
 
   const handleDropFromOutside = ({
     start,
