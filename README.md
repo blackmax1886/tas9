@@ -1,38 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Tas9
 
-## Getting Started
+Simple task manager for personal use
 
-First, run the development server:
+# Introduction
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+The process of creating a task consists of two steps.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. List the tasks (things that must be done)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+2. Arrange the tasks on a time line, i.e., to decide when to do them.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Tas9 is a task management tool that consists of Task Manager and Timetable so that you can focus on each step.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# Feature
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Add / edit / complete / delete tasks
+- Autosave when task's content is modified
+- Drag and drop to calendar to set task start/end date and time
+- OAuth2 login/signup
 
-## Learn More
+## Task Manager
 
-To learn more about Next.js, take a look at the following resources:
+![task manager demo](https://user-images.githubusercontent.com/69624999/230751050-e6ce5a32-620c-4174-864f-ac4c359968a0.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Timetable
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![timetable demo](https://user-images.githubusercontent.com/69624999/230751186-74da6422-4602-4f09-93e4-5c0d42cfbdec.png)

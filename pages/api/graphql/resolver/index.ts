@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+
 import { Resolvers } from '../types/graphql'
 
 const prisma = new PrismaClient()
@@ -70,6 +71,20 @@ export const resolvers: Resolvers = {
       const result = await prisma.task.update({
         where: { id: String(args.id) },
         data: { done: Boolean(args.isDone) },
+      })
+      return result
+    },
+    updateTaskContent: async (_, args) => {
+      const result = await prisma.task.update({
+        where: { id: String(args.id) },
+        data: { content: String(args.content) },
+      })
+      return result
+    },
+    updateTaskStartEnd: async (_, args) => {
+      const result = await prisma.task.update({
+        where: { id: String(args.id) },
+        data: { start: args.start, end: args.end },
       })
       return result
     },

@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
+
 import { resolvers } from './resolver'
 import dateScalar from './resolver/dateScalar'
 
@@ -50,6 +51,8 @@ type Mutation {
   createTask(input: NewTask!): Task!
   updateTaskIsDone(id: String!, isDone: Boolean!): Task!
   deleteTask(id: String!): Task
+  updateTaskContent(id: String!, content: String!): Task!
+  updateTaskStartEnd(id: String!, start: Date!, end: Date!): Task!
 }
 `
 
