@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { css } from '@emotion/react'
+import Head from 'next/head'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
@@ -58,42 +59,47 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div css={home}>
-      <Header />
-      <Tabs selected="TaskManager" />
-      <div css={boards}>
-        <Board>
-          <TaskTabs
-            activeTaskTab={activeTaskTab}
-            setActiveTaskTab={setActiveTaskTab}
-          />
-          <QuickAdd
-            newTaskTitle={newTaskTitle}
-            setNewTaskTitle={setNewTaskTitle}
-            userId={session?.user?.id}
-            refetch={refetch}
-          />
-          <TaskCards
-            tasks={tasks}
-            refetch={refetch}
-            openTaskDetail={openTaskDetail}
-            selectedTaskId={selectedTaskId}
-            setSelectedTaskId={setSelectedTaskId}
-          ></TaskCards>
-        </Board>
-        <Board>
-          {selected && (
-            <TaskDetail
-              selectedTask={selected.task}
-              key={selected.task?.id}
-            ></TaskDetail>
-          )}
-        </Board>
-        <Board>
-          <h1>subtask detail</h1>
-        </Board>
+    <>
+      <Head>
+        <title>Task Manager</title>
+      </Head>
+      <div css={home}>
+        <Header />
+        <Tabs selected="TaskManager" />
+        <div css={boards}>
+          <Board>
+            <TaskTabs
+              activeTaskTab={activeTaskTab}
+              setActiveTaskTab={setActiveTaskTab}
+            />
+            <QuickAdd
+              newTaskTitle={newTaskTitle}
+              setNewTaskTitle={setNewTaskTitle}
+              userId={session?.user?.id}
+              refetch={refetch}
+            />
+            <TaskCards
+              tasks={tasks}
+              refetch={refetch}
+              openTaskDetail={openTaskDetail}
+              selectedTaskId={selectedTaskId}
+              setSelectedTaskId={setSelectedTaskId}
+            ></TaskCards>
+          </Board>
+          <Board>
+            {selected && (
+              <TaskDetail
+                selectedTask={selected.task}
+                key={selected.task?.id}
+              ></TaskDetail>
+            )}
+          </Board>
+          <Board>
+            <h1>subtask detail</h1>
+          </Board>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

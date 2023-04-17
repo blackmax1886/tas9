@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import { NextPage } from 'next'
+import Head from 'next/head'
 import { signIn } from 'next-auth/react'
 
 const card = css`
@@ -42,16 +43,21 @@ const Top: NextPage & {
   isRootPage?: boolean
 } = () => {
   return (
-    <div css={card}>
-      <h1 css={heading}>tas9</h1>
-      <p>Make your Day more efficient</p>
-      <button
-        css={Button}
-        onClick={() => signIn('google', { callbackUrl: '/home' })}
-      >
-        Sign in with Google
-      </button>
-    </div>
+    <>
+      <Head>
+        <title>Tas9</title>
+      </Head>
+      <div css={card}>
+        <h1 css={heading}>tas9</h1>
+        <p>Make your Day more efficient</p>
+        <button
+          css={Button}
+          onClick={() => signIn('google', { callbackUrl: '/home' })}
+        >
+          Sign in with Google
+        </button>
+      </div>
+    </>
   )
 }
 
