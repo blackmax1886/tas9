@@ -37,6 +37,7 @@ const taskContent = css`
   padding: 1rem;
   font-size: inherit;
   font-family: inherit;
+  width: fit-content;
 `
 
 const TaskDetail = ({
