@@ -37,6 +37,8 @@ const taskContent = css`
   padding: 1rem;
   font-size: inherit;
   font-family: inherit;
+  overflow-wrap: anywhere;
+  width: fit-content;
 `
 
 const TaskDetail = ({
