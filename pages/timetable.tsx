@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { css } from '@emotion/react'
+import Head from 'next/head'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { stringOrDate } from 'react-big-calendar'
@@ -108,37 +109,42 @@ const TimeTable = () => {
   }
 
   return (
-    <div>
-      <Header />
-      <Tabs selected="Timetable" />
-      <div css={boards}>
-        <Board>
-          <TaskTabs
-            activeTaskTab={activeTaskTab}
-            setActiveTaskTab={setActiveTaskTab}
-          />
-          <QuickAdd
-            newTaskTitle={newTaskTitle}
-            setNewTaskTitle={setNewTaskTitle}
-            userId={session?.user?.id}
-            refetch={refetch}
-          />
-          <DraggableTaskCards
-            tasks={tasks}
-            refetch={refetch}
-            setDraggedTask={setDraggedTask}
-          ></DraggableTaskCards>
-        </Board>
-        <div css={calendarWrapper}>
-          <Calendar
-            tasks={data?.tasks}
-            onDropFromOutside={handleDropFromOutside}
-            onEventDrop={handleEventDrop}
-            onEventResize={resizeEvent}
-          />
+    <>
+      <Head>
+        <title>Timetable</title>
+      </Head>
+      <div>
+        <Header />
+        <Tabs selected="Timetable" />
+        <div css={boards}>
+          <Board>
+            <TaskTabs
+              activeTaskTab={activeTaskTab}
+              setActiveTaskTab={setActiveTaskTab}
+            />
+            <QuickAdd
+              newTaskTitle={newTaskTitle}
+              setNewTaskTitle={setNewTaskTitle}
+              userId={session?.user?.id}
+              refetch={refetch}
+            />
+            <DraggableTaskCards
+              tasks={tasks}
+              refetch={refetch}
+              setDraggedTask={setDraggedTask}
+            ></DraggableTaskCards>
+          </Board>
+          <div css={calendarWrapper}>
+            <Calendar
+              tasks={data?.tasks}
+              onDropFromOutside={handleDropFromOutside}
+              onEventDrop={handleEventDrop}
+              onEventResize={resizeEvent}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
