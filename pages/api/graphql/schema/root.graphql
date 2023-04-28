@@ -10,6 +10,7 @@ type Query {
 
 type Mutation {
   createUser(input: NewUser!): PrismaUser!
+  deleteUser(id: String!): PrismaUser
   createTask(input: NewTask!): Task!
   updateTaskIsDone(id: String!, isDone: Boolean!): Task!
   deleteTask(id: String!): Task

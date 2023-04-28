@@ -22,6 +22,7 @@ export type Mutation = {
   createTask: Task;
   createUser: PrismaUser;
   deleteTask?: Maybe<Task>;
+  deleteUser?: Maybe<PrismaUser>;
   updateTaskContent: Task;
   updateTaskIsDone: Task;
   updateTaskStartEnd: Task;
@@ -39,6 +40,11 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteTaskArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteUserArgs = {
   id: Scalars['String'];
 };
 
@@ -224,6 +230,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationCreateTaskArgs, 'input'>>;
   createUser?: Resolver<ResolversTypes['PrismaUser'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'id'>>;
+  deleteUser?: Resolver<Maybe<ResolversTypes['PrismaUser']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
   updateTaskContent?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskContentArgs, 'content' | 'id'>>;
   updateTaskIsDone?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskIsDoneArgs, 'id' | 'isDone'>>;
   updateTaskStartEnd?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskStartEndArgs, 'end' | 'id' | 'start'>>;

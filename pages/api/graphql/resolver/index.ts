@@ -45,6 +45,14 @@ export const resolvers: Resolvers = {
       })
       return result
     },
+    deleteUser: async (_, args) => {
+      const result = await prisma.user.delete({
+        where: {
+          id: String(args.id),
+        },
+      })
+      return result
+    },
     createTask: async (_, args) => {
       const { userId, title, content } = args.input
       const result = await prisma.task.create({

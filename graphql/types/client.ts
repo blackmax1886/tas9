@@ -21,6 +21,7 @@ export type Mutation = {
   createTask: Task;
   createUser: PrismaUser;
   deleteTask?: Maybe<Task>;
+  deleteUser?: Maybe<PrismaUser>;
   updateTaskContent: Task;
   updateTaskIsDone: Task;
   updateTaskStartEnd: Task;
@@ -38,6 +39,11 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteTaskArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteUserArgs = {
   id: Scalars['String'];
 };
 
