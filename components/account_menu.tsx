@@ -1,6 +1,10 @@
+import { useMutation } from '@apollo/client'
 import { SerializedStyles, css } from '@emotion/react'
 import { Session } from 'next-auth'
+import { signOut } from 'next-auth/react'
 import React, { useState } from 'react'
+
+import { DeleteUserDocument, DeleteUserMutation } from '@/graphql/types/client'
 
 type User = Session['user']
 type AccoutMenuProps = {
@@ -36,10 +40,20 @@ const accountToggleMenuItem = css`
 
 const AccountMenu = (props: AccoutMenuProps) => {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
+  const [deleteAccount] = useMutation<DeleteUserMutation>(DeleteUserDocument, {
+    onCompleted() {
+      signOut()
+    },
+  })
 
   const handleAccountDeletion = () => {
     // アカウント削除処理
     console.log('open confirmation of account deletion')
+    deleteAccount({
+      variables: {
+        userId: props.user?.id,
+      },
+    })
   }
 
   const accountMenu = css`
