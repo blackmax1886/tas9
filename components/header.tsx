@@ -1,4 +1,5 @@
 import { css } from '@emotion/react'
+import { Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
 import { useState } from 'react'
 
@@ -21,6 +22,7 @@ const navItem = css`
   flex: 1 0 auto;
   font-size: inherit;
   padding: 1rem;
+  cursor: pointer;
 `
 
 const accountMenu = css`
@@ -38,13 +40,28 @@ const accountToggleMenu = css`
   right: 2rem;
   background-color: #424242;
   font-size: inherit;
+  z-index: 100;
+`
+
+const accountToggleMenuHeader = css`
+  padding: 1rem 0;
+  cursor: default;
+  border-bottom: 1px solid white;
 `
 
 const accountToggleMenuItem = css`
-  margin: 1rem 0;
+  padding: 1rem 0;
+  &:hover {
+    background-color: #43676b;
+  }
 `
 
-const Header = () => {
+type User = Session['user']
+type headerProps = {
+  user: User
+}
+
+const Header = (props: headerProps) => {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
 
   const handleAccountDeletion = () => {
@@ -65,9 +82,9 @@ const Header = () => {
           </div>
           {isAccountMenuOpen && (
             <div css={accountToggleMenu}>
-              <div css={accountToggleMenuItem}>ユーザー名</div>
+              <div css={accountToggleMenuHeader}>{props.user?.email}</div>
               <div onClick={handleAccountDeletion} css={accountToggleMenuItem}>
-                delete account
+                delete tas9 account
               </div>
             </div>
           )}
