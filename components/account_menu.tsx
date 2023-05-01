@@ -23,6 +23,7 @@ const accountToggleMenu = css`
   background-color: #424242;
   font-size: inherit;
   z-index: 100;
+  border-radius: 1rem;
 `
 
 const accountToggleMenuHeader = css`
