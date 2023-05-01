@@ -4,6 +4,8 @@ import { Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
 import React, { useState } from 'react'
 
+import Modal from './modal'
+
 import { DeleteUserDocument, DeleteUserMutation } from '@/graphql/types/client'
 
 type User = Session['user']
@@ -41,6 +43,7 @@ const accountToggleMenuItem = css`
 
 const AccountMenu = (props: AccoutMenuProps) => {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
+  const [isModalOpen, setModalOpen] = useState(false)
   const [deleteAccount] = useMutation<DeleteUserMutation>(DeleteUserDocument, {
     onCompleted() {
       signOut()
@@ -48,13 +51,21 @@ const AccountMenu = (props: AccoutMenuProps) => {
   })
 
   const handleAccountDeletion = () => {
-    // アカウント削除処理
-    console.log('open confirmation of account deletion')
+    setModalOpen(true)
+  }
+
+  const handleConfirm = () => {
     deleteAccount({
       variables: {
         userId: props.user?.id,
       },
     })
+    console.log('Account deleted')
+    setModalOpen(false)
+  }
+
+  const handleCancel = () => {
+    setModalOpen(false)
   }
 
   const accountMenu = css`
@@ -74,6 +85,14 @@ const AccountMenu = (props: AccoutMenuProps) => {
           </div>
         </div>
       )}
+      <Modal
+        isOpen={isModalOpen}
+        title="Delete Account"
+        content="Are you sure you want to delete your account?"
+        isWarnStyle={true}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
     </div>
   )
 }
