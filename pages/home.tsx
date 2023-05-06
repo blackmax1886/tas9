@@ -64,7 +64,7 @@ const Home: NextPage = () => {
         <title>Task Manager</title>
       </Head>
       <div css={home}>
-        <Header />
+        <Header user={session?.user} />
         <Tabs selected="TaskManager" />
         <div css={boards}>
           <Board>

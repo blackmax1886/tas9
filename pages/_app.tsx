@@ -31,6 +31,17 @@ const global = css`
     margin: auto;
     overflow-y: scroll;
   }
+
+  button {
+    color: inherit;
+    background-color: #4caf50; /* Green */
+    border: none;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: inherit;
+    border-radius: 0.25rem;
+    corsor: pointer;
+  }
 `
 
 export default function App({

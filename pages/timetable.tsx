@@ -114,7 +114,7 @@ const TimeTable = () => {
         <title>Timetable</title>
       </Head>
       <div>
-        <Header />
+        <Header user={session?.user} />
         <Tabs selected="Timetable" />
         <div css={boards}>
           <Board>

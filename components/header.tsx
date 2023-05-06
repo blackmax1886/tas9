@@ -1,5 +1,8 @@
 import { css } from '@emotion/react'
+import { Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
+
+import AccountMenu from './account_menu'
 
 const header = css`
   display: flex;
@@ -17,19 +20,26 @@ const nav = css`
 `
 
 const navItem = css`
-  font-size: 1rem;
+  flex: 1 0 auto;
+  font-size: inherit;
   padding: 1rem;
+  cursor: pointer;
 `
 
-const Header = () => {
+type User = Session['user']
+type headerProps = {
+  user: User
+}
+
+const Header = (props: headerProps) => {
   return (
     <div css={header}>
       <div css={logo}>Tas9</div>
       <nav css={nav}>
-        <button onClick={() => signOut()} css={navItem}>
+        <div onClick={() => signOut()} css={navItem}>
           Sign Out
-        </button>
-        <div css={navItem}>Account</div>
+        </div>
+        <AccountMenu style={navItem} user={props.user} />
       </nav>
     </div>
   )
