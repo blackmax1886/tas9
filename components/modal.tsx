@@ -51,6 +51,7 @@ const overlayStyle = css`
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  cursor: default;
 `
 
 const modalStyle = css`
@@ -70,18 +71,21 @@ const buttons = css`
 `
 
 const safeButtonStyle = css`
-background-color: #4caf50
-color: inherit;
+  background-color: #4caf50
+  color: inherit;
+  cursor: pointer;
 `
 
 const cautionButtonStyle = css`
   background-color: #a52a2a; /* brown */
   color: inherit;
+  cursor: pointer;
 `
 
 const cancelButtonStyle = css`
   background-color: #848484;
   color: inherit;
+  cursor: pointer;
 `
 
 export default Modal
