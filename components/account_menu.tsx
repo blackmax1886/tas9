@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { SerializedStyles, css } from '@emotion/react'
+import router from 'next/router'
 import { Session } from 'next-auth'
-import { signOut } from 'next-auth/react'
 import React, { useState } from 'react'
 
 import Modal from './modal'
@@ -46,7 +46,7 @@ const AccountMenu = (props: AccoutMenuProps) => {
   const [isModalOpen, setModalOpen] = useState(false)
   const [deleteAccount] = useMutation<DeleteUserMutation>(DeleteUserDocument, {
     onCompleted() {
-      signOut()
+      router.push('/')
     },
   })
 
