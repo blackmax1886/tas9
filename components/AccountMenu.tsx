@@ -60,8 +60,6 @@ const AccountMenu = (props: AccoutMenuProps) => {
         userId: props.user?.id,
       },
     })
-    console.log('Account deleted')
-    setModalOpen(false)
   }
 
   const handleCancel = () => {
