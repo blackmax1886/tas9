@@ -5,13 +5,13 @@ import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { stringOrDate } from 'react-big-calendar'
 
-import Board from '@/components/board'
-import Calendar from '@/components/calendar'
-import Header from '@/components/header'
-import QuickAdd from '@/components/quick_add'
-import Tabs from '@/components/tabs'
-import { DraggableTaskCards } from '@/components/task_card'
-import TaskTabs from '@/components/task_tabs'
+import Board from '@/components/Board'
+import Calendar from '@/components/Calendar'
+import Header from '@/components/Header'
+import Tabs from '@/components/Tabs'
+import QuickAdd from '@/components/task/QuickAdd'
+import { DraggableTaskCards } from '@/components/task/TaskCard'
+import TaskTabs from '@/components/task/TaskTabs'
 import {
   GetTasksQuery,
   GetTasksDocument,

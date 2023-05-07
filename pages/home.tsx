@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react'
 
 import type { NextPage } from 'next'
 
-import Board from '@/components/board'
-import Header from '@/components/header'
-import QuickAdd from '@/components/quick_add'
-import Tabs from '@/components/tabs'
-import { TaskCards } from '@/components/task_card'
-import { TaskDetail } from '@/components/task_detail'
-import TaskTabs from '@/components/task_tabs'
+import Board from '@/components/Board'
+import Header from '@/components/Header'
+import Tabs from '@/components/Tabs'
+import QuickAdd from '@/components/task/QuickAdd'
+import { TaskCards } from '@/components/task/TaskCard'
+import { TaskDetail } from '@/components/task/TaskDetail'
+import TaskTabs from '@/components/task/TaskTabs'
 import {
   GetTaskQuery,
   GetTaskDocument,
