@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { SerializedStyles, css } from '@emotion/react'
 import router from 'next/router'
 import { Session } from 'next-auth'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import Modal from './Modal'
 
