@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import { Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
 
-import AccountMenu from './account_menu'
+import AccountMenu from './AccountMenu'
 
 const header = css`
   display: flex;

@@ -4,7 +4,7 @@ import router from 'next/router'
 import { Session } from 'next-auth'
 import React, { useState } from 'react'
 
-import Modal from './modal'
+import Modal from './Modal'
 
 import { DeleteUserDocument, DeleteUserMutation } from '@/graphql/types/client'
 

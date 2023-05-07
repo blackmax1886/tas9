@@ -5,7 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 
 import type { AppProps } from 'next/app'
 
-import { RootLayout, GuardLayout } from '@/components/layout'
+import { RootLayout, GuardLayout } from '@/components/Layout'
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { isRootPage?: boolean }
