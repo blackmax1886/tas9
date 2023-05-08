@@ -5,7 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 
 import type { AppProps } from 'next/app'
 
-import { RootLayout, GuardLayout } from '@/components/layout'
+import { RootLayout, GuardLayout } from '@/components/Layout'
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { isRootPage?: boolean }
@@ -30,6 +30,17 @@ const global = css`
     min-width: 100rem;
     margin: auto;
     overflow-y: scroll;
+  }
+
+  button {
+    color: inherit;
+    background-color: #4caf50; /* Green */
+    border: none;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: inherit;
+    border-radius: 0.25rem;
+    corsor: pointer;
   }
 `
 
