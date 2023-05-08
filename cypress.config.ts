@@ -21,6 +21,15 @@ export default defineConfig({
           })
           return result
         },
+        async 'db:reset-user'() {
+          // delete test user data
+          const result = await prisma.user.delete({
+            where: {
+              id: 'clhep0xew0000ml08ri93zfr9',
+            },
+          })
+          return result
+        },
       })
     },
   },
