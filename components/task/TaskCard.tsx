@@ -131,7 +131,7 @@ const TaskCard = (props: taskCardProps) => {
 
   return (
     <>
-      <div key={props.task?.id} css={selectableTaskCard}>
+      <div key={props.task?.id} css={selectableTaskCard} data-cy="taskCard">
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>

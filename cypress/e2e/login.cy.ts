@@ -7,4 +7,11 @@ describe('template spec', () => {
     cy.visit('/')
     cy.googleLogin().then(() => cy.visit('home'))
   })
+
+  it('new user should have 0 task on tasklist', () => {
+    cy.visit('/')
+    cy.googleLogin().then(() => cy.visit('home'))
+    cy.dataCy('logo').should('be.visible')
+    cy.dataCy('taskCard').should('have.length', 0)
+  })
 })
