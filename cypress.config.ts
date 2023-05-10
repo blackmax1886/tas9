@@ -30,6 +30,15 @@ export default defineConfig({
           })
           return result
         },
+        async 'db:reset-task'() {
+          // delete test user's tasks
+          const result = await prisma.task.deleteMany({
+            where: {
+              userId: 'clhep0xew0000ml08ri93zfr9',
+            },
+          })
+          return result
+        },
       })
     },
   },
