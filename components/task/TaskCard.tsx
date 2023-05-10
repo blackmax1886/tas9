@@ -134,12 +134,24 @@ const TaskCard = (props: taskCardProps) => {
       <div key={props.task?.id} css={selectableTaskCard} data-cy="taskCard">
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
-          <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>
+          <label
+            css={checkboxWrapperLabel}
+            data-cy="doneTaskLabel"
+            onClick={handleTaskIsDone}
+          ></label>
         </div>
-        <label css={taskLabel} onClick={handleClickTask}>
+        <label
+          css={taskLabel}
+          onClick={handleClickTask}
+          data-cy="taskCardTitle"
+        >
           {props.task?.title}
         </label>
-        <button css={deleteButton} onClick={handleDeleteTask}>
+        <button
+          css={deleteButton}
+          data-cy="deleteTaskButon"
+          onClick={handleDeleteTask}
+        >
           <Image
             src="/delete-button.png"
             alt="delete"
