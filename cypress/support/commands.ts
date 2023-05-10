@@ -43,3 +43,7 @@ Cypress.Commands.add('googleLogin', () => {
     'a valid cookie from your browser session'
   )
 })
+
+Cypress.Commands.add('dataCy', (value) => {
+  return cy.get(`[data-cy=${value}]`)
+})
