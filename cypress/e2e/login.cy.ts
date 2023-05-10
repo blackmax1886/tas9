@@ -4,7 +4,6 @@ describe('template spec', () => {
     cy.task('db:seed-user')
   })
   it('can access home', () => {
-    cy.visit('/')
     cy.googleLogin().then(() => cy.visit('home'))
   })
 

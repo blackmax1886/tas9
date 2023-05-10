@@ -1,11 +1,10 @@
-describe('/*description here*/', () => {
+describe('Task management with quick-add', () => {
   before('seed-test-user', () => {
     cy.task('db:reset-user')
     cy.task('db:seed-user')
   })
   beforeEach('reset tasks', () => {
     cy.task('db:reset-task')
-    cy.visit('/')
     cy.googleLogin()
     cy.visit('/home')
   })
