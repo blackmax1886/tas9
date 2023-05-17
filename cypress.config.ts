@@ -30,6 +30,34 @@ export default defineConfig({
           })
           return result
         },
+        async 'db:reset-task'() {
+          // delete test user's tasks
+          const result = await prisma.task.deleteMany({
+            where: {
+              userId: 'clhep0xew0000ml08ri93zfr9',
+            },
+          })
+          return result
+        },
+        async 'db:seed-task'(input) {
+          const result = await prisma.task.create({
+            data: {
+              userId: input.userId,
+              title: input.title,
+              content: input.content,
+              done: input.done || false,
+              due: input.due,
+              start: input.start,
+              end: input.end,
+              group: input.group,
+              type: input.type,
+              priority: input.priority,
+              archived: input.archived || false,
+              createdAt: new Date(),
+            },
+          })
+          return result
+        },
       })
     },
   },

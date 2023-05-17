@@ -33,7 +33,7 @@ type headerProps = {
 
 const Header = (props: headerProps) => {
   return (
-    <div css={header}>
+    <div css={header} data-cy="logo">
       <div css={logo}>Tas9</div>
       <nav css={nav}>
         <div onClick={() => signOut()} css={navItem}>
