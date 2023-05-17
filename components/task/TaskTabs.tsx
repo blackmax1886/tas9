@@ -51,10 +51,18 @@ const TaskTabs = (props: taskTabsProps) => {
       <div onClick={() => handleClickTaskFilterTab('tasks')} css={tasksTab}>
         tasks
       </div>
-      <div onClick={() => handleClickTaskFilterTab('done')} css={doneTab}>
+      <div
+        onClick={() => handleClickTaskFilterTab('done')}
+        css={doneTab}
+        data-cy="doneTab"
+      >
         done
       </div>
-      <div onClick={() => handleClickTaskFilterTab('all')} css={allTab}>
+      <div
+        onClick={() => handleClickTaskFilterTab('all')}
+        css={allTab}
+        data-cy="allTab"
+      >
         all
       </div>
       <div css={space}></div>

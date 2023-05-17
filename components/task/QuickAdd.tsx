@@ -55,6 +55,7 @@ const QuickAdd = (props: quickAddProps) => {
         onChange={(e) => props.setNewTaskTitle(e.target.value)}
         onKeyDown={handleKeyDown}
         css={addTask}
+        data-cy="quickAdd"
       ></input>
     </div>
   )

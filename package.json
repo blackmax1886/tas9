@@ -10,7 +10,8 @@
     "gen": "prisma generate",
     "migrate": "prisma migrate dev",
     "studio": "prisma studio",
-    "gqlgen": "graphql-codegen --config codegen.ts"
+    "gqlgen": "graphql-codegen --config codegen.ts",
+    "cypress": "cypress open"
   },
   "dependencies": {
     "@apollo/client": "^3.7.10",
@@ -42,8 +43,11 @@
     "@graphql-codegen/typescript-operations": "^3.0.2",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@graphql-codegen/typescript-resolvers": "^3.1.1",
+    "@testing-library/cypress": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
+    "cypress": "^12.11.0",
+    "cypress-social-logins": "^1.14.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
