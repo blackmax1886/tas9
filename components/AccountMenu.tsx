@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { SerializedStyles, css } from '@emotion/react'
 import router from 'next/router'
 import { Session } from 'next-auth'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import Modal from './Modal'
 
@@ -44,11 +44,25 @@ const accountToggleMenuItem = css`
 const AccountMenu = (props: AccoutMenuProps) => {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
   const [isModalOpen, setModalOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement | null>(null)
   const [deleteAccount] = useMutation<DeleteUserMutation>(DeleteUserDocument, {
     onCompleted() {
       router.push('/')
     },
   })
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsAccountMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [menuRef])
 
   const handleAccountDeletion = () => {
     setModalOpen(true)
@@ -71,7 +85,7 @@ const AccountMenu = (props: AccoutMenuProps) => {
     position: relative;
   `
   return (
-    <div css={accountMenu}>
+    <div ref={menuRef} css={accountMenu}>
       <div onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}>
         Account
       </div>
