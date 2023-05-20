@@ -30,7 +30,6 @@ const QuickAdd = (props: quickAddProps) => {
   const [createTask] = useMutation<CreateTaskMutation>(CreateTaskDocument, {
     onCompleted() {
       props.refetch()
-      props.setNewTaskTitle('')
     },
   })
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -43,6 +42,7 @@ const QuickAdd = (props: quickAddProps) => {
           },
         },
       })
+      props.setNewTaskTitle('')
     }
   }
 
