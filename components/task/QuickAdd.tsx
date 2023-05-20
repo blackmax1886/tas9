@@ -63,6 +63,7 @@ const QuickAdd = (props: quickAddProps) => {
         optimisticResponse: {
           createTask: {
             id: 'temp-id',
+            userId: props.userId,
             title: props.newTaskTitle,
             done: false,
             archived: false,
