@@ -1,4 +1,4 @@
-import { QueryResult, useMutation } from '@apollo/client'
+import { QueryResult, gql, useMutation } from '@apollo/client'
 import { css } from '@emotion/react'
 import { KeyboardEvent } from 'react'
 
@@ -28,8 +28,27 @@ type quickAddProps = {
 
 const QuickAdd = (props: quickAddProps) => {
   const [createTask] = useMutation<CreateTaskMutation>(CreateTaskDocument, {
-    onCompleted() {
-      props.refetch()
+    update: (cache, { data }) => {
+      const createdTask = data?.createTask
+      if (createdTask) {
+        cache.modify({
+          fields: {
+            tasks(existingTasks = []) {
+              const newTaskRef = cache.writeFragment({
+                data: createdTask,
+                fragment: gql`
+                  fragment NewTask on Task {
+                    id
+                    userId
+                    title
+                  }
+                `,
+              })
+              return [...existingTasks, newTaskRef]
+            },
+          },
+        })
+      }
     },
   })
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -39,6 +58,15 @@ const QuickAdd = (props: quickAddProps) => {
           task: {
             title: props.newTaskTitle,
             userId: props.userId,
+          },
+        },
+        optimisticResponse: {
+          createTask: {
+            id: 'temp-id',
+            title: props.newTaskTitle,
+            done: false,
+            archived: false,
+            __typename: 'Task',
           },
         },
       })
