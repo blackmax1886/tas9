@@ -128,7 +128,7 @@ export type CreateTaskMutationVariables = Exact<{
 }>;
 
 
-export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string, title: string, done: boolean, archived: boolean } };
+export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, archived: boolean } };
 
 export type GetTaskQueryVariables = Exact<{
   taskId: Scalars['String'];
@@ -188,6 +188,7 @@ export const CreateTaskDocument = gql`
     mutation createTask($task: NewTask!) {
   createTask(input: $task) {
     id
+    userId
     title
     done
     archived

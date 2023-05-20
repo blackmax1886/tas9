@@ -1,6 +1,7 @@
 mutation createTask($task: NewTask!) {
   createTask(input: $task) {
     id
+    userId
     title
     done
     archived
