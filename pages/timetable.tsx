@@ -125,7 +125,7 @@ const TimeTable = () => {
             <QuickAdd
               newTaskTitle={newTaskTitle}
               setNewTaskTitle={setNewTaskTitle}
-              userId={session?.user?.id}
+              userId={session?.user?.id as string}
               refetch={refetch}
             />
             <DraggableTaskCards
