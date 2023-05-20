@@ -22,7 +22,7 @@ const addTask = css`
 type quickAddProps = {
   newTaskTitle: string
   setNewTaskTitle: (newTaskTitle: string) => void
-  userId: string | undefined
+  userId: string
   refetch: QueryResult<GetTasksQuery>['refetch']
 }
 
