@@ -11,6 +11,7 @@ import {
   UpdateTaskIsDoneDocument,
   UpdateTaskIsDoneMutation,
 } from '@/graphql/types/client'
+import { TaskSummaryFragment } from '@/graphql/types/client'
 
 const checkbox = css`
   display: none;
@@ -45,7 +46,7 @@ const taskCard = css`
 `
 
 type taskCardProps = {
-  task: Partial<Task> | undefined
+  task: TaskSummaryFragment | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
   openTaskDetail: (taskId: string | undefined) => void
   isSelected: boolean
@@ -55,12 +56,7 @@ type taskCardProps = {
 const TaskCard = (props: taskCardProps) => {
   const [isDone, setIsDone] = useState(props.task?.done)
   const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
-    UpdateTaskIsDoneDocument,
-    {
-      onCompleted() {
-        props.refetch()
-      },
-    }
+    UpdateTaskIsDoneDocument
   )
   const [deleteTask] = useMutation<DeleteTaskMutation>(DeleteTaskDocument, {
     onCompleted() {
@@ -69,13 +65,25 @@ const TaskCard = (props: taskCardProps) => {
   })
 
   const handleTaskIsDone = () => {
-    setIsDone(!isDone)
-    updateTaskIsDone({
-      variables: {
-        taskId: props.task?.id,
-        isDone: !isDone,
-      },
-    })
+    if (props.task) {
+      const { id, done, ...rest } = props.task
+
+      setIsDone(!isDone)
+      updateTaskIsDone({
+        variables: {
+          taskId: id as string,
+          isDone: !isDone,
+        },
+        optimisticResponse: {
+          updateTask: {
+            id: id as string,
+            done: !done,
+            ...rest,
+            __typename: 'Task',
+          },
+        },
+      })
+    }
   }
 
   const handleClickTask = () => {
@@ -165,7 +173,7 @@ const TaskCard = (props: taskCardProps) => {
 }
 
 type taskCardsProps = {
-  tasks: Partial<Task>[] | undefined
+  tasks: TaskSummaryFragment[] | undefined
   refetch: QueryResult<GetTasksQuery>['refetch']
   openTaskDetail: (taskId: string | undefined) => void
   selectedTaskId: string
@@ -175,7 +183,7 @@ type taskCardsProps = {
 const TaskCards = (props: taskCardsProps) => {
   return (
     <>
-      {props.tasks?.map((task: Partial<Task>) => (
+      {props.tasks?.map((task: TaskSummaryFragment) => (
         <TaskCard
           key={task.id}
           task={task}

@@ -152,7 +152,7 @@ export type UpdateTaskIsDoneMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTaskIsDoneMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', title: string, done: boolean } };
+export type UpdateTaskIsDoneMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } };
 
 export type DeleteTaskMutationVariables = Exact<{
   taskId: Scalars['ID'];
@@ -313,11 +313,10 @@ export type GetTasksQueryResult = Apollo.QueryResult<GetTasksQuery, GetTasksQuer
 export const UpdateTaskIsDoneDocument = gql`
     mutation UpdateTaskIsDone($taskId: ID!, $isDone: Boolean!) {
   updateTask(id: $taskId, input: {done: $isDone}) {
-    title
-    done
+    ...TaskSummary
   }
 }
-    `;
+    ${TaskSummaryFragmentDoc}`;
 export type UpdateTaskIsDoneMutationFn = Apollo.MutationFunction<UpdateTaskIsDoneMutation, UpdateTaskIsDoneMutationVariables>;
 
 /**

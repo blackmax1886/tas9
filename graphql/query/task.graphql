@@ -38,8 +38,7 @@ query getTasks($userId: ID!) {
 
 mutation UpdateTaskIsDone($taskId: ID!, $isDone: Boolean!) {
   updateTask(id: $taskId, input: { done: $isDone }) {
-    title
-    done
+    ...TaskSummary
   }
 }
 
