@@ -41,6 +41,13 @@ const QuickAdd = (props: quickAddProps) => {
                     id
                     userId
                     title
+                    done
+                    archived
+                    start
+                    end
+                    group
+                    type
+                    priority
                   }
                 `,
               })
@@ -62,10 +69,15 @@ const QuickAdd = (props: quickAddProps) => {
         },
         optimisticResponse: {
           createTask: {
-            id: 'temp-id',
+            id: Math.random().toString(),
             userId: props.userId,
             title: props.newTaskTitle,
             done: false,
+            start: null,
+            end: null,
+            group: null,
+            type: null,
+            priority: null,
             archived: false,
             __typename: 'Task',
           },

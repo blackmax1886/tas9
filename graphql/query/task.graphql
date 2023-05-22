@@ -4,6 +4,11 @@ mutation createTask($task: NewTask!) {
     userId
     title
     done
+    start
+    end
+    group
+    type
+    priority
     archived
   }
 }

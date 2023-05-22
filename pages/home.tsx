@@ -50,7 +50,7 @@ const Home: NextPage = () => {
     refetchSelectedTask()
   }, [refetchSelectedTask, selectedTaskId])
 
-  const tasks = filterByActiveTab(activeTaskTab, data?.tasks)
+  const tasks = filterByActiveTab(activeTaskTab, data?.tasks)?.reverse()
 
   const openTaskDetail = (taskId: string | undefined) => {
     if (taskId) {

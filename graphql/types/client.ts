@@ -128,7 +128,7 @@ export type CreateTaskMutationVariables = Exact<{
 }>;
 
 
-export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, archived: boolean } };
+export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } };
 
 export type GetTaskQueryVariables = Exact<{
   taskId: Scalars['String'];
@@ -191,6 +191,11 @@ export const CreateTaskDocument = gql`
     userId
     title
     done
+    start
+    end
+    group
+    type
+    priority
     archived
   }
 }

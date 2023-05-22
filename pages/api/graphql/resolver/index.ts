@@ -27,7 +27,7 @@ export const resolvers: Resolvers = {
           userId: String(args.userId),
         },
         // TODO:
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: 'asc' },
       })
       return result
     },
