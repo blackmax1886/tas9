@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client'
+
 import { Resolvers } from '../types/graphql'
 
 import { prisma } from '@/prisma/client'
@@ -92,6 +94,50 @@ export const resolvers: Resolvers = {
         where: { id: String(args.id) },
         data: { start: args.start, end: args.end },
       })
+      return result
+    },
+    updateTask: async (_, args) => {
+      const { id, input } = args
+
+      const data: Prisma.TaskUpdateInput = {}
+
+      // Enumerate the fields in `input` and only add them to `data` if they are not `undefined`.
+      if (input.title !== undefined) {
+        data.title = input.title || ''
+      }
+      if (input.content !== undefined) {
+        data.content = input.content || ''
+      }
+      if (input.done !== undefined) {
+        data.done = input.done || false
+      }
+      if (input.archived !== undefined) {
+        data.archived = input.archived || false
+      }
+      if (input.due !== undefined) {
+        data.due = input.due
+      }
+      if (input.start !== undefined) {
+        data.start = input.start
+      }
+      if (input.end !== undefined) {
+        data.end = input.end
+      }
+      if (input.group !== undefined) {
+        data.group = input.group
+      }
+      if (input.type !== undefined) {
+        data.type = input.type
+      }
+      if (input.priority !== undefined) {
+        data.priority = input.priority
+      }
+
+      const result = await prisma.task.update({
+        where: { id: String(id) },
+        data,
+      })
+
       return result
     },
   },
