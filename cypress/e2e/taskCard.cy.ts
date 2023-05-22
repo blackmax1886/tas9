@@ -48,4 +48,15 @@ describe('Task card operations', () => {
         cy.dataCy('taskCardTitle').invoke('text').should('equal', 'test1')
       })
   })
+
+  it('should add a new task and verify the tasks are ordered in descending order', () => {
+    cy.task('db:seed-task', {
+      userId: 'clhep0xew0000ml08ri93zfr9',
+      title: 'test2',
+    }).then(() => {
+      cy.dataCy('taskCard').should('have.length', 2)
+      cy.dataCy('taskCardTitle').first().invoke('text').should('equal', 'test2')
+      cy.dataCy('taskCardTitle').eq(1).invoke('text').should('equal', 'test1')
+    })
+  })
 })
