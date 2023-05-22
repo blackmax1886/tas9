@@ -13,7 +13,7 @@ mutation createTask($task: NewTask!) {
   }
 }
 
-query getTask($taskId: String!) {
+query getTask($taskId: ID!) {
   task(id: $taskId) {
     id
     userId
@@ -31,7 +31,7 @@ query getTask($taskId: String!) {
   }
 }
 
-query getTasks($userId: String!) {
+query getTasks($userId: ID!) {
   tasks(userId: $userId) {
     id
     userId
@@ -53,7 +53,7 @@ mutation UpdateTaskIsDone($taskId: ID!, $isDone: Boolean!) {
   }
 }
 
-mutation DeleteTask($taskId: String!) {
+mutation DeleteTask($taskId: ID!) {
   deleteTask(id: $taskId) {
     title
   }

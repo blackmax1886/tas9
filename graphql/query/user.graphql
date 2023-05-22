@@ -1,4 +1,4 @@
-mutation DeleteUser($userId: String!) {
+mutation DeleteUser($userId: ID!) {
   deleteUser(id: $userId) {
     id
   }

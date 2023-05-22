@@ -37,12 +37,12 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteTaskArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
@@ -54,7 +54,7 @@ export type MutationUpdateTaskArgs = {
 export type NewTask = {
   content?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 export type NewUser = {
@@ -78,17 +78,17 @@ export type Query = {
 
 
 export type QueryTaskArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
 export type QueryTasksArgs = {
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 
 export type QueryUserArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 export type Task = {
@@ -105,7 +105,7 @@ export type Task = {
   start?: Maybe<Scalars['Date']>;
   title: Scalars['String'];
   type?: Maybe<Scalars['String']>;
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 export type UpdateTaskInput = {
@@ -129,14 +129,14 @@ export type CreateTaskMutationVariables = Exact<{
 export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } };
 
 export type GetTaskQueryVariables = Exact<{
-  taskId: Scalars['String'];
+  taskId: Scalars['ID'];
 }>;
 
 
 export type GetTaskQuery = { __typename?: 'Query', task?: { __typename?: 'Task', id: string, userId: string, title: string, content?: string | null, done: boolean, due?: number | null, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean, createdAt: number } | null };
 
 export type GetTasksQueryVariables = Exact<{
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 }>;
 
 
@@ -151,7 +151,7 @@ export type UpdateTaskIsDoneMutationVariables = Exact<{
 export type UpdateTaskIsDoneMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', title: string, done: boolean } };
 
 export type DeleteTaskMutationVariables = Exact<{
-  taskId: Scalars['String'];
+  taskId: Scalars['ID'];
 }>;
 
 
@@ -175,7 +175,7 @@ export type UpdateTaskStartEndMutationVariables = Exact<{
 export type UpdateTaskStartEndMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, start?: number | null, end?: number | null } };
 
 export type DeleteUserMutationVariables = Exact<{
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 }>;
 
 
@@ -225,7 +225,7 @@ export type CreateTaskMutationHookResult = ReturnType<typeof useCreateTaskMutati
 export type CreateTaskMutationResult = Apollo.MutationResult<CreateTaskMutation>;
 export type CreateTaskMutationOptions = Apollo.BaseMutationOptions<CreateTaskMutation, CreateTaskMutationVariables>;
 export const GetTaskDocument = gql`
-    query getTask($taskId: String!) {
+    query getTask($taskId: ID!) {
   task(id: $taskId) {
     id
     userId
@@ -272,7 +272,7 @@ export type GetTaskQueryHookResult = ReturnType<typeof useGetTaskQuery>;
 export type GetTaskLazyQueryHookResult = ReturnType<typeof useGetTaskLazyQuery>;
 export type GetTaskQueryResult = Apollo.QueryResult<GetTaskQuery, GetTaskQueryVariables>;
 export const GetTasksDocument = gql`
-    query getTasks($userId: String!) {
+    query getTasks($userId: ID!) {
   tasks(userId: $userId) {
     id
     userId
@@ -351,7 +351,7 @@ export type UpdateTaskIsDoneMutationHookResult = ReturnType<typeof useUpdateTask
 export type UpdateTaskIsDoneMutationResult = Apollo.MutationResult<UpdateTaskIsDoneMutation>;
 export type UpdateTaskIsDoneMutationOptions = Apollo.BaseMutationOptions<UpdateTaskIsDoneMutation, UpdateTaskIsDoneMutationVariables>;
 export const DeleteTaskDocument = gql`
-    mutation DeleteTask($taskId: String!) {
+    mutation DeleteTask($taskId: ID!) {
   deleteTask(id: $taskId) {
     title
   }
@@ -456,7 +456,7 @@ export type UpdateTaskStartEndMutationHookResult = ReturnType<typeof useUpdateTa
 export type UpdateTaskStartEndMutationResult = Apollo.MutationResult<UpdateTaskStartEndMutation>;
 export type UpdateTaskStartEndMutationOptions = Apollo.BaseMutationOptions<UpdateTaskStartEndMutation, UpdateTaskStartEndMutationVariables>;
 export const DeleteUserDocument = gql`
-    mutation DeleteUser($userId: String!) {
+    mutation DeleteUser($userId: ID!) {
   deleteUser(id: $userId) {
     id
   }
