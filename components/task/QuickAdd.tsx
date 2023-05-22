@@ -1,4 +1,4 @@
-import { QueryResult, gql, useMutation } from '@apollo/client'
+import { QueryResult, useMutation } from '@apollo/client'
 import { css } from '@emotion/react'
 import { KeyboardEvent } from 'react'
 
@@ -6,6 +6,7 @@ import {
   CreateTaskDocument,
   CreateTaskMutation,
   GetTasksQuery,
+  TaskSummaryFragmentDoc,
 } from '@/graphql/types/client'
 
 const addTask = css`
@@ -36,20 +37,7 @@ const QuickAdd = (props: quickAddProps) => {
             tasks(existingTasks = []) {
               const newTaskRef = cache.writeFragment({
                 data: createdTask,
-                fragment: gql`
-                  fragment NewTask on Task {
-                    id
-                    userId
-                    title
-                    done
-                    archived
-                    start
-                    end
-                    group
-                    type
-                    priority
-                  }
-                `,
+                fragment: TaskSummaryFragmentDoc,
               })
               return [...existingTasks, newTaskRef]
             },
