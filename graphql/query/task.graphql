@@ -46,8 +46,8 @@ query getTasks($userId: String!) {
   }
 }
 
-mutation UpdateTaskIsDone($taskId: String!, $isDone: Boolean!) {
-  updateTaskIsDone(id: $taskId, isDone: $isDone) {
+mutation UpdateTaskIsDone($taskId: ID!, $isDone: Boolean!) {
+  updateTask(id: $taskId, input: { done: $isDone }) {
     title
     done
   }
@@ -59,15 +59,15 @@ mutation DeleteTask($taskId: String!) {
   }
 }
 
-mutation UpdateTaskContent($taskId: String!, $content: String!) {
-  updateTaskContent(id: $taskId, content: $content) {
+mutation UpdateTaskContent($taskId: ID!, $content: String!) {
+  updateTask(id: $taskId, input: { content: $content }) {
     id
     content
   }
 }
 
-mutation UpdateTaskStartEnd($taskId: String!, $start: Date!, $end: Date!) {
-  updateTaskStartEnd(id: $taskId, start: $start, end: $end) {
+mutation UpdateTaskStartEnd($taskId: ID!, $start: Date!, $end: Date!) {
+  updateTask(id: $taskId, input: { start: $start, end: $end }) {
     id
     start
     end
