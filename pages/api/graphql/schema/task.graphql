@@ -21,3 +21,16 @@ input NewTask {
   title: String!
   content: String
 }
+
+input UpdateTaskInput {
+  title: String
+  content: String
+  done: Boolean
+  due: Date
+  start: Date
+  end: Date
+  group: String
+  type: String
+  priority: Int
+  archived: Boolean
+}

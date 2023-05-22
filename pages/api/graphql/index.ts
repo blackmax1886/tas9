@@ -40,6 +40,19 @@ input NewTask {
   content: String
 }
 
+input UpdateTaskInput {
+  title: String
+  content: String
+  done: Boolean
+  due: Date
+  start: Date
+  end: Date
+  group: String
+  type: String
+  priority: Int
+  archived: Boolean
+}
+
 type Query {
   user(id: String!): PrismaUser
   tasks(userId: String!): [Task!]!
@@ -54,6 +67,7 @@ type Mutation {
   deleteTask(id: String!): Task
   updateTaskContent(id: String!, content: String!): Task!
   updateTaskStartEnd(id: String!, start: Date!, end: Date!): Task!
+  updateTask(id: ID!, input: UpdateTaskInput!): Task!
 }
 `
 

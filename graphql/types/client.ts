@@ -22,6 +22,7 @@ export type Mutation = {
   createUser: PrismaUser;
   deleteTask?: Maybe<Task>;
   deleteUser?: Maybe<PrismaUser>;
+  updateTask: Task;
   updateTaskContent: Task;
   updateTaskIsDone: Task;
   updateTaskStartEnd: Task;
@@ -45,6 +46,12 @@ export type MutationDeleteTaskArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationUpdateTaskArgs = {
+  id: Scalars['ID'];
+  input: UpdateTaskInput;
 };
 
 
@@ -121,6 +128,19 @@ export type Task = {
   title: Scalars['String'];
   type?: Maybe<Scalars['String']>;
   userId: Scalars['String'];
+};
+
+export type UpdateTaskInput = {
+  archived?: InputMaybe<Scalars['Boolean']>;
+  content?: InputMaybe<Scalars['String']>;
+  done?: InputMaybe<Scalars['Boolean']>;
+  due?: InputMaybe<Scalars['Date']>;
+  end?: InputMaybe<Scalars['Date']>;
+  group?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Date']>;
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateTaskMutationVariables = Exact<{

@@ -1,5 +1,5 @@
 #import PrismaUser, NewUser from "user.graphql"
-#import Task, NewTask from "task.graphql"
+#import Task, NewTask, UpdateTaskInput from "task.graphql"
 #import Date from "scalar.graphql"
 
 type Query {
@@ -16,4 +16,5 @@ type Mutation {
   deleteTask(id: String!): Task
   updateTaskContent(id: String!, content: String!): Task!
   updateTaskStartEnd(id: String!, start: Date!, end: Date!): Task!
+  updateTask(id: ID!, input: UpdateTaskInput!): Task!
 }
