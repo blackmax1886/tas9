@@ -12,9 +12,6 @@ type Mutation {
   createUser(input: NewUser!): PrismaUser!
   deleteUser(id: String!): PrismaUser
   createTask(input: NewTask!): Task!
-  updateTaskIsDone(id: String!, isDone: Boolean!): Task!
   deleteTask(id: String!): Task
-  updateTaskContent(id: String!, content: String!): Task!
-  updateTaskStartEnd(id: String!, start: Date!, end: Date!): Task!
   updateTask(id: ID!, input: UpdateTaskInput!): Task!
 }

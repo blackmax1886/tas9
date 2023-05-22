@@ -75,27 +75,6 @@ export const resolvers: Resolvers = {
       })
       return result
     },
-    updateTaskIsDone: async (_, args) => {
-      const result = await prisma.task.update({
-        where: { id: String(args.id) },
-        data: { done: Boolean(args.isDone) },
-      })
-      return result
-    },
-    updateTaskContent: async (_, args) => {
-      const result = await prisma.task.update({
-        where: { id: String(args.id) },
-        data: { content: String(args.content) },
-      })
-      return result
-    },
-    updateTaskStartEnd: async (_, args) => {
-      const result = await prisma.task.update({
-        where: { id: String(args.id) },
-        data: { start: args.start, end: args.end },
-      })
-      return result
-    },
     updateTask: async (_, args) => {
       const { id, input } = args
 

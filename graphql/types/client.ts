@@ -23,9 +23,6 @@ export type Mutation = {
   deleteTask?: Maybe<Task>;
   deleteUser?: Maybe<PrismaUser>;
   updateTask: Task;
-  updateTaskContent: Task;
-  updateTaskIsDone: Task;
-  updateTaskStartEnd: Task;
 };
 
 
@@ -52,25 +49,6 @@ export type MutationDeleteUserArgs = {
 export type MutationUpdateTaskArgs = {
   id: Scalars['ID'];
   input: UpdateTaskInput;
-};
-
-
-export type MutationUpdateTaskContentArgs = {
-  content: Scalars['String'];
-  id: Scalars['String'];
-};
-
-
-export type MutationUpdateTaskIsDoneArgs = {
-  id: Scalars['String'];
-  isDone: Scalars['Boolean'];
-};
-
-
-export type MutationUpdateTaskStartEndArgs = {
-  end: Scalars['Date'];
-  id: Scalars['String'];
-  start: Scalars['Date'];
 };
 
 export type NewTask = {
