@@ -1,48 +1,38 @@
+fragment TaskSummary on Task {
+  id
+  userId
+  title
+  done
+  start
+  end
+  group
+  type
+  priority
+  archived
+}
+
+fragment TaskDetails on Task {
+  ...TaskSummary
+  content
+  due
+  createdAt
+}
+
 mutation createTask($task: NewTask!) {
   createTask(input: $task) {
-    id
-    userId
-    title
-    done
-    start
-    end
-    group
-    type
-    priority
-    archived
+    ...TaskSummary
   }
 }
 
 query getTask($taskId: ID!) {
   task(id: $taskId) {
-    id
-    userId
-    title
-    content
-    done
-    due
-    start
-    end
-    group
-    type
-    priority
-    archived
-    createdAt
+    ...TaskDetails
   }
 }
 
 query getTasks($userId: ID!) {
   tasks(userId: $userId) {
-    id
-    userId
-    title
-    done
-    start
-    end
-    group
-    type
-    priority
-    archived
+    ...TaskSummary
   }
 }
 

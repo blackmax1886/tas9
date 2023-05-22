@@ -121,6 +121,10 @@ export type UpdateTaskInput = {
   type?: InputMaybe<Scalars['String']>;
 };
 
+export type TaskSummaryFragment = { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean };
+
+export type TaskDetailsFragment = { __typename?: 'Task', content?: string | null, due?: number | null, createdAt: number, id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean };
+
 export type CreateTaskMutationVariables = Exact<{
   task: NewTask;
 }>;
@@ -133,7 +137,7 @@ export type GetTaskQueryVariables = Exact<{
 }>;
 
 
-export type GetTaskQuery = { __typename?: 'Query', task?: { __typename?: 'Task', id: string, userId: string, title: string, content?: string | null, done: boolean, due?: number | null, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean, createdAt: number } | null };
+export type GetTaskQuery = { __typename?: 'Query', task?: { __typename?: 'Task', content?: string | null, due?: number | null, createdAt: number, id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } | null };
 
 export type GetTasksQueryVariables = Exact<{
   userId: Scalars['ID'];
@@ -181,23 +185,35 @@ export type DeleteUserMutationVariables = Exact<{
 
 export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'PrismaUser', id: string } | null };
 
-
+export const TaskSummaryFragmentDoc = gql`
+    fragment TaskSummary on Task {
+  id
+  userId
+  title
+  done
+  start
+  end
+  group
+  type
+  priority
+  archived
+}
+    `;
+export const TaskDetailsFragmentDoc = gql`
+    fragment TaskDetails on Task {
+  ...TaskSummary
+  content
+  due
+  createdAt
+}
+    ${TaskSummaryFragmentDoc}`;
 export const CreateTaskDocument = gql`
     mutation createTask($task: NewTask!) {
   createTask(input: $task) {
-    id
-    userId
-    title
-    done
-    start
-    end
-    group
-    type
-    priority
-    archived
+    ...TaskSummary
   }
 }
-    `;
+    ${TaskSummaryFragmentDoc}`;
 export type CreateTaskMutationFn = Apollo.MutationFunction<CreateTaskMutation, CreateTaskMutationVariables>;
 
 /**
@@ -227,22 +243,10 @@ export type CreateTaskMutationOptions = Apollo.BaseMutationOptions<CreateTaskMut
 export const GetTaskDocument = gql`
     query getTask($taskId: ID!) {
   task(id: $taskId) {
-    id
-    userId
-    title
-    content
-    done
-    due
-    start
-    end
-    group
-    type
-    priority
-    archived
-    createdAt
+    ...TaskDetails
   }
 }
-    `;
+    ${TaskDetailsFragmentDoc}`;
 
 /**
  * __useGetTaskQuery__
@@ -274,19 +278,10 @@ export type GetTaskQueryResult = Apollo.QueryResult<GetTaskQuery, GetTaskQueryVa
 export const GetTasksDocument = gql`
     query getTasks($userId: ID!) {
   tasks(userId: $userId) {
-    id
-    userId
-    title
-    done
-    start
-    end
-    group
-    type
-    priority
-    archived
+    ...TaskSummary
   }
 }
-    `;
+    ${TaskSummaryFragmentDoc}`;
 
 /**
  * __useGetTasksQuery__
