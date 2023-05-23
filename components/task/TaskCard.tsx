@@ -7,7 +7,6 @@ import {
   DeleteTaskDocument,
   DeleteTaskMutation,
   GetTasksQuery,
-  Task,
   UpdateTaskIsDoneDocument,
   UpdateTaskIsDoneMutation,
 } from '@/graphql/types/client'
@@ -196,13 +195,13 @@ const TaskCards = (props: taskCardsProps) => {
 }
 
 type draggableTaskCardProps = {
-  task: Partial<Task> | undefined
+  task: TaskSummaryFragment
   refetch: QueryResult<GetTasksQuery>['refetch']
-  setDraggedTask: (task: Partial<Task> | undefined) => void
+  setDraggedTask: (task: TaskSummaryFragment) => void
 }
 
 const DraggableTaskCard = (props: draggableTaskCardProps) => {
-  const [isDone, setIsDone] = useState(props.task?.done)
+  const [isDone, setIsDone] = useState(props.task.done)
   const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
     UpdateTaskIsDoneDocument,
     {
@@ -221,17 +220,17 @@ const DraggableTaskCard = (props: draggableTaskCardProps) => {
     setIsDone(!isDone)
     updateTaskIsDone({
       variables: {
-        taskId: props.task?.id,
+        taskId: props.task.id,
         isDone: !isDone,
       },
     })
   }
 
   const handleDeleteTask = () => {
-    deleteTask({ variables: { taskId: props.task?.id } })
+    deleteTask({ variables: { taskId: props.task.id } })
   }
   const handleDragStart = () => {
-    console.log('drag start taskId:', props.task?.id)
+    console.log('drag start taskId:', props.task.id)
     props.setDraggedTask(props.task)
   }
 
@@ -269,13 +268,13 @@ const DraggableTaskCard = (props: draggableTaskCardProps) => {
 
   return (
     <>
-      <div key={props.task?.id} draggable={true} css={taskCard}>
+      <div key={props.task.id} draggable={true} css={taskCard}>
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>
         </div>
         <label css={taskLabel} onDragStart={handleDragStart} draggable>
-          {props.task?.title}
+          {props.task.title}
         </label>
         <button css={deleteButton} onClick={handleDeleteTask}>
           <Image
@@ -291,16 +290,16 @@ const DraggableTaskCard = (props: draggableTaskCardProps) => {
 }
 
 type draggableTaskCardsProps = {
-  tasks: Partial<Task>[] | undefined
+  tasks: TaskSummaryFragment[]
   refetch: QueryResult<GetTasksQuery>['refetch']
   //TODO: not undefined, should be null?
-  setDraggedTask: (task: Partial<Task> | undefined) => void
+  setDraggedTask: (task: TaskSummaryFragment) => void
 }
 
 const DraggableTaskCards = (props: draggableTaskCardsProps) => {
   return (
     <>
-      {props.tasks?.map((task: Partial<Task>) => (
+      {props.tasks.map((task: TaskSummaryFragment) => (
         <DraggableTaskCard
           key={task.id}
           task={task}
