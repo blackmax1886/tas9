@@ -88,7 +88,6 @@ const Home: NextPage = () => {
             {!loading && !error ? (
               <TaskCards
                 tasks={tasks}
-                refetch={refetch}
                 openTaskDetail={openTaskDetail}
                 selectedTaskId={selectedTaskId}
                 setSelectedTaskId={setSelectedTaskId}

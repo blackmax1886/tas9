@@ -46,7 +46,6 @@ const taskCard = css`
 
 type taskCardProps = {
   task: TaskSummaryFragment
-  refetch: QueryResult<GetTasksQuery>['refetch']
   openTaskDetail: (taskId: string) => void
   isSelected: boolean
   setSelectedTaskId: (taskId: string) => void
@@ -188,7 +187,6 @@ const TaskCard = (props: taskCardProps) => {
 
 type taskCardsProps = {
   tasks: TaskSummaryFragment[]
-  refetch: QueryResult<GetTasksQuery>['refetch']
   openTaskDetail: (taskId: string) => void
   selectedTaskId: string
   setSelectedTaskId: (taskId: string) => void
@@ -201,7 +199,6 @@ const TaskCards = (props: taskCardsProps) => {
         <TaskCard
           key={task.id}
           task={task}
-          refetch={props.refetch}
           openTaskDetail={props.openTaskDetail}
           isSelected={task.id === props.selectedTaskId}
           setSelectedTaskId={props.setSelectedTaskId}
