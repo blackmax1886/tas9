@@ -56,7 +56,7 @@ const Home: NextPage = () => {
 
   let tasks: TaskSummaryFragment[] = []
   if (!loading && !error && data) {
-    tasks = filterByActiveTab(activeTaskTab, data.tasks)?.reverse()
+    tasks = filterByActiveTab(activeTaskTab, data.tasks).reverse()
   }
 
   const openTaskDetail = (taskId: string | undefined) => {

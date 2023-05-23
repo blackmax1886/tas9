@@ -7,13 +7,14 @@ const filterByActiveTab = (
   let result: TaskSummaryFragment[]
   switch (activeTaskTab) {
     case 'tasks':
-      result = tasks?.filter((task) => !task.done)
+      result = tasks.filter((task) => !task.done)
       break
     case 'done':
-      result = tasks?.filter((task) => task.done)
+      result = tasks.filter((task) => task.done)
       break
     default:
-      result = tasks
+      // useQuery result is readonly object
+      result = [...tasks]
   }
   return result
 }
