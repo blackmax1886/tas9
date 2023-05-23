@@ -46,15 +46,15 @@ const taskCard = css`
 `
 
 type taskCardProps = {
-  task: TaskSummaryFragment | undefined
+  task: TaskSummaryFragment
   refetch: QueryResult<GetTasksQuery>['refetch']
-  openTaskDetail: (taskId: string | undefined) => void
+  openTaskDetail: (taskId: string) => void
   isSelected: boolean
   setSelectedTaskId: (taskId: string) => void
 }
 
 const TaskCard = (props: taskCardProps) => {
-  const [isDone, setIsDone] = useState(props.task?.done)
+  const [isDone, setIsDone] = useState(props.task.done)
   const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
     UpdateTaskIsDoneDocument
   )
@@ -65,33 +65,31 @@ const TaskCard = (props: taskCardProps) => {
   })
 
   const handleTaskIsDone = () => {
-    if (props.task) {
-      const { id, done, ...rest } = props.task
+    const { id, done, ...rest } = props.task
 
-      setIsDone(!isDone)
-      updateTaskIsDone({
-        variables: {
-          taskId: id as string,
-          isDone: !isDone,
+    setIsDone(!isDone)
+    updateTaskIsDone({
+      variables: {
+        taskId: id,
+        isDone: !isDone,
+      },
+      optimisticResponse: {
+        updateTask: {
+          id: id,
+          done: !done,
+          ...rest,
+          __typename: 'Task',
         },
-        optimisticResponse: {
-          updateTask: {
-            id: id as string,
-            done: !done,
-            ...rest,
-            __typename: 'Task',
-          },
-        },
-      })
-    }
+      },
+    })
   }
 
   const handleClickTask = () => {
-    props.openTaskDetail(props.task?.id)
+    props.openTaskDetail(props.task.id)
   }
 
   const handleDeleteTask = () => {
-    deleteTask({ variables: { taskId: props.task?.id } })
+    deleteTask({ variables: { taskId: props.task.id } })
     if (props.isSelected) {
       props.setSelectedTaskId('')
     }
@@ -139,7 +137,7 @@ const TaskCard = (props: taskCardProps) => {
 
   return (
     <>
-      <div key={props.task?.id} css={selectableTaskCard} data-cy="taskCard">
+      <div key={props.task.id} css={selectableTaskCard} data-cy="taskCard">
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label
@@ -153,7 +151,7 @@ const TaskCard = (props: taskCardProps) => {
           onClick={handleClickTask}
           data-cy="taskCardTitle"
         >
-          {props.task?.title}
+          {props.task.title}
         </label>
         <button
           css={deleteButton}
@@ -173,9 +171,9 @@ const TaskCard = (props: taskCardProps) => {
 }
 
 type taskCardsProps = {
-  tasks: TaskSummaryFragment[] | undefined
+  tasks: TaskSummaryFragment[]
   refetch: QueryResult<GetTasksQuery>['refetch']
-  openTaskDetail: (taskId: string | undefined) => void
+  openTaskDetail: (taskId: string) => void
   selectedTaskId: string
   setSelectedTaskId: (taskId: string) => void
 }
@@ -183,7 +181,7 @@ type taskCardsProps = {
 const TaskCards = (props: taskCardsProps) => {
   return (
     <>
-      {props.tasks?.map((task: TaskSummaryFragment) => (
+      {props.tasks.map((task: TaskSummaryFragment) => (
         <TaskCard
           key={task.id}
           task={task}

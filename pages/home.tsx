@@ -18,6 +18,7 @@ import {
   GetTaskDocument,
   GetTasksQuery,
   GetTasksDocument,
+  TaskSummaryFragment,
 } from '@/graphql/types/client'
 import { filterByActiveTab } from '@/lib/task/filter'
 
@@ -33,10 +34,13 @@ const boards = css`
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession()
-  const { data, refetch } = useQuery<GetTasksQuery>(GetTasksDocument, {
-    variables: { userId: session?.user?.id },
-    skip: status === 'loading',
-  })
+  const { data, refetch, loading, error } = useQuery<GetTasksQuery>(
+    GetTasksDocument,
+    {
+      variables: { userId: session?.user?.id },
+      skip: status === 'loading',
+    }
+  )
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [selectedTaskId, setSelectedTaskId] = useState('')
   const [activeTaskTab, setActiveTaskTab] = useState('tasks')
@@ -50,7 +54,10 @@ const Home: NextPage = () => {
     refetchSelectedTask()
   }, [refetchSelectedTask, selectedTaskId])
 
-  const tasks = filterByActiveTab(activeTaskTab, data?.tasks)?.reverse()
+  let tasks: TaskSummaryFragment[] = []
+  if (!loading && !error && data) {
+    tasks = filterByActiveTab(activeTaskTab, data.tasks)?.reverse()
+  }
 
   const openTaskDetail = (taskId: string | undefined) => {
     if (taskId) {
@@ -78,13 +85,17 @@ const Home: NextPage = () => {
               userId={session?.user?.id as string}
               refetch={refetch}
             />
-            <TaskCards
-              tasks={tasks}
-              refetch={refetch}
-              openTaskDetail={openTaskDetail}
-              selectedTaskId={selectedTaskId}
-              setSelectedTaskId={setSelectedTaskId}
-            ></TaskCards>
+            {!loading && !error ? (
+              <TaskCards
+                tasks={tasks}
+                refetch={refetch}
+                openTaskDetail={openTaskDetail}
+                selectedTaskId={selectedTaskId}
+                setSelectedTaskId={setSelectedTaskId}
+              ></TaskCards>
+            ) : (
+              <></>
+            )}
           </Board>
           <Board>
             {selected && (

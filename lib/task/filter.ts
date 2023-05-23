@@ -1,10 +1,10 @@
-import { Task } from '@/graphql/types/client'
+import { TaskSummaryFragment } from '@/graphql/types/client'
 
 const filterByActiveTab = (
   activeTaskTab: string,
-  tasks: Partial<Task>[] | undefined
+  tasks: TaskSummaryFragment[]
 ) => {
-  let result: Partial<Task>[] | undefined = []
+  let result: TaskSummaryFragment[]
   switch (activeTaskTab) {
     case 'tasks':
       result = tasks?.filter((task) => !task.done)
