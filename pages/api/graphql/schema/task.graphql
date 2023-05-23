@@ -2,7 +2,7 @@
 
 type Task {
   id: ID!
-  userId: String!
+  userId: ID!
   title: String!
   content: String
   done: Boolean!
@@ -17,7 +17,20 @@ type Task {
 }
 
 input NewTask {
-  userId: String!
+  userId: ID!
   title: String!
   content: String
+}
+
+input UpdateTaskInput {
+  title: String
+  content: String
+  done: Boolean
+  due: Date
+  start: Date
+  end: Date
+  group: String
+  type: String
+  priority: Int
+  archived: Boolean
 }

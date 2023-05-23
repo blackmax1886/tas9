@@ -1,16 +1,9 @@
-import { useMutation, QueryResult } from '@apollo/client'
 import { css } from '@emotion/react'
 import Image from 'next/image'
-import { useState } from 'react'
 
-import {
-  DeleteTaskDocument,
-  DeleteTaskMutation,
-  GetTasksQuery,
-  Task,
-  UpdateTaskIsDoneDocument,
-  UpdateTaskIsDoneMutation,
-} from '@/graphql/types/client'
+import useTaskCard from './hooks/useTaskCard'
+
+import { TaskSummaryFragment } from '@/graphql/types/client'
 
 const checkbox = css`
   display: none;
@@ -45,45 +38,25 @@ const taskCard = css`
 `
 
 type taskCardProps = {
-  task: Partial<Task> | undefined
-  refetch: QueryResult<GetTasksQuery>['refetch']
-  openTaskDetail: (taskId: string | undefined) => void
+  task: TaskSummaryFragment
+  openTaskDetail: (taskId: string) => void
   isSelected: boolean
   setSelectedTaskId: (taskId: string) => void
 }
 
 const TaskCard = (props: taskCardProps) => {
-  const [isDone, setIsDone] = useState(props.task?.done)
-  const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
-    UpdateTaskIsDoneDocument,
-    {
-      onCompleted() {
-        props.refetch()
-      },
-    }
-  )
-  const [deleteTask] = useMutation<DeleteTaskMutation>(DeleteTaskDocument, {
-    onCompleted() {
-      props.refetch()
-    },
-  })
-
-  const handleTaskIsDone = () => {
-    setIsDone(!isDone)
-    updateTaskIsDone({
-      variables: {
-        taskId: props.task?.id,
-        isDone: !isDone,
-      },
-    })
-  }
+  const {
+    isDone,
+    handleTaskIsDone,
+    handleDeleteTask: deleteTask,
+  } = useTaskCard(props)
 
   const handleClickTask = () => {
-    props.openTaskDetail(props.task?.id)
+    props.openTaskDetail(props.task.id)
   }
 
   const handleDeleteTask = () => {
-    deleteTask({ variables: { taskId: props.task?.id } })
+    deleteTask()
     if (props.isSelected) {
       props.setSelectedTaskId('')
     }
@@ -131,7 +104,7 @@ const TaskCard = (props: taskCardProps) => {
 
   return (
     <>
-      <div key={props.task?.id} css={selectableTaskCard} data-cy="taskCard">
+      <div key={props.task.id} css={selectableTaskCard} data-cy="taskCard">
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label
@@ -145,7 +118,7 @@ const TaskCard = (props: taskCardProps) => {
           onClick={handleClickTask}
           data-cy="taskCardTitle"
         >
-          {props.task?.title}
+          {props.task.title}
         </label>
         <button
           css={deleteButton}
@@ -165,9 +138,8 @@ const TaskCard = (props: taskCardProps) => {
 }
 
 type taskCardsProps = {
-  tasks: Partial<Task>[] | undefined
-  refetch: QueryResult<GetTasksQuery>['refetch']
-  openTaskDetail: (taskId: string | undefined) => void
+  tasks: TaskSummaryFragment[]
+  openTaskDetail: (taskId: string) => void
   selectedTaskId: string
   setSelectedTaskId: (taskId: string) => void
 }
@@ -175,11 +147,10 @@ type taskCardsProps = {
 const TaskCards = (props: taskCardsProps) => {
   return (
     <>
-      {props.tasks?.map((task: Partial<Task>) => (
+      {props.tasks.map((task: TaskSummaryFragment) => (
         <TaskCard
           key={task.id}
           task={task}
-          refetch={props.refetch}
           openTaskDetail={props.openTaskDetail}
           isSelected={task.id === props.selectedTaskId}
           setSelectedTaskId={props.setSelectedTaskId}
@@ -190,42 +161,15 @@ const TaskCards = (props: taskCardsProps) => {
 }
 
 type draggableTaskCardProps = {
-  task: Partial<Task> | undefined
-  refetch: QueryResult<GetTasksQuery>['refetch']
-  setDraggedTask: (task: Partial<Task> | undefined) => void
+  task: TaskSummaryFragment
+  setDraggedTask: (task: TaskSummaryFragment) => void
 }
 
 const DraggableTaskCard = (props: draggableTaskCardProps) => {
-  const [isDone, setIsDone] = useState(props.task?.done)
-  const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
-    UpdateTaskIsDoneDocument,
-    {
-      onCompleted() {
-        props.refetch()
-      },
-    }
-  )
-  const [deleteTask] = useMutation<DeleteTaskMutation>(DeleteTaskDocument, {
-    onCompleted() {
-      props.refetch()
-    },
-  })
+  const { isDone, handleTaskIsDone, handleDeleteTask } = useTaskCard(props)
 
-  const handleTaskIsDone = () => {
-    setIsDone(!isDone)
-    updateTaskIsDone({
-      variables: {
-        taskId: props.task?.id,
-        isDone: !isDone,
-      },
-    })
-  }
-
-  const handleDeleteTask = () => {
-    deleteTask({ variables: { taskId: props.task?.id } })
-  }
   const handleDragStart = () => {
-    console.log('drag start taskId:', props.task?.id)
+    console.log('drag start taskId:', props.task.id)
     props.setDraggedTask(props.task)
   }
 
@@ -263,13 +207,13 @@ const DraggableTaskCard = (props: draggableTaskCardProps) => {
 
   return (
     <>
-      <div key={props.task?.id} draggable={true} css={taskCard}>
+      <div key={props.task.id} draggable={true} css={taskCard}>
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>
         </div>
         <label css={taskLabel} onDragStart={handleDragStart} draggable>
-          {props.task?.title}
+          {props.task.title}
         </label>
         <button css={deleteButton} onClick={handleDeleteTask}>
           <Image
@@ -285,20 +229,18 @@ const DraggableTaskCard = (props: draggableTaskCardProps) => {
 }
 
 type draggableTaskCardsProps = {
-  tasks: Partial<Task>[] | undefined
-  refetch: QueryResult<GetTasksQuery>['refetch']
+  tasks: TaskSummaryFragment[]
   //TODO: not undefined, should be null?
-  setDraggedTask: (task: Partial<Task> | undefined) => void
+  setDraggedTask: (task: TaskSummaryFragment) => void
 }
 
 const DraggableTaskCards = (props: draggableTaskCardsProps) => {
   return (
     <>
-      {props.tasks?.map((task: Partial<Task>) => (
+      {props.tasks.map((task: TaskSummaryFragment) => (
         <DraggableTaskCard
           key={task.id}
           task={task}
-          refetch={props.refetch}
           setDraggedTask={props.setDraggedTask}
         ></DraggableTaskCard>
       ))}

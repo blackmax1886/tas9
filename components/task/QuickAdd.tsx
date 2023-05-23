@@ -6,6 +6,7 @@ import {
   CreateTaskDocument,
   CreateTaskMutation,
   GetTasksQuery,
+  TaskSummaryFragmentDoc,
 } from '@/graphql/types/client'
 
 const addTask = css`
@@ -22,15 +23,27 @@ const addTask = css`
 type quickAddProps = {
   newTaskTitle: string
   setNewTaskTitle: (newTaskTitle: string) => void
-  userId: string | undefined
+  userId: string
   refetch: QueryResult<GetTasksQuery>['refetch']
 }
 
 const QuickAdd = (props: quickAddProps) => {
   const [createTask] = useMutation<CreateTaskMutation>(CreateTaskDocument, {
-    onCompleted() {
-      props.refetch()
-      props.setNewTaskTitle('')
+    update: (cache, { data }) => {
+      const createdTask = data?.createTask
+      if (createdTask) {
+        cache.modify({
+          fields: {
+            tasks(existingTasks = []) {
+              const newTaskRef = cache.writeFragment({
+                data: createdTask,
+                fragment: TaskSummaryFragmentDoc,
+              })
+              return [...existingTasks, newTaskRef]
+            },
+          },
+        })
+      }
     },
   })
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -42,7 +55,23 @@ const QuickAdd = (props: quickAddProps) => {
             userId: props.userId,
           },
         },
+        optimisticResponse: {
+          createTask: {
+            id: Math.random().toString(),
+            userId: props.userId,
+            title: props.newTaskTitle,
+            done: false,
+            start: null,
+            end: null,
+            group: null,
+            type: null,
+            priority: null,
+            archived: false,
+            __typename: 'Task',
+          },
+        },
       })
+      props.setNewTaskTitle('')
     }
   }
 

@@ -1,66 +1,62 @@
+fragment TaskSummary on Task {
+  id
+  userId
+  title
+  done
+  start
+  end
+  group
+  type
+  priority
+  archived
+}
+
+fragment TaskDetails on Task {
+  ...TaskSummary
+  content
+  due
+  createdAt
+}
+
 mutation createTask($task: NewTask!) {
   createTask(input: $task) {
-    id
-    title
-    done
-    archived
+    ...TaskSummary
   }
 }
 
-query getTask($taskId: String!) {
+query getTask($taskId: ID!) {
   task(id: $taskId) {
-    id
-    userId
-    title
-    content
-    done
-    due
-    start
-    end
-    group
-    type
-    priority
-    archived
-    createdAt
+    ...TaskDetails
   }
 }
 
-query getTasks($userId: String!) {
+query getTasks($userId: ID!) {
   tasks(userId: $userId) {
-    id
-    title
-    done
-    start
-    end
-    group
-    type
-    priority
-    archived
+    ...TaskSummary
   }
 }
 
-mutation UpdateTaskIsDone($taskId: String!, $isDone: Boolean!) {
-  updateTaskIsDone(id: $taskId, isDone: $isDone) {
-    title
-    done
+mutation UpdateTaskIsDone($taskId: ID!, $isDone: Boolean!) {
+  updateTask(id: $taskId, input: { done: $isDone }) {
+    ...TaskSummary
   }
 }
 
-mutation DeleteTask($taskId: String!) {
+mutation DeleteTask($taskId: ID!) {
   deleteTask(id: $taskId) {
-    title
+    ...TaskSummary
   }
 }
 
-mutation UpdateTaskContent($taskId: String!, $content: String!) {
-  updateTaskContent(id: $taskId, content: $content) {
+mutation UpdateTaskContent($taskId: ID!, $content: String!) {
+  updateTask(id: $taskId, input: { content: $content }) {
     id
     content
   }
 }
 
-mutation UpdateTaskStartEnd($taskId: String!, $start: Date!, $end: Date!) {
-  updateTaskStartEnd(id: $taskId, start: $start, end: $end) {
+mutation UpdateTaskStartEnd($taskId: ID!, $start: Date!, $end: Date!) {
+  updateTask(id: $taskId, input: { start: $start, end: $end }) {
     id
     start
     end

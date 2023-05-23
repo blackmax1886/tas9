@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { stringOrDate } from 'react-big-calendar'
 
 import Board from '@/components/Board'
-import Calendar from '@/components/Calendar'
+import Calendar, { taskAsEvent } from '@/components/Calendar'
 import Header from '@/components/Header'
 import Tabs from '@/components/Tabs'
 import QuickAdd from '@/components/task/QuickAdd'
@@ -17,7 +17,7 @@ import {
   GetTasksDocument,
   UpdateTaskStartEndMutation,
   UpdateTaskStartEndDocument,
-  Task,
+  TaskSummaryFragment,
 } from '@/graphql/types/client'
 import { dayjs } from '@/lib/day'
 import { filterByActiveTab } from '@/lib/task/filter'
@@ -36,76 +36,84 @@ const calendarWrapper = css`
 
 const TimeTable = () => {
   const { data: session, status } = useSession()
-  const { data, refetch } = useQuery<GetTasksQuery>(GetTasksDocument, {
-    variables: { userId: session?.user?.id },
-    skip: status === 'loading',
-  })
-  const [newTaskTitle, setNewTaskTitle] = useState('')
-  const [activeTaskTab, setActiveTaskTab] = useState('tasks')
-  const [draggedTask, setDraggedTask] = useState<Partial<Task> | null>()
-  const [updateTaskStartEnd] = useMutation<UpdateTaskStartEndMutation>(
-    UpdateTaskStartEndDocument,
+  const { data, refetch, loading, error } = useQuery<GetTasksQuery>(
+    GetTasksDocument,
     {
-      onCompleted() {
-        // Idea: to optimize, do not use refetch & use only mutation & add event to calendar manually
-        refetch()
-      },
+      variables: { userId: session?.user?.id },
+      skip: status === 'loading',
     }
   )
-  const tasks = filterByActiveTab(activeTaskTab, data?.tasks)
+  const [newTaskTitle, setNewTaskTitle] = useState('')
+  const [activeTaskTab, setActiveTaskTab] = useState('tasks')
+  const [draggedTask, setDraggedTask] = useState<TaskSummaryFragment | null>()
+  const [updateTaskStartEnd] = useMutation<UpdateTaskStartEndMutation>(
+    UpdateTaskStartEndDocument
+  )
+  let tasks: TaskSummaryFragment[] = []
+  if (!loading && !error && data) {
+    tasks = filterByActiveTab(activeTaskTab, data.tasks)?.reverse()
+  }
+
+  const updateTaskTime = (
+    taskId: string,
+    startInput: stringOrDate,
+    endInput: stringOrDate
+  ) => {
+    const startUnixMillis = dayjs(startInput).valueOf()
+    const endUnixMillis = dayjs(endInput).valueOf()
+    updateTaskStartEnd({
+      variables: {
+        taskId: taskId,
+        start: startUnixMillis,
+        end: endUnixMillis,
+      },
+      optimisticResponse: {
+        updateTask: {
+          __typename: 'Task',
+          id: taskId,
+          start: startUnixMillis,
+          end: endUnixMillis,
+        },
+      },
+    })
+  }
 
   const handleDropFromOutside = ({
-    start,
-    end,
+    start: startInput,
+    end: endInput,
   }: {
     start: stringOrDate
     end: stringOrDate
   }) => {
-    updateTaskStartEnd({
-      variables: {
-        taskId: draggedTask?.id,
-        start: dayjs(start).valueOf(),
-        end: dayjs(end).valueOf(),
-      },
-    })
+    if (!draggedTask) {
+      return
+    }
+    updateTaskTime(draggedTask.id, startInput, endInput)
     setDraggedTask(null)
   }
+
   const handleEventDrop = ({
     event,
-    start,
-    end,
+    start: startInput,
+    end: endInput,
   }: {
-    event: object
+    event: taskAsEvent
     start: stringOrDate
     end: stringOrDate
   }) => {
-    updateTaskStartEnd({
-      variables: {
-        // @ts-expect-error to be fixed
-        taskId: event.taskId,
-        start: dayjs(start).valueOf(),
-        end: dayjs(end).valueOf(),
-      },
-    })
+    updateTaskTime(event.taskId, startInput, endInput)
   }
 
   const resizeEvent = ({
     event,
-    start,
-    end,
+    start: startInput,
+    end: endInput,
   }: {
-    event: object
+    event: taskAsEvent
     start: stringOrDate
     end: stringOrDate
   }) => {
-    updateTaskStartEnd({
-      variables: {
-        // @ts-expect-error to be fixed
-        taskId: event.taskId,
-        start: dayjs(start).valueOf(),
-        end: dayjs(end).valueOf(),
-      },
-    })
+    updateTaskTime(event.taskId, startInput, endInput)
   }
 
   return (
@@ -125,18 +133,21 @@ const TimeTable = () => {
             <QuickAdd
               newTaskTitle={newTaskTitle}
               setNewTaskTitle={setNewTaskTitle}
-              userId={session?.user?.id}
+              userId={session?.user?.id as string}
               refetch={refetch}
             />
-            <DraggableTaskCards
-              tasks={tasks}
-              refetch={refetch}
-              setDraggedTask={setDraggedTask}
-            ></DraggableTaskCards>
+            {!loading && !error ? (
+              <DraggableTaskCards
+                tasks={tasks}
+                setDraggedTask={setDraggedTask}
+              ></DraggableTaskCards>
+            ) : (
+              <></>
+            )}
           </Board>
           <div css={calendarWrapper}>
             <Calendar
-              tasks={data?.tasks}
+              tasks={tasks}
               onDropFromOutside={handleDropFromOutside}
               onEventDrop={handleEventDrop}
               onEventResize={resizeEvent}

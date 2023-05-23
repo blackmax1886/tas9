@@ -20,7 +20,7 @@ input NewUser {
 
 type Task {
   id: ID!
-  userId: String!
+  userId: ID!
   title: String!
   content: String
   done: Boolean!
@@ -35,26 +35,38 @@ type Task {
 }
 
 input NewTask {
-  userId: String!
+  userId: ID!
   title: String!
   content: String
 }
 
+input UpdateTaskInput {
+  title: String
+  content: String
+  done: Boolean
+  due: Date
+  start: Date
+  end: Date
+  group: String
+  type: String
+  priority: Int
+  archived: Boolean
+}
+
 type Query {
-  user(id: String!): PrismaUser
-  tasks(userId: String!): [Task!]!
-  task(id: String!): Task
+  user(id: ID!): PrismaUser
+  tasks(userId: ID!): [Task!]!
+  task(id: ID!): Task
 }
 
 type Mutation {
   createUser(input: NewUser!): PrismaUser!
-  deleteUser(id: String!): PrismaUser
+  deleteUser(id: ID!): PrismaUser
   createTask(input: NewTask!): Task!
-  updateTaskIsDone(id: String!, isDone: Boolean!): Task!
-  deleteTask(id: String!): Task
-  updateTaskContent(id: String!, content: String!): Task!
-  updateTaskStartEnd(id: String!, start: Date!, end: Date!): Task!
+  deleteTask(id: ID!): Task
+  updateTask(id: ID!, input: UpdateTaskInput!): Task!
 }
+
 `
 
 const server = new ApolloServer({

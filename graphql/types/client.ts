@@ -22,9 +22,7 @@ export type Mutation = {
   createUser: PrismaUser;
   deleteTask?: Maybe<Task>;
   deleteUser?: Maybe<PrismaUser>;
-  updateTaskContent: Task;
-  updateTaskIsDone: Task;
-  updateTaskStartEnd: Task;
+  updateTask: Task;
 };
 
 
@@ -39,37 +37,24 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteTaskArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
-export type MutationUpdateTaskContentArgs = {
-  content: Scalars['String'];
-  id: Scalars['String'];
-};
-
-
-export type MutationUpdateTaskIsDoneArgs = {
-  id: Scalars['String'];
-  isDone: Scalars['Boolean'];
-};
-
-
-export type MutationUpdateTaskStartEndArgs = {
-  end: Scalars['Date'];
-  id: Scalars['String'];
-  start: Scalars['Date'];
+export type MutationUpdateTaskArgs = {
+  id: Scalars['ID'];
+  input: UpdateTaskInput;
 };
 
 export type NewTask = {
   content?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 export type NewUser = {
@@ -93,17 +78,17 @@ export type Query = {
 
 
 export type QueryTaskArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
 export type QueryTasksArgs = {
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 
 export type QueryUserArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 export type Task = {
@@ -120,80 +105,115 @@ export type Task = {
   start?: Maybe<Scalars['Date']>;
   title: Scalars['String'];
   type?: Maybe<Scalars['String']>;
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
+
+export type UpdateTaskInput = {
+  archived?: InputMaybe<Scalars['Boolean']>;
+  content?: InputMaybe<Scalars['String']>;
+  done?: InputMaybe<Scalars['Boolean']>;
+  due?: InputMaybe<Scalars['Date']>;
+  end?: InputMaybe<Scalars['Date']>;
+  group?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Date']>;
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
+export type TaskSummaryFragment = { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean };
+
+export type TaskDetailsFragment = { __typename?: 'Task', content?: string | null, due?: number | null, createdAt: number, id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean };
 
 export type CreateTaskMutationVariables = Exact<{
   task: NewTask;
 }>;
 
 
-export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string, title: string, done: boolean, archived: boolean } };
+export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } };
 
 export type GetTaskQueryVariables = Exact<{
-  taskId: Scalars['String'];
+  taskId: Scalars['ID'];
 }>;
 
 
-export type GetTaskQuery = { __typename?: 'Query', task?: { __typename?: 'Task', id: string, userId: string, title: string, content?: string | null, done: boolean, due?: number | null, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean, createdAt: number } | null };
+export type GetTaskQuery = { __typename?: 'Query', task?: { __typename?: 'Task', content?: string | null, due?: number | null, createdAt: number, id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } | null };
 
 export type GetTasksQueryVariables = Exact<{
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 }>;
 
 
-export type GetTasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean }> };
+export type GetTasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean }> };
 
 export type UpdateTaskIsDoneMutationVariables = Exact<{
-  taskId: Scalars['String'];
+  taskId: Scalars['ID'];
   isDone: Scalars['Boolean'];
 }>;
 
 
-export type UpdateTaskIsDoneMutation = { __typename?: 'Mutation', updateTaskIsDone: { __typename?: 'Task', title: string, done: boolean } };
+export type UpdateTaskIsDoneMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } };
 
 export type DeleteTaskMutationVariables = Exact<{
-  taskId: Scalars['String'];
+  taskId: Scalars['ID'];
 }>;
 
 
-export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'Task', title: string } | null };
+export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } | null };
 
 export type UpdateTaskContentMutationVariables = Exact<{
-  taskId: Scalars['String'];
+  taskId: Scalars['ID'];
   content: Scalars['String'];
 }>;
 
 
-export type UpdateTaskContentMutation = { __typename?: 'Mutation', updateTaskContent: { __typename?: 'Task', id: string, content?: string | null } };
+export type UpdateTaskContentMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, content?: string | null } };
 
 export type UpdateTaskStartEndMutationVariables = Exact<{
-  taskId: Scalars['String'];
+  taskId: Scalars['ID'];
   start: Scalars['Date'];
   end: Scalars['Date'];
 }>;
 
 
-export type UpdateTaskStartEndMutation = { __typename?: 'Mutation', updateTaskStartEnd: { __typename?: 'Task', id: string, start?: number | null, end?: number | null } };
+export type UpdateTaskStartEndMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, start?: number | null, end?: number | null } };
 
 export type DeleteUserMutationVariables = Exact<{
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 }>;
 
 
 export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'PrismaUser', id: string } | null };
 
-
+export const TaskSummaryFragmentDoc = gql`
+    fragment TaskSummary on Task {
+  id
+  userId
+  title
+  done
+  start
+  end
+  group
+  type
+  priority
+  archived
+}
+    `;
+export const TaskDetailsFragmentDoc = gql`
+    fragment TaskDetails on Task {
+  ...TaskSummary
+  content
+  due
+  createdAt
+}
+    ${TaskSummaryFragmentDoc}`;
 export const CreateTaskDocument = gql`
     mutation createTask($task: NewTask!) {
   createTask(input: $task) {
-    id
-    title
-    done
-    archived
+    ...TaskSummary
   }
 }
-    `;
+    ${TaskSummaryFragmentDoc}`;
 export type CreateTaskMutationFn = Apollo.MutationFunction<CreateTaskMutation, CreateTaskMutationVariables>;
 
 /**
@@ -221,24 +241,12 @@ export type CreateTaskMutationHookResult = ReturnType<typeof useCreateTaskMutati
 export type CreateTaskMutationResult = Apollo.MutationResult<CreateTaskMutation>;
 export type CreateTaskMutationOptions = Apollo.BaseMutationOptions<CreateTaskMutation, CreateTaskMutationVariables>;
 export const GetTaskDocument = gql`
-    query getTask($taskId: String!) {
+    query getTask($taskId: ID!) {
   task(id: $taskId) {
-    id
-    userId
-    title
-    content
-    done
-    due
-    start
-    end
-    group
-    type
-    priority
-    archived
-    createdAt
+    ...TaskDetails
   }
 }
-    `;
+    ${TaskDetailsFragmentDoc}`;
 
 /**
  * __useGetTaskQuery__
@@ -268,20 +276,12 @@ export type GetTaskQueryHookResult = ReturnType<typeof useGetTaskQuery>;
 export type GetTaskLazyQueryHookResult = ReturnType<typeof useGetTaskLazyQuery>;
 export type GetTaskQueryResult = Apollo.QueryResult<GetTaskQuery, GetTaskQueryVariables>;
 export const GetTasksDocument = gql`
-    query getTasks($userId: String!) {
+    query getTasks($userId: ID!) {
   tasks(userId: $userId) {
-    id
-    title
-    done
-    start
-    end
-    group
-    type
-    priority
-    archived
+    ...TaskSummary
   }
 }
-    `;
+    ${TaskSummaryFragmentDoc}`;
 
 /**
  * __useGetTasksQuery__
@@ -311,13 +311,12 @@ export type GetTasksQueryHookResult = ReturnType<typeof useGetTasksQuery>;
 export type GetTasksLazyQueryHookResult = ReturnType<typeof useGetTasksLazyQuery>;
 export type GetTasksQueryResult = Apollo.QueryResult<GetTasksQuery, GetTasksQueryVariables>;
 export const UpdateTaskIsDoneDocument = gql`
-    mutation UpdateTaskIsDone($taskId: String!, $isDone: Boolean!) {
-  updateTaskIsDone(id: $taskId, isDone: $isDone) {
-    title
-    done
+    mutation UpdateTaskIsDone($taskId: ID!, $isDone: Boolean!) {
+  updateTask(id: $taskId, input: {done: $isDone}) {
+    ...TaskSummary
   }
 }
-    `;
+    ${TaskSummaryFragmentDoc}`;
 export type UpdateTaskIsDoneMutationFn = Apollo.MutationFunction<UpdateTaskIsDoneMutation, UpdateTaskIsDoneMutationVariables>;
 
 /**
@@ -346,12 +345,12 @@ export type UpdateTaskIsDoneMutationHookResult = ReturnType<typeof useUpdateTask
 export type UpdateTaskIsDoneMutationResult = Apollo.MutationResult<UpdateTaskIsDoneMutation>;
 export type UpdateTaskIsDoneMutationOptions = Apollo.BaseMutationOptions<UpdateTaskIsDoneMutation, UpdateTaskIsDoneMutationVariables>;
 export const DeleteTaskDocument = gql`
-    mutation DeleteTask($taskId: String!) {
+    mutation DeleteTask($taskId: ID!) {
   deleteTask(id: $taskId) {
-    title
+    ...TaskSummary
   }
 }
-    `;
+    ${TaskSummaryFragmentDoc}`;
 export type DeleteTaskMutationFn = Apollo.MutationFunction<DeleteTaskMutation, DeleteTaskMutationVariables>;
 
 /**
@@ -379,8 +378,8 @@ export type DeleteTaskMutationHookResult = ReturnType<typeof useDeleteTaskMutati
 export type DeleteTaskMutationResult = Apollo.MutationResult<DeleteTaskMutation>;
 export type DeleteTaskMutationOptions = Apollo.BaseMutationOptions<DeleteTaskMutation, DeleteTaskMutationVariables>;
 export const UpdateTaskContentDocument = gql`
-    mutation UpdateTaskContent($taskId: String!, $content: String!) {
-  updateTaskContent(id: $taskId, content: $content) {
+    mutation UpdateTaskContent($taskId: ID!, $content: String!) {
+  updateTask(id: $taskId, input: {content: $content}) {
     id
     content
   }
@@ -414,8 +413,8 @@ export type UpdateTaskContentMutationHookResult = ReturnType<typeof useUpdateTas
 export type UpdateTaskContentMutationResult = Apollo.MutationResult<UpdateTaskContentMutation>;
 export type UpdateTaskContentMutationOptions = Apollo.BaseMutationOptions<UpdateTaskContentMutation, UpdateTaskContentMutationVariables>;
 export const UpdateTaskStartEndDocument = gql`
-    mutation UpdateTaskStartEnd($taskId: String!, $start: Date!, $end: Date!) {
-  updateTaskStartEnd(id: $taskId, start: $start, end: $end) {
+    mutation UpdateTaskStartEnd($taskId: ID!, $start: Date!, $end: Date!) {
+  updateTask(id: $taskId, input: {start: $start, end: $end}) {
     id
     start
     end
@@ -451,7 +450,7 @@ export type UpdateTaskStartEndMutationHookResult = ReturnType<typeof useUpdateTa
 export type UpdateTaskStartEndMutationResult = Apollo.MutationResult<UpdateTaskStartEndMutation>;
 export type UpdateTaskStartEndMutationOptions = Apollo.BaseMutationOptions<UpdateTaskStartEndMutation, UpdateTaskStartEndMutationVariables>;
 export const DeleteUserDocument = gql`
-    mutation DeleteUser($userId: String!) {
+    mutation DeleteUser($userId: ID!) {
   deleteUser(id: $userId) {
     id
   }
