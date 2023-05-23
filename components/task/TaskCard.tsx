@@ -1,17 +1,9 @@
-import { useMutation, QueryResult } from '@apollo/client'
 import { css } from '@emotion/react'
 import Image from 'next/image'
-import { useState } from 'react'
 
-import {
-  DeleteTaskDocument,
-  DeleteTaskMutation,
-  GetTasksQuery,
-  UpdateTaskIsDoneDocument,
-  UpdateTaskIsDoneMutation,
-} from '@/graphql/types/client'
-import { TaskSummaryFragment } from '@/graphql/types/client'
 import useTaskCard from './useTaskCard'
+
+import { TaskSummaryFragment } from '@/graphql/types/client'
 
 const checkbox = css`
   display: none;
@@ -170,39 +162,12 @@ const TaskCards = (props: taskCardsProps) => {
 
 type draggableTaskCardProps = {
   task: TaskSummaryFragment
-  refetch: QueryResult<GetTasksQuery>['refetch']
   setDraggedTask: (task: TaskSummaryFragment) => void
 }
 
 const DraggableTaskCard = (props: draggableTaskCardProps) => {
-  const [isDone, setIsDone] = useState(props.task.done)
-  const [updateTaskIsDone] = useMutation<UpdateTaskIsDoneMutation>(
-    UpdateTaskIsDoneDocument,
-    {
-      onCompleted() {
-        props.refetch()
-      },
-    }
-  )
-  const [deleteTask] = useMutation<DeleteTaskMutation>(DeleteTaskDocument, {
-    onCompleted() {
-      props.refetch()
-    },
-  })
+  const { isDone, handleTaskIsDone, handleDeleteTask } = useTaskCard(props)
 
-  const handleTaskIsDone = () => {
-    setIsDone(!isDone)
-    updateTaskIsDone({
-      variables: {
-        taskId: props.task.id,
-        isDone: !isDone,
-      },
-    })
-  }
-
-  const handleDeleteTask = () => {
-    deleteTask({ variables: { taskId: props.task.id } })
-  }
   const handleDragStart = () => {
     console.log('drag start taskId:', props.task.id)
     props.setDraggedTask(props.task)
@@ -265,7 +230,6 @@ const DraggableTaskCard = (props: draggableTaskCardProps) => {
 
 type draggableTaskCardsProps = {
   tasks: TaskSummaryFragment[]
-  refetch: QueryResult<GetTasksQuery>['refetch']
   //TODO: not undefined, should be null?
   setDraggedTask: (task: TaskSummaryFragment) => void
 }
@@ -277,7 +241,6 @@ const DraggableTaskCards = (props: draggableTaskCardsProps) => {
         <DraggableTaskCard
           key={task.id}
           task={task}
-          refetch={props.refetch}
           setDraggedTask={props.setDraggedTask}
         ></DraggableTaskCard>
       ))}

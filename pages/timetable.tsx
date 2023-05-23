@@ -138,7 +138,6 @@ const TimeTable = () => {
             {!loading && !error ? (
               <DraggableTaskCards
                 tasks={tasks}
-                refetch={refetch}
                 setDraggedTask={setDraggedTask}
               ></DraggableTaskCards>
             ) : (
