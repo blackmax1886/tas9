@@ -9,26 +9,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 
-import { Task } from '@/graphql/types/client'
+import { TaskSummaryFragment } from '@/graphql/types/client'
 import { dayjs, formatString } from '@/lib/day'
-
-const localizer = dayjsLocalizer(dayjs)
-const DragAndDropCalendar = withDragAndDrop(ReactBigCalendar)
-
-const tasksAsEvents = (tasks: Partial<Task>[] | undefined) => {
-  if (!tasks) {
-    return []
-  }
-  const events = tasks.map((task) => {
-    return {
-      taskId: task.id,
-      title: task.title,
-      start: dayjs(task.start, formatString).toDate(),
-      end: dayjs(task.end, formatString).toDate(),
-    }
-  })
-  return events
-}
 
 const calendar = css`
   height: 800px;
@@ -57,12 +39,41 @@ export const CalendarStyleWrapper = styled.div`
   }
 `
 
-type TimeSlotWrapperProps = {
-  children: React.ReactNode
+export type taskAsEvent = {
+  taskId: string
+  title: string
+  start: stringOrDate
+  end: stringOrDate
 }
 
-// TODO: Fix type error from TimeSlowWrapper arg
-const TimeSlotWrapper: React.FC<TimeSlotWrapperProps> = ({ children }) => {
+type calendarEventArgs = {
+  event: taskAsEvent
+  start: stringOrDate
+  end: stringOrDate
+  isAllDay: boolean
+}
+
+const localizer = dayjsLocalizer(dayjs)
+const DragAndDropCalendar = withDragAndDrop<taskAsEvent, object>(
+  ReactBigCalendar
+)
+
+const tasksAsEvents = (tasks: TaskSummaryFragment[]) => {
+  if (!tasks) {
+    return []
+  }
+  const events = tasks.map((task) => {
+    return {
+      taskId: task.id,
+      title: task.title,
+      start: dayjs(task.start, formatString).toDate(),
+      end: dayjs(task.end, formatString).toDate(),
+    }
+  })
+  return events
+}
+
+const TimeSlotWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   return <div css={timeslot}>{children}</div>
 }
 
@@ -72,7 +83,7 @@ const Calendar = ({
   onEventDrop,
   onEventResize,
 }: {
-  tasks: Partial<Task>[] | undefined
+  tasks: TaskSummaryFragment[]
   onDropFromOutside: ({
     start,
     end,
@@ -80,24 +91,8 @@ const Calendar = ({
     start: stringOrDate
     end: stringOrDate
   }) => void
-  onEventDrop: ({
-    event,
-    start,
-    end,
-  }: {
-    event: object
-    start: stringOrDate
-    end: stringOrDate
-  }) => void
-  onEventResize: ({
-    event,
-    start,
-    end,
-  }: {
-    event: object
-    start: stringOrDate
-    end: stringOrDate
-  }) => void
+  onEventDrop: (args: calendarEventArgs) => void
+  onEventResize: (args: calendarEventArgs) => void
 }) => {
   const events = tasksAsEvents(tasks)
   const defaultDate = dayjs().toDate()
@@ -115,7 +110,6 @@ const Calendar = ({
         onEventResize={onEventResize}
         resizable
         components={{
-          // @ts-expect-error to be fixed
           timeSlotWrapper: TimeSlotWrapper,
         }}
         css={calendar}
