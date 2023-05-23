@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import Image from 'next/image'
 
-import useTaskCard from './useTaskCard'
+import useTaskCard from './hooks/useTaskCard'
 
 import { TaskSummaryFragment } from '@/graphql/types/client'
 
