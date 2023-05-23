@@ -44,7 +44,7 @@ mutation UpdateTaskIsDone($taskId: ID!, $isDone: Boolean!) {
 
 mutation DeleteTask($taskId: ID!) {
   deleteTask(id: $taskId) {
-    title
+    ...TaskSummary
   }
 }
 

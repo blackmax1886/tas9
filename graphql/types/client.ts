@@ -159,7 +159,7 @@ export type DeleteTaskMutationVariables = Exact<{
 }>;
 
 
-export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'Task', title: string } | null };
+export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } | null };
 
 export type UpdateTaskContentMutationVariables = Exact<{
   taskId: Scalars['ID'];
@@ -347,10 +347,10 @@ export type UpdateTaskIsDoneMutationOptions = Apollo.BaseMutationOptions<UpdateT
 export const DeleteTaskDocument = gql`
     mutation DeleteTask($taskId: ID!) {
   deleteTask(id: $taskId) {
-    title
+    ...TaskSummary
   }
 }
-    `;
+    ${TaskSummaryFragmentDoc}`;
 export type DeleteTaskMutationFn = Apollo.MutationFunction<DeleteTaskMutation, DeleteTaskMutationVariables>;
 
 /**

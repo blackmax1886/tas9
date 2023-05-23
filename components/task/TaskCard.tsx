@@ -58,8 +58,25 @@ const TaskCard = (props: taskCardProps) => {
     UpdateTaskIsDoneDocument
   )
   const [deleteTask] = useMutation<DeleteTaskMutation>(DeleteTaskDocument, {
-    onCompleted() {
-      props.refetch()
+    update: (cache, mutationResult) => {
+      if (mutationResult.data?.deleteTask) {
+        cache.evict({ id: cache.identify(mutationResult.data.deleteTask) })
+      }
+    },
+    optimisticResponse: {
+      deleteTask: {
+        __typename: 'Task',
+        id: props.task.id,
+        userId: props.task.userId,
+        title: props.task.title,
+        done: props.task.done,
+        start: props.task.start,
+        end: props.task.end,
+        group: props.task.group,
+        type: props.task.type,
+        priority: props.task.priority,
+        archived: props.task.archived,
+      },
     },
   })
 
