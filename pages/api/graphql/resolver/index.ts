@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 import { Resolvers } from '../types/graphql'
 
-const prisma = new PrismaClient()
+import { prisma } from '@/prisma/client'
 
 export const resolvers: Resolvers = {
   Query: {
@@ -29,7 +29,7 @@ export const resolvers: Resolvers = {
           userId: String(args.userId),
         },
         // TODO:
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: 'asc' },
       })
       return result
     },
@@ -75,25 +75,48 @@ export const resolvers: Resolvers = {
       })
       return result
     },
-    updateTaskIsDone: async (_, args) => {
+    updateTask: async (_, args) => {
+      const { id, input } = args
+
+      const data: Prisma.TaskUpdateInput = {}
+
+      // Enumerate the fields in `input` and only add them to `data` if they are not `undefined`.
+      if (input.title !== undefined) {
+        data.title = input.title || ''
+      }
+      if (input.content !== undefined) {
+        data.content = input.content || ''
+      }
+      if (input.done !== undefined) {
+        data.done = input.done || false
+      }
+      if (input.archived !== undefined) {
+        data.archived = input.archived || false
+      }
+      if (input.due !== undefined) {
+        data.due = input.due
+      }
+      if (input.start !== undefined) {
+        data.start = input.start
+      }
+      if (input.end !== undefined) {
+        data.end = input.end
+      }
+      if (input.group !== undefined) {
+        data.group = input.group
+      }
+      if (input.type !== undefined) {
+        data.type = input.type
+      }
+      if (input.priority !== undefined) {
+        data.priority = input.priority
+      }
+
       const result = await prisma.task.update({
-        where: { id: String(args.id) },
-        data: { done: Boolean(args.isDone) },
+        where: { id: String(id) },
+        data,
       })
-      return result
-    },
-    updateTaskContent: async (_, args) => {
-      const result = await prisma.task.update({
-        where: { id: String(args.id) },
-        data: { content: String(args.content) },
-      })
-      return result
-    },
-    updateTaskStartEnd: async (_, args) => {
-      const result = await prisma.task.update({
-        where: { id: String(args.id) },
-        data: { start: args.start, end: args.end },
-      })
+
       return result
     },
   },

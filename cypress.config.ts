@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client'
 import { defineConfig } from 'cypress'
 
-const prisma = new PrismaClient()
+import { prisma } from '@/prisma/client'
 
 export default defineConfig({
   e2e: {

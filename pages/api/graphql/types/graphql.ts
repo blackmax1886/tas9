@@ -23,9 +23,7 @@ export type Mutation = {
   createUser: PrismaUser;
   deleteTask?: Maybe<Task>;
   deleteUser?: Maybe<PrismaUser>;
-  updateTaskContent: Task;
-  updateTaskIsDone: Task;
-  updateTaskStartEnd: Task;
+  updateTask: Task;
 };
 
 
@@ -40,37 +38,24 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteTaskArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
-export type MutationUpdateTaskContentArgs = {
-  content: Scalars['String'];
-  id: Scalars['String'];
-};
-
-
-export type MutationUpdateTaskIsDoneArgs = {
-  id: Scalars['String'];
-  isDone: Scalars['Boolean'];
-};
-
-
-export type MutationUpdateTaskStartEndArgs = {
-  end: Scalars['Date'];
-  id: Scalars['String'];
-  start: Scalars['Date'];
+export type MutationUpdateTaskArgs = {
+  id: Scalars['ID'];
+  input: UpdateTaskInput;
 };
 
 export type NewTask = {
   content?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 export type NewUser = {
@@ -94,17 +79,17 @@ export type Query = {
 
 
 export type QueryTaskArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
 export type QueryTasksArgs = {
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 
 export type QueryUserArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 export type Task = {
@@ -121,7 +106,20 @@ export type Task = {
   start?: Maybe<Scalars['Date']>;
   title: Scalars['String'];
   type?: Maybe<Scalars['String']>;
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+export type UpdateTaskInput = {
+  archived?: InputMaybe<Scalars['Boolean']>;
+  content?: InputMaybe<Scalars['String']>;
+  done?: InputMaybe<Scalars['Boolean']>;
+  due?: InputMaybe<Scalars['Date']>;
+  end?: InputMaybe<Scalars['Date']>;
+  group?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Date']>;
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -205,6 +203,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Task: ResolverTypeWrapper<Task>;
+  UpdateTaskInput: UpdateTaskInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -220,6 +219,7 @@ export type ResolversParentTypes = {
   Query: {};
   String: Scalars['String'];
   Task: Task;
+  UpdateTaskInput: UpdateTaskInput;
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -231,9 +231,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createUser?: Resolver<ResolversTypes['PrismaUser'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'id'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['PrismaUser']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
-  updateTaskContent?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskContentArgs, 'content' | 'id'>>;
-  updateTaskIsDone?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskIsDoneArgs, 'id' | 'isDone'>>;
-  updateTaskStartEnd?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskStartEndArgs, 'end' | 'id' | 'start'>>;
+  updateTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskArgs, 'id' | 'input'>>;
 };
 
 export type PrismaUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['PrismaUser'] = ResolversParentTypes['PrismaUser']> = {
@@ -262,7 +260,7 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
   start?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

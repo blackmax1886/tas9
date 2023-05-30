@@ -1,19 +1,17 @@
 #import PrismaUser, NewUser from "user.graphql"
-#import Task, NewTask from "task.graphql"
+#import Task, NewTask, UpdateTaskInput from "task.graphql"
 #import Date from "scalar.graphql"
 
 type Query {
-  user(id: String!): PrismaUser
-  tasks(userId: String!): [Task!]!
-  task(id: String!): Task
+  user(id: ID!): PrismaUser
+  tasks(userId: ID!): [Task!]!
+  task(id: ID!): Task
 }
 
 type Mutation {
   createUser(input: NewUser!): PrismaUser!
-  deleteUser(id: String!): PrismaUser
+  deleteUser(id: ID!): PrismaUser
   createTask(input: NewTask!): Task!
-  updateTaskIsDone(id: String!, isDone: Boolean!): Task!
-  deleteTask(id: String!): Task
-  updateTaskContent(id: String!, content: String!): Task!
-  updateTaskStartEnd(id: String!, start: Date!, end: Date!): Task!
+  deleteTask(id: ID!): Task
+  updateTask(id: ID!, input: UpdateTaskInput!): Task!
 }
