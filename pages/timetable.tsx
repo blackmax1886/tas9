@@ -20,7 +20,7 @@ import {
   TaskSummaryFragment,
 } from '@/graphql/types/client'
 import { dayjs } from '@/lib/day'
-import { filterByActiveTab } from '@/lib/task/filter'
+import { filterByActiveTab, splitAssignedTasks } from '@/lib/task/filter'
 import { sortTasksByStart } from '@/lib/task/sort'
 
 const boards = css`
@@ -52,9 +52,11 @@ const TimeTable = () => {
   )
   let tasks: TaskSummaryFragment[] = []
   if (!loading && !error && data) {
-    tasks = sortTasksByStart(
+    const { assignedTasks, unassignedTasks } = splitAssignedTasks(
       filterByActiveTab(activeTaskTab, data.tasks)?.reverse()
     )
+    const sortedAssignedTasks = sortTasksByStart(assignedTasks)
+    tasks = [...unassignedTasks, ...sortedAssignedTasks]
   }
 
   const updateTaskTime = (

@@ -205,9 +205,17 @@ const DraggableTaskCard = (props: draggableTaskCardProps) => {
     `}
   `
 
+  const draggableTaskCard = css`
+    ${taskCard}
+    ${props.task?.start &&
+    css`
+      background-color: blue;
+    `}
+  `
+
   return (
     <>
-      <div key={props.task.id} draggable={true} css={taskCard}>
+      <div key={props.task.id} draggable={true} css={draggableTaskCard}>
         <div css={checkboxWrapper}>
           <input type="checkbox" css={checkbox}></input>
           <label css={checkboxWrapperLabel} onClick={handleTaskIsDone}></label>
