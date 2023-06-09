@@ -21,6 +21,7 @@ import {
 } from '@/graphql/types/client'
 import { dayjs } from '@/lib/day'
 import { filterByActiveTab } from '@/lib/task/filter'
+import { sortTasksByStart } from '@/lib/task/sort'
 
 const boards = css`
   display: flex;
@@ -51,7 +52,9 @@ const TimeTable = () => {
   )
   let tasks: TaskSummaryFragment[] = []
   if (!loading && !error && data) {
-    tasks = filterByActiveTab(activeTaskTab, data.tasks)?.reverse()
+    tasks = sortTasksByStart(
+      filterByActiveTab(activeTaskTab, data.tasks)?.reverse()
+    )
   }
 
   const updateTaskTime = (
