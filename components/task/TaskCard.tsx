@@ -68,6 +68,10 @@ const TaskCard = (props: taskCardProps) => {
     css`
       border: 2px solid #66bb6a;
     `}
+    ${props.task?.start &&
+    css`
+      background-color: #2285c2;
+    `}
   `
 
   const checkboxWrapperLabel = css`
