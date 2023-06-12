@@ -209,7 +209,7 @@ const DraggableTaskCard = (props: draggableTaskCardProps) => {
     ${taskCard}
     ${props.task?.start &&
     css`
-      background-color: blue;
+      background-color: #2285c2;
     `}
   `
 
