@@ -20,7 +20,8 @@ import {
   GetTasksDocument,
   TaskSummaryFragment,
 } from '@/graphql/types/client'
-import { filterByActiveTab } from '@/lib/task/filter'
+import { filterByActiveTab, splitAssignedTasks } from '@/lib/task/filter'
+import { sortTasksByStart } from '@/lib/task/sort'
 
 const home = css`
   display: flex;
@@ -56,7 +57,11 @@ const Home: NextPage = () => {
 
   let tasks: TaskSummaryFragment[] = []
   if (!loading && !error && data) {
-    tasks = filterByActiveTab(activeTaskTab, data.tasks).reverse()
+    const { assignedTasks, unassignedTasks } = splitAssignedTasks(
+      filterByActiveTab(activeTaskTab, data.tasks)?.reverse()
+    )
+    const sortedAssignedTasks = sortTasksByStart(assignedTasks)
+    tasks = [...unassignedTasks, ...sortedAssignedTasks]
   }
 
   const openTaskDetail = (taskId: string | undefined) => {

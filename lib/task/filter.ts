@@ -19,4 +19,15 @@ const filterByActiveTab = (
   return result
 }
 
-export { filterByActiveTab }
+const splitAssignedTasks = (tasks: TaskSummaryFragment[]) => {
+  const assignedTasks = tasks.filter(
+    (task) => task.start !== null && task.start !== undefined
+  )
+  const unassignedTasks = tasks.filter(
+    (task) => task.start === null || task.start === undefined
+  )
+
+  return { assignedTasks, unassignedTasks }
+}
+
+export { filterByActiveTab, splitAssignedTasks }
