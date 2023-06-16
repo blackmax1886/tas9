@@ -1,8 +1,13 @@
 import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+import { applyMiddleware } from 'graphql-middleware'
+import { getSession } from 'next-auth/react'
 
 import { resolvers } from './resolver'
 import dateScalar from './resolver/dateScalar'
+import permissions from './resolver/permissions'
+
 
 const typeDefs = `#graphql
 scalar Date
@@ -69,7 +74,7 @@ type Mutation {
 
 `
 
-const server = new ApolloServer({
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Date: dateScalar,
@@ -77,6 +82,13 @@ const server = new ApolloServer({
   },
 })
 
-//TODO: GraphQLResolveInfo does not match BaseContext
-// @ts-expect-error to be fixed
-export default startServerAndCreateNextHandler(server)
+const schemaWithMiddleware = applyMiddleware(schema, permissions)
+
+const server = new ApolloServer({schema:schemaWithMiddleware})
+
+export default startServerAndCreateNextHandler(server, {
+  context: async (req) => {
+    const session = await getSession({req})
+    return {session}
+  }
+})
