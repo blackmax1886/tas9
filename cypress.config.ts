@@ -20,6 +20,17 @@ export default defineConfig({
           })
           return result
         },
+        async 'db:seed-session'() {
+          // seed test user's session data
+          const result = await prisma.session.create({
+            data: {
+              sessionToken: 'Test Session',
+              userId: 'clhep0xew0000ml08ri93zfr9',
+              expires: new Date('2999-12-31')
+            },
+          })
+          return result
+        },
         async 'db:reset-user'() {
           // delete test user data
           const result = await prisma.user.delete({

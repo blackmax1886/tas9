@@ -41,7 +41,7 @@ Cypress.Commands.add('googleLogin', () => {
   cy.intercept('api/auth/session', { fixture: 'session.json' }).as('session')
   cy.setCookie(
     'next-auth.session-token',
-    'a valid cookie from your browser session'
+    'Test Session'
   )
 })
 

@@ -3,6 +3,7 @@ describe('Task card operations', () => {
   before('seed-test-user', () => {
     cy.task('db:reset-user')
     cy.task('db:seed-user')
+    cy.task('db:seed-session')
   })
 
   // Reset tasks and login before each test
