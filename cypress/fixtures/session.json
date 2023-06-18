@@ -5,5 +5,5 @@
     "email": "test@example.com"
   },
   "expires": "2999-12-31T00:00:00.000Z",
-  "accessToken": "abcdefghijklmnopqrst"
+  "sessionToken": "Test Session"
 }

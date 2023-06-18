@@ -1,0 +1,11 @@
+{
+    "session2": {
+        "user": {
+            "id": "user2",
+            "name": "otherTestUser",
+            "email": "other1@example.com"
+        },
+        "expires": "2999-12-31T00:00:00.000Z",
+        "sessionToken": "Other Session"
+    }
+}

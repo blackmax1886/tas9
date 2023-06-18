@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress'
 
+import {session2} from './cypress/fixtures/otherSessions.json'
 import session from './cypress/fixtures/session.json'
 
 import { prisma } from '@/prisma/client'
@@ -14,19 +15,26 @@ export default defineConfig({
       on('task', {
         async 'db:seed-user'() {
           // seed test user data
-          const result = await prisma.user.create({
-            data: session.user,
+          const result = await prisma.user.createMany({
+            data: [session.user, session2.user],
           })
           return result
         },
         async 'db:seed-session'() {
           // seed test user's session data
-          const result = await prisma.session.create({
-            data: {
-              sessionToken: 'Test Session',
-              userId: session.user.id,
-              expires: new Date(session.expires)
-            },
+          const result = await prisma.session.createMany({
+            data: [
+              {
+                sessionToken: session.sessionToken,
+                userId: session.user.id,
+                expires: new Date(session.expires)
+              },
+              {
+                sessionToken: session2.sessionToken,
+                userId: session2.user.id,
+                expires: new Date(session2.expires)
+              }
+          ],
           })
           return result
         },
@@ -40,7 +48,13 @@ export default defineConfig({
                 },
                 {
                   email: session.user.email,
-                }
+                },
+                {
+                  id: session2.user.id,
+                },
+                {
+                  email: session2.user.email,
+                },
               ]
             },
           })
