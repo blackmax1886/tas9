@@ -10,7 +10,7 @@ describe('Task card operations', () => {
   beforeEach('reset & seed tasks', () => {
     cy.task('db:reset-task')
     cy.task('db:seed-task', {
-      userId: 'clhep0xew0000ml08ri93zfr9',
+      userId: 'user1',
       title: 'test1',
     }).then(() => {
       cy.googleLogin()
@@ -52,7 +52,7 @@ describe('Task card operations', () => {
 
   it('should add a new task and verify the tasks are ordered in descending order', () => {
     cy.task('db:seed-task', {
-      userId: 'clhep0xew0000ml08ri93zfr9',
+      userId: 'user1',
       title: 'test2',
     }).then(() => {
       cy.dataCy('taskCard').should('have.length', 2)

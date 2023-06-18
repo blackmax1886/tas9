@@ -13,7 +13,7 @@ export default defineConfig({
           // seed test user data
           const result = await prisma.user.create({
             data: {
-              id: 'clhep0xew0000ml08ri93zfr9',
+              id: 'user1',
               name: 'Test User',
               email: 'test@example.com',
             },
@@ -25,7 +25,7 @@ export default defineConfig({
           const result = await prisma.session.create({
             data: {
               sessionToken: 'Test Session',
-              userId: 'clhep0xew0000ml08ri93zfr9',
+              userId: 'user1',
               expires: new Date('2999-12-31')
             },
           })
@@ -33,9 +33,16 @@ export default defineConfig({
         },
         async 'db:reset-user'() {
           // delete test user data
-          const result = await prisma.user.delete({
+          const result = await prisma.user.deleteMany({
             where: {
-              id: 'clhep0xew0000ml08ri93zfr9',
+              OR: [
+                {
+                  id: 'user1',
+                },
+                {
+                  email: 'test@example.com',
+                }
+              ]
             },
           })
           return result
@@ -44,7 +51,7 @@ export default defineConfig({
           // delete test user's tasks
           const result = await prisma.task.deleteMany({
             where: {
-              userId: 'clhep0xew0000ml08ri93zfr9',
+              userId: 'user1',
             },
           })
           return result
