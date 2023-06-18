@@ -4,6 +4,6 @@
     "name": "Test User",
     "email": "test@example.com"
   },
-  "expires": "3000-01-01T00:00:00.000Z",
+  "expires": "2999-12-31T00:00:00.000Z",
   "accessToken": "abcdefghijklmnopqrst"
 }

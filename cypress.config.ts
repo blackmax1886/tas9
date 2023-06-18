@@ -1,6 +1,9 @@
 import { defineConfig } from 'cypress'
 
+import session from './cypress/fixtures/session.json'
+
 import { prisma } from '@/prisma/client'
+
 
 export default defineConfig({
   e2e: {
@@ -12,11 +15,7 @@ export default defineConfig({
         async 'db:seed-user'() {
           // seed test user data
           const result = await prisma.user.create({
-            data: {
-              id: 'user1',
-              name: 'Test User',
-              email: 'test@example.com',
-            },
+            data: session.user,
           })
           return result
         },
@@ -25,8 +24,8 @@ export default defineConfig({
           const result = await prisma.session.create({
             data: {
               sessionToken: 'Test Session',
-              userId: 'user1',
-              expires: new Date('2999-12-31')
+              userId: session.user.id,
+              expires: new Date(session.expires)
             },
           })
           return result
@@ -37,10 +36,10 @@ export default defineConfig({
             where: {
               OR: [
                 {
-                  id: 'user1',
+                  id: session.user.id,
                 },
                 {
-                  email: 'test@example.com',
+                  email: session.user.email,
                 }
               ]
             },
@@ -51,7 +50,7 @@ export default defineConfig({
           // delete test user's tasks
           const result = await prisma.task.deleteMany({
             where: {
-              userId: 'user1',
+              userId: session.user.id,
             },
           })
           return result
