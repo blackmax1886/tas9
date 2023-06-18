@@ -60,6 +60,14 @@ export default defineConfig({
           })
           return result
         },
+        async 'db:find-user'(userId) {
+          const result = await prisma.user.findUnique({
+            where:{
+              id: userId
+            }
+          })
+          return result
+        },
         async 'db:reset-task'() {
           // delete test user's tasks
           const result = await prisma.task.deleteMany({

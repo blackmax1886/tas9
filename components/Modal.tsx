@@ -23,12 +23,12 @@ const Modal: React.FC<ModalProps> = ({
   const confirmStyle = isWarnStyle ? cautionButtonStyle : safeButtonStyle
 
   return (
-    <div css={overlayStyle}>
+    <div data-cy='modal' css={overlayStyle}>
       <div css={modalStyle}>
         <h2>{title}</h2>
         <p>{content}</p>
         <div css={buttons}>
-          <button onClick={onConfirm} css={confirmStyle}>
+          <button data-cy='confirmButton' onClick={onConfirm} css={confirmStyle}>
             OK
           </button>
           <button onClick={onCancel} css={cancelButtonStyle}>
