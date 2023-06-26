@@ -10,7 +10,10 @@ describe('template spec', () => {
   })
 
   it('can access home', () => {
-    cy.googleLogin().then(() => cy.visit('home')).url().should('contain', 'home')
+    cy.googleLogin()
+      .then(() => cy.visit('home'))
+      .url()
+      .should('contain', 'home')
   })
 
   it('new user should have 0 task on tasklist', () => {
@@ -26,25 +29,10 @@ describe('template spec', () => {
       title: 'test1',
     })
     cy.visit('/')
-    cy.googleLogin().then(() => {cy.visit('home')})
+    cy.googleLogin().then(() => {
+      cy.visit('home')
+    })
     cy.dataCy('logo').should('be.visible')
     cy.dataCy('taskCard').should('have.length', 1)
-  })
-
-  it('login user can access only own data', function () {
-    cy.task('db:reset-task')
-    // seed task data of default test user
-    cy.task('db:seed-task', {
-      userId: this.defaultSession.user.id,
-      title: 'test1',
-    })
-    cy.visit('/')
-    // login as other user
-    cy.intercept('api/auth/session', { fixture: 'otherSessions.json' }).as('sessions')
-    cy.fixture('otherSessions').then((sessions) => {
-      cy.setCookie('next-auth.session-token', sessions.session2.sessionToken)
-    }).then( () => cy.visit('home'))
-    cy.dataCy('logo').should('be.visible')
-    cy.dataCy('taskCard').should('have.length', 0)
   })
 })

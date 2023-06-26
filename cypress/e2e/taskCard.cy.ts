@@ -1,3 +1,6 @@
+import { session2 } from '../fixtures/otherSessions.json'
+import session from '../fixtures/session.json'
+
 describe('Task card operations', () => {
   // Seed test user data before running the tests
   before('seed-test-user', () => {
@@ -10,7 +13,7 @@ describe('Task card operations', () => {
   beforeEach('reset & seed tasks', () => {
     cy.task('db:reset-task')
     cy.task('db:seed-task', {
-      userId: 'user1',
+      userId: session.user.id,
       title: 'test1',
     }).then(() => {
       cy.googleLogin()
@@ -59,5 +62,24 @@ describe('Task card operations', () => {
       cy.dataCy('taskCardTitle').first().invoke('text').should('equal', 'test2')
       cy.dataCy('taskCardTitle').eq(1).invoke('text').should('equal', 'test1')
     })
+  })
+
+  it('login user can get only own tasks', function () {
+    cy.intercept('POST', '/api/graphql', (req) => {
+      if (req.body.operationName === 'getTasks') {
+        req.body.variables.userId = session2.user.id
+      }
+    }).as('GraphQL')
+    cy.visit('/home')
+    cy.wait('@GraphQL').then((interception) => {
+      if (interception.request.body.operationName === 'getTasks') {
+        expect(interception.response?.statusCode).to.equal(200)
+        expect(interception.response?.body).to.have.property('data', null)
+        expect(interception.response?.body).to.have.property('errors')
+        const errors = interception.response?.body.errors
+        expect(errors[0]).to.have.property('message', 'Not Authorised!')
+      }
+    })
+    cy.dataCy('taskCard').should('have.length', 0)
   })
 })
