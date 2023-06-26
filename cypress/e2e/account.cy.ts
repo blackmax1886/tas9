@@ -57,6 +57,11 @@ describe('Account Management Functionality', () => {
         cy.dataCy('accountToggleMenu').should('be.visible')
         cy.dataCy('deleteAccount').click()
         cy.dataCy('modal').should('be.visible')
+        // set event listner for NextJS error not to fail test
+        Cypress.on('uncaught:exception', (err) => {
+          expect(err.message).to.include('Not Authorised!')
+          return false
+        })
         cy.dataCy('confirmButton').click()
         cy.wait('@deleteUser').then(() => {
           cy.task('db:find-user', session.user.id).should('not.be.null')
