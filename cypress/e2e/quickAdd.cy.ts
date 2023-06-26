@@ -1,3 +1,5 @@
+import session from '../fixtures/session.json'
+
 describe('Task management with quick-add', () => {
   // Seed test user data before running the tests
   before('seed-test-user', () => {
@@ -9,7 +11,7 @@ describe('Task management with quick-add', () => {
   // Reset tasks and login before each test
   beforeEach('reset tasks', () => {
     cy.task('db:reset-task')
-    cy.googleLogin()
+    cy.googleLogin(session)
     cy.visit('/home')
   })
 

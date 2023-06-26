@@ -16,7 +16,7 @@ describe('Task card operations', () => {
       userId: session.user.id,
       title: 'test1',
     }).then(() => {
-      cy.googleLogin()
+      cy.googleLogin(session)
       cy.visit('/home')
     })
   })

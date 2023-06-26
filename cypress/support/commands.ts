@@ -35,14 +35,12 @@
 //     }
 //   }
 // }
+import NextAuthSession from './session'
 
-Cypress.Commands.add('googleLogin', () => {
+Cypress.Commands.add('googleLogin', (session: NextAuthSession) => {
   cy.visit('/')
-  cy.intercept('api/auth/session', { fixture: 'session.json' }).as('session')
-  cy.setCookie(
-    'next-auth.session-token',
-    'Test Session'
-  )
+  cy.intercept('api/auth/session', { body: session }).as('session')
+  cy.setCookie('next-auth.session-token', session.sessionToken)
 })
 
 Cypress.Commands.add('dataCy', (value) => {

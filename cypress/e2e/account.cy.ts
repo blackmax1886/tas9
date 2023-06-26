@@ -8,11 +8,7 @@ describe('Account Management Functionality', () => {
     cy.task('db:seed-user')
     cy.task('db:seed-session')
     cy.session(session.user.id, () => {
-      cy.visit('/')
-      cy.intercept('api/auth/session', { fixture: 'session.json' }).as(
-        'session'
-      )
-      cy.setCookie('next-auth.session-token', session.sessionToken)
+      cy.googleLogin(session)
     })
     cy.visit('home')
   })
