@@ -55,7 +55,7 @@ describe('Account Management Functionality', () => {
         cy.dataCy('modal').should('be.visible')
         // set event listner for NextJS error not to fail test
         Cypress.on('uncaught:exception', (err) => {
-          expect(err.message).to.include('Not Authorised!')
+          expect(err.message).to.include('You are not the current user.')
           return false
         })
         cy.dataCy('confirmButton').click()

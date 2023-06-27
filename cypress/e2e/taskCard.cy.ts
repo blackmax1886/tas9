@@ -1,5 +1,6 @@
 import { session2 } from '../fixtures/otherSessions.json'
 import session from '../fixtures/session.json'
+import { aliasQuery, hasOperationName } from '../utils/graphql-test-utils'
 
 describe('Task card operations', () => {
   // Seed test user data before running the tests
@@ -66,20 +67,29 @@ describe('Task card operations', () => {
 
   it('login user can get only own tasks', function () {
     cy.intercept('POST', '/api/graphql', (req) => {
-      if (req.body.operationName === 'getTasks') {
+      aliasQuery(req, 'getTasks')
+      if (hasOperationName(req, 'getTasks')) {
         req.body.variables.userId = session2.user.id
       }
-    }).as('GraphQL')
-    cy.visit('/home')
-    cy.wait('@GraphQL').then((interception) => {
-      if (interception.request.body.operationName === 'getTasks') {
-        expect(interception.response?.statusCode).to.equal(200)
-        expect(interception.response?.body).to.have.property('data', null)
-        expect(interception.response?.body).to.have.property('errors')
-        const errors = interception.response?.body.errors
-        expect(errors[0]).to.have.property('message', 'Not Authorised!')
-      }
     })
+    cy.visit('/home').wait('@gqlgetTasksQuery')
+    cy.get('@gqlgetTasksQuery')
+      .its('response')
+      .its('statusCode')
+      .should('eq', 200)
+    cy.get('@gqlgetTasksQuery')
+      .its('response')
+      .its('body')
+      .its('data')
+      .should('be.null')
+    cy.get('@gqlgetTasksQuery')
+      .its('response')
+      .its('body')
+      .its('errors')
+      .should('be.a', 'array')
+      .its(0)
+      .its('message')
+      .should('eq', 'You are not the owner.')
     cy.dataCy('taskCard').should('have.length', 0)
   })
 })

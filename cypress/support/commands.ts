@@ -39,8 +39,10 @@ import NextAuthSession from './session'
 
 Cypress.Commands.add('googleLogin', (session: NextAuthSession) => {
   cy.visit('/')
-  cy.intercept('api/auth/session', { body: session }).as('session')
-  cy.setCookie('next-auth.session-token', session.sessionToken)
+  cy.session(session, () => {
+    cy.intercept('api/auth/session', { body: session }).as('session')
+    cy.setCookie('next-auth.session-token', session.sessionToken)
+  })
 })
 
 Cypress.Commands.add('dataCy', (value) => {
