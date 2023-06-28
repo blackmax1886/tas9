@@ -126,7 +126,7 @@ const TaskCard = (props: taskCardProps) => {
         </label>
         <button
           css={deleteButton}
-          data-cy="deleteTaskButon"
+          data-cy="deleteTaskButton"
           onClick={handleDeleteTask}
         >
           <Image

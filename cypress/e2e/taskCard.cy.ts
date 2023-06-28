@@ -28,7 +28,7 @@ describe('Task card operations', () => {
   })
 
   it('should delete the task and verify it is removed from the All tab', () => {
-    cy.dataCy('deleteTaskButon')
+    cy.dataCy('deleteTaskButton')
       .click()
       .then(() => {
         cy.dataCy('taskCard').should('have.length', 0)
