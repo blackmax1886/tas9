@@ -1,5 +1,6 @@
 import { session2 } from '../fixtures/otherSessions.json'
 import session from '../fixtures/session.json'
+import { aliasMutation, hasOperationName } from '../utils/graphql-test-utils'
 
 describe('Account Management Functionality', () => {
   beforeEach('login', () => {
@@ -46,10 +47,11 @@ describe('Account Management Functionality', () => {
         cy.task('db:find-user', session.user.id).should('not.be.null')
         cy.task('db:find-user', session2.user.id).should('not.be.null')
         cy.intercept('POST', '/api/graphql', (req) => {
-          if (req.body.operationName === 'DeleteUser') {
+          aliasMutation(req, 'DeleteUser')
+          if (hasOperationName(req, 'DeleteUser')) {
             req.body.variables.userId = session2.user.id
           }
-        }).as('deleteUser')
+        })
         cy.dataCy('accountToggleMenu').should('be.visible')
         cy.dataCy('deleteAccount').click()
         cy.dataCy('modal').should('be.visible')
@@ -59,7 +61,7 @@ describe('Account Management Functionality', () => {
           return false
         })
         cy.dataCy('confirmButton').click()
-        cy.wait('@deleteUser').then(() => {
+        cy.wait('@gqlDeleteUserMutation').then(() => {
           cy.task('db:find-user', session.user.id).should('not.be.null')
           cy.task('db:find-user', session2.user.id).should('not.be.null')
         })
