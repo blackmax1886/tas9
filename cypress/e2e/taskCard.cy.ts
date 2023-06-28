@@ -123,4 +123,31 @@ describe('Task card operations', () => {
       })
     })
   })
+
+  it('tasks should not be deleted by another user', function () {
+    cy.task('db:seed-task', {
+      userId: session2.user.id,
+      title: 'task of another user',
+    })
+      .its('id')
+      .as('taskId')
+    cy.get('@taskId').then((taskId) => {
+      cy.intercept('POST', '/api/graphql', (req) => {
+        aliasMutation(req, 'DeleteTask')
+        if (hasOperationName(req, 'DeleteTask')) {
+          req.body.variables.taskId = taskId
+        }
+      })
+    })
+    Cypress.on('uncaught:exception', (err) => {
+      expect(err.message).to.include('You are not the owner of this task.')
+      return false
+    })
+    cy.dataCy('deleteTaskButton').click()
+    cy.get('@taskId').then((taskId) => {
+      cy.wait('@gqlDeleteTaskMutation').then(() => {
+        cy.task('db:find-task', taskId).should('not.be.null')
+      })
+    })
+  })
 })
