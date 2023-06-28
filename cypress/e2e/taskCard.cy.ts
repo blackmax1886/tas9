@@ -1,6 +1,10 @@
 import { session2 } from '../fixtures/otherSessions.json'
 import session from '../fixtures/session.json'
-import { aliasQuery, hasOperationName } from '../utils/graphql-test-utils'
+import {
+  aliasMutation,
+  aliasQuery,
+  hasOperationName,
+} from '../utils/graphql-test-utils'
 
 describe('Task card operations', () => {
   // Seed test user data before running the tests
@@ -91,5 +95,32 @@ describe('Task card operations', () => {
       .its('message')
       .should('eq', 'You are not the owner.')
     cy.dataCy('taskCard').should('have.length', 0)
+  })
+
+  it('tasks should not be done by another user', function () {
+    cy.task('db:seed-task', {
+      userId: session2.user.id,
+      title: 'task of another user',
+    })
+      .its('id')
+      .as('taskId')
+    cy.get('@taskId').then((taskId) => {
+      cy.intercept('POST', '/api/graphql', (req) => {
+        aliasMutation(req, 'UpdateTaskIsDone')
+        if (hasOperationName(req, 'UpdateTaskIsDone')) {
+          req.body.variables.taskId = taskId
+        }
+      })
+    })
+    Cypress.on('uncaught:exception', (err) => {
+      expect(err.message).to.include('You are not the owner of this task.')
+      return false
+    })
+    cy.dataCy('doneTaskLabel').click()
+    cy.get('@taskId').then((taskId) => {
+      cy.wait('@gqlUpdateTaskIsDoneMutation').then(() => {
+        cy.task('db:find-task', taskId).its('done').should('be.false')
+      })
+    })
   })
 })

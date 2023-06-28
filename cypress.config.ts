@@ -103,6 +103,14 @@ export default defineConfig({
           })
           return result
         },
+        async 'db:find-task'(taskId) {
+          const result = await prisma.task.findUnique({
+            where: {
+              id: taskId,
+            },
+          })
+          return result
+        },
       })
     },
   },
