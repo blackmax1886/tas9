@@ -67,84 +67,86 @@ describe('Task card operations', () => {
     })
   })
 
-  it('login user can get only own tasks', function () {
-    cy.intercept('POST', '/api/graphql', (req) => {
-      aliasQuery(req, 'getTasks')
-      if (hasOperationName(req, 'getTasks')) {
-        req.body.variables.userId = session2.user.id
-      }
-    })
-    cy.visit('/home').wait('@gqlgetTasksQuery')
-    cy.get('@gqlgetTasksQuery')
-      .its('response')
-      .its('statusCode')
-      .should('eq', 200)
-    cy.get('@gqlgetTasksQuery')
-      .its('response')
-      .its('body')
-      .its('data')
-      .should('be.null')
-    cy.get('@gqlgetTasksQuery')
-      .its('response')
-      .its('body')
-      .its('errors')
-      .should('be.a', 'array')
-      .its(0)
-      .its('message')
-      .should('eq', 'You are not the owner.')
-    cy.dataCy('taskCard').should('have.length', 0)
-  })
-
-  it('tasks should not be done by another user', function () {
-    cy.task('db:seed-task', {
-      userId: session2.user.id,
-      title: 'task of another user',
-    })
-      .its('id')
-      .as('taskId')
-    cy.get('@taskId').then((taskId) => {
+  describe('GraphQL should be protected by authorization shield', () => {
+    it('tasks should not be fetched by another user', function () {
       cy.intercept('POST', '/api/graphql', (req) => {
-        aliasMutation(req, 'UpdateTaskIsDone')
-        if (hasOperationName(req, 'UpdateTaskIsDone')) {
-          req.body.variables.taskId = taskId
+        aliasQuery(req, 'getTasks')
+        if (hasOperationName(req, 'getTasks')) {
+          req.body.variables.userId = session2.user.id
         }
       })
+      cy.visit('/home').wait('@gqlgetTasksQuery')
+      cy.get('@gqlgetTasksQuery')
+        .its('response')
+        .its('statusCode')
+        .should('eq', 200)
+      cy.get('@gqlgetTasksQuery')
+        .its('response')
+        .its('body')
+        .its('data')
+        .should('be.null')
+      cy.get('@gqlgetTasksQuery')
+        .its('response')
+        .its('body')
+        .its('errors')
+        .should('be.a', 'array')
+        .its(0)
+        .its('message')
+        .should('eq', 'You are not the owner.')
+      cy.dataCy('taskCard').should('have.length', 0)
     })
-    Cypress.on('uncaught:exception', (err) => {
-      expect(err.message).to.include('You are not the owner of this task.')
-      return false
-    })
-    cy.dataCy('doneTaskLabel').click()
-    cy.get('@taskId').then((taskId) => {
-      cy.wait('@gqlUpdateTaskIsDoneMutation').then(() => {
-        cy.task('db:find-task', taskId).its('done').should('be.false')
-      })
-    })
-  })
 
-  it('tasks should not be deleted by another user', function () {
-    cy.task('db:seed-task', {
-      userId: session2.user.id,
-      title: 'task of another user',
-    })
-      .its('id')
-      .as('taskId')
-    cy.get('@taskId').then((taskId) => {
-      cy.intercept('POST', '/api/graphql', (req) => {
-        aliasMutation(req, 'DeleteTask')
-        if (hasOperationName(req, 'DeleteTask')) {
-          req.body.variables.taskId = taskId
-        }
+    it('tasks should not be done by another user', function () {
+      cy.task('db:seed-task', {
+        userId: session2.user.id,
+        title: 'task of another user',
+      })
+        .its('id')
+        .as('taskId')
+      cy.get('@taskId').then((taskId) => {
+        cy.intercept('POST', '/api/graphql', (req) => {
+          aliasMutation(req, 'UpdateTaskIsDone')
+          if (hasOperationName(req, 'UpdateTaskIsDone')) {
+            req.body.variables.taskId = taskId
+          }
+        })
+      })
+      Cypress.on('uncaught:exception', (err) => {
+        expect(err.message).to.include('You are not the owner of this task.')
+        return false
+      })
+      cy.dataCy('doneTaskLabel').click()
+      cy.get('@taskId').then((taskId) => {
+        cy.wait('@gqlUpdateTaskIsDoneMutation').then(() => {
+          cy.task('db:find-task', taskId).its('done').should('be.false')
+        })
       })
     })
-    Cypress.on('uncaught:exception', (err) => {
-      expect(err.message).to.include('You are not the owner of this task.')
-      return false
-    })
-    cy.dataCy('deleteTaskButton').click()
-    cy.get('@taskId').then((taskId) => {
-      cy.wait('@gqlDeleteTaskMutation').then(() => {
-        cy.task('db:find-task', taskId).should('not.be.null')
+
+    it('tasks should not be deleted by another user', function () {
+      cy.task('db:seed-task', {
+        userId: session2.user.id,
+        title: 'task of another user',
+      })
+        .its('id')
+        .as('taskId')
+      cy.get('@taskId').then((taskId) => {
+        cy.intercept('POST', '/api/graphql', (req) => {
+          aliasMutation(req, 'DeleteTask')
+          if (hasOperationName(req, 'DeleteTask')) {
+            req.body.variables.taskId = taskId
+          }
+        })
+      })
+      Cypress.on('uncaught:exception', (err) => {
+        expect(err.message).to.include('You are not the owner of this task.')
+        return false
+      })
+      cy.dataCy('deleteTaskButton').click()
+      cy.get('@taskId').then((taskId) => {
+        cy.wait('@gqlDeleteTaskMutation').then(() => {
+          cy.task('db:find-task', taskId).should('not.be.null')
+        })
       })
     })
   })
