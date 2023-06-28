@@ -7,14 +7,12 @@ import {
 } from '../utils/graphql-test-utils'
 
 describe('Task card operations', () => {
-  // Seed test user data before running the tests
   before('seed-test-user', () => {
     cy.task('db:reset-user')
     cy.task('db:seed-user')
     cy.task('db:seed-session')
   })
 
-  // Reset tasks and login before each test
   beforeEach('reset & seed tasks', () => {
     cy.task('db:reset-task')
     cy.task('db:seed-task', {
