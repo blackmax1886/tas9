@@ -1,10 +1,9 @@
 import { defineConfig } from 'cypress'
 
-import {session2} from './cypress/fixtures/otherSessions.json'
+import { session2 } from './cypress/fixtures/otherSessions.json'
 import session from './cypress/fixtures/session.json'
 
 import { prisma } from '@/prisma/client'
-
 
 export default defineConfig({
   e2e: {
@@ -27,14 +26,14 @@ export default defineConfig({
               {
                 sessionToken: session.sessionToken,
                 userId: session.user.id,
-                expires: new Date(session.expires)
+                expires: new Date(session.expires),
               },
               {
                 sessionToken: session2.sessionToken,
                 userId: session2.user.id,
-                expires: new Date(session2.expires)
-              }
-          ],
+                expires: new Date(session2.expires),
+              },
+            ],
           })
           return result
         },
@@ -55,16 +54,16 @@ export default defineConfig({
                 {
                   email: session2.user.email,
                 },
-              ]
+              ],
             },
           })
           return result
         },
         async 'db:find-user'(userId) {
           const result = await prisma.user.findUnique({
-            where:{
-              id: userId
-            }
+            where: {
+              id: userId,
+            },
           })
           return result
         },
@@ -92,6 +91,14 @@ export default defineConfig({
               priority: input.priority,
               archived: input.archived || false,
               createdAt: new Date(),
+            },
+          })
+          return result
+        },
+        async 'db:find-tasks'(userId) {
+          const result = await prisma.task.findMany({
+            where: {
+              userId: userId,
             },
           })
           return result

@@ -1,4 +1,6 @@
+import { session2 } from '../fixtures/otherSessions.json'
 import session from '../fixtures/session.json'
+import { aliasMutation, hasOperationName } from '../utils/graphql-test-utils'
 
 describe('Task management with quick-add', () => {
   // Seed test user data before running the tests
@@ -27,5 +29,25 @@ describe('Task management with quick-add', () => {
     cy.dataCy('taskCard').should('have.length', 1)
     cy.dataCy('quickAdd').type('test2{enter}')
     cy.dataCy('taskCard').should('have.length', 2)
+  })
+
+  it('login user can create only own tasks', function () {
+    cy.intercept('POST', '/api/graphql', (req) => {
+      aliasMutation(req, 'createTask')
+      if (hasOperationName(req, 'createTask')) {
+        req.body.variables.task.userId = session2.user.id
+      }
+    })
+    Cypress.on('uncaught:exception', (err) => {
+      expect(err.message).to.include(
+        'You are not the owner of task you create.'
+      )
+      return false
+    })
+    cy.dataCy('quickAdd').type('test1{enter}')
+    cy.wait('@gqlcreateTaskMutation').then(() => {
+      cy.task('db:find-tasks', session.user.id).should('be.empty')
+      cy.task('db:find-tasks', session2.user.id).should('be.empty')
+    })
   })
 })
