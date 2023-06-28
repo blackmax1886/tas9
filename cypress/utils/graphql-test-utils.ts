@@ -12,14 +12,20 @@ export const hasOperationName = (
 }
 
 // Alias query if operationName matches
-export const aliasQuery = (req, operationName) => {
+export const aliasQuery = (
+  req: CyHttpMessages.IncomingHttpRequest,
+  operationName: string
+) => {
   if (hasOperationName(req, operationName)) {
     req.alias = `gql${operationName}Query`
   }
 }
 
 // Alias mutation if operationName matches
-export const aliasMutation = (req, operationName) => {
+export const aliasMutation = (
+  req: CyHttpMessages.IncomingHttpRequest,
+  operationName: string
+) => {
   if (hasOperationName(req, operationName)) {
     req.alias = `gql${operationName}Mutation`
   }
