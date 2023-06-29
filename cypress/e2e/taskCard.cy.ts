@@ -68,7 +68,7 @@ describe('Task card operations', () => {
   })
 
   describe('GraphQL should be protected by authorization shield', () => {
-    it('tasks should not be fetched by another user', function () {
+    it('tasks should not be fetched by anyone but the owner', function () {
       cy.intercept('POST', '/api/graphql', (req) => {
         aliasQuery(req, 'getTasks')
         if (hasOperationName(req, 'getTasks')) {
@@ -96,7 +96,7 @@ describe('Task card operations', () => {
       cy.dataCy('taskCard').should('have.length', 0)
     })
 
-    it('tasks should not be done by another user', function () {
+    it('tasks should not be done by anyone but the owner', function () {
       cy.task('db:seed-task', {
         userId: session2.user.id,
         title: 'task of another user',
@@ -123,7 +123,7 @@ describe('Task card operations', () => {
       })
     })
 
-    it('tasks should not be deleted by another user', function () {
+    it('tasks should not be deleted by anyone but the owner', function () {
       cy.task('db:seed-task', {
         userId: session2.user.id,
         title: 'task of another user',
@@ -133,6 +133,7 @@ describe('Task card operations', () => {
       cy.get('@taskId').then((taskId) => {
         cy.intercept('POST', '/api/graphql', (req) => {
           aliasMutation(req, 'DeleteTask')
+          // delete task that does not belong to current user
           if (hasOperationName(req, 'DeleteTask')) {
             req.body.variables.taskId = taskId
           }
