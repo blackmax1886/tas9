@@ -208,7 +208,7 @@ export const TaskDetailsFragmentDoc = gql`
 }
     ${TaskSummaryFragmentDoc}`;
 export const CreateTaskDocument = gql`
-    mutation createTask($task: NewTask!) {
+    mutation CreateTask($task: NewTask!) {
   createTask(input: $task) {
     ...TaskSummary
   }
@@ -241,7 +241,7 @@ export type CreateTaskMutationHookResult = ReturnType<typeof useCreateTaskMutati
 export type CreateTaskMutationResult = Apollo.MutationResult<CreateTaskMutation>;
 export type CreateTaskMutationOptions = Apollo.BaseMutationOptions<CreateTaskMutation, CreateTaskMutationVariables>;
 export const GetTaskDocument = gql`
-    query getTask($taskId: ID!) {
+    query GetTask($taskId: ID!) {
   task(id: $taskId) {
     ...TaskDetails
   }
@@ -276,7 +276,7 @@ export type GetTaskQueryHookResult = ReturnType<typeof useGetTaskQuery>;
 export type GetTaskLazyQueryHookResult = ReturnType<typeof useGetTaskLazyQuery>;
 export type GetTaskQueryResult = Apollo.QueryResult<GetTaskQuery, GetTaskQueryVariables>;
 export const GetTasksDocument = gql`
-    query getTasks($userId: ID!) {
+    query GetTasks($userId: ID!) {
   tasks(userId: $userId) {
     ...TaskSummary
   }
