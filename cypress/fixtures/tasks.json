@@ -1,0 +1,14 @@
+{
+  "generalTask": {
+    "title": "general task that has all props",
+    "content": "Content <div>is shown here</div>",
+    "done": false,
+    "due": "2999-12-31T23:59:59.000Z",
+    "start": "2999-12-31T00:00:00.000Z",
+    "end": "2999-12-31T00:30:00.000Z",
+    "group": "undefined yet",
+    "type": "undefined yet",
+    "priority": 0,
+    "archived": false
+  }
+}

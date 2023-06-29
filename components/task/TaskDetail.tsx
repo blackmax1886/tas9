@@ -80,10 +80,12 @@ const TaskDetail = ({
 
   return (
     <div css={taskDetail}>
-      <h1 css={taskName}>{selectedTask?.title}</h1>
-      <div>start: {start}</div>
-      <div>end: {end}</div>
-      <div css={taskContentWrapper}>
+      <h1 css={taskName} data-cy="taskDetailTitle">
+        {selectedTask?.title}
+      </h1>
+      <div data-cy="taskDetailStart">start: {start}</div>
+      <div data-cy="taskDetailEnd">end: {end}</div>
+      <div css={taskContentWrapper} data-cy="taskDetailContent">
         <ContentEditable
           css={taskContent}
           html={content}
