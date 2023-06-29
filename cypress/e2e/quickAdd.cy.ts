@@ -33,8 +33,8 @@ describe('Task management with quick-add', () => {
 
   it('login user can create only own tasks', function () {
     cy.intercept('POST', '/api/graphql', (req) => {
-      aliasMutation(req, 'createTask')
-      if (hasOperationName(req, 'createTask')) {
+      aliasMutation(req, 'CreateTask')
+      if (hasOperationName(req, 'CreateTask')) {
         req.body.variables.task.userId = session2.user.id
       }
     })
@@ -45,7 +45,7 @@ describe('Task management with quick-add', () => {
       return false
     })
     cy.dataCy('quickAdd').type('test1{enter}')
-    cy.wait('@gqlcreateTaskMutation').then(() => {
+    cy.wait('@gqlCreateTaskMutation').then(() => {
       cy.task('db:find-tasks', session.user.id).should('be.empty')
       cy.task('db:find-tasks', session2.user.id).should('be.empty')
     })

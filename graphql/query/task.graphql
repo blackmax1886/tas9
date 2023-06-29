@@ -18,19 +18,19 @@ fragment TaskDetails on Task {
   createdAt
 }
 
-mutation createTask($task: NewTask!) {
+mutation CreateTask($task: NewTask!) {
   createTask(input: $task) {
     ...TaskSummary
   }
 }
 
-query getTask($taskId: ID!) {
+query GetTask($taskId: ID!) {
   task(id: $taskId) {
     ...TaskDetails
   }
 }
 
-query getTasks($userId: ID!) {
+query GetTasks($userId: ID!) {
   tasks(userId: $userId) {
     ...TaskSummary
   }

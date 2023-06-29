@@ -62,26 +62,26 @@ describe('taskDetail shows properties of task & edit them', () => {
       .as('taskId')
     cy.get('@taskId').then((taskId) => {
       cy.intercept('POST', '/api/graphql', (req) => {
-        aliasQuery(req, 'getTask')
+        aliasQuery(req, 'GetTask')
         // get a task that does not belong to current user
-        if (hasOperationName(req, 'getTask')) {
+        if (hasOperationName(req, 'GetTask')) {
           req.body.variables.taskId = taskId
         }
       })
     })
     cy.dataCy('taskCard').click()
-    cy.get('@gqlgetTaskQuery')
+    cy.get('@gqlGetTaskQuery')
       .its('response')
       .its('statusCode')
       .should('eq', 200)
-    cy.get('@gqlgetTaskQuery')
+    cy.get('@gqlGetTaskQuery')
       .its('response')
       .its('body')
       .its('data')
       .its('task')
       .should('be.null')
 
-    cy.get('@gqlgetTaskQuery')
+    cy.get('@gqlGetTaskQuery')
       .its('response')
       .its('body')
       .its('errors')

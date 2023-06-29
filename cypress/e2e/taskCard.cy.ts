@@ -70,22 +70,22 @@ describe('Task card operations', () => {
   describe('GraphQL should be protected by authorization shield', () => {
     it('tasks should not be fetched by anyone but the owner', function () {
       cy.intercept('POST', '/api/graphql', (req) => {
-        aliasQuery(req, 'getTasks')
-        if (hasOperationName(req, 'getTasks')) {
+        aliasQuery(req, 'GetTasks')
+        if (hasOperationName(req, 'GetTasks')) {
           req.body.variables.userId = session2.user.id
         }
       })
-      cy.visit('/home').wait('@gqlgetTasksQuery')
-      cy.get('@gqlgetTasksQuery')
+      cy.visit('/home').wait('@gqlGetTasksQuery')
+      cy.get('@gqlGetTasksQuery')
         .its('response')
         .its('statusCode')
         .should('eq', 200)
-      cy.get('@gqlgetTasksQuery')
+      cy.get('@gqlGetTasksQuery')
         .its('response')
         .its('body')
         .its('data')
         .should('be.null')
-      cy.get('@gqlgetTasksQuery')
+      cy.get('@gqlGetTasksQuery')
         .its('response')
         .its('body')
         .its('errors')
