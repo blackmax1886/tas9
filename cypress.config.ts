@@ -1,5 +1,8 @@
 import { defineConfig } from 'cypress'
 
+import { session2 } from './cypress/fixtures/otherSessions.json'
+import session from './cypress/fixtures/session.json'
+
 import { prisma } from '@/prisma/client'
 
 export default defineConfig({
@@ -11,20 +14,55 @@ export default defineConfig({
       on('task', {
         async 'db:seed-user'() {
           // seed test user data
-          const result = await prisma.user.create({
-            data: {
-              id: 'clhep0xew0000ml08ri93zfr9',
-              name: 'Test User',
-              email: 'test@example.com',
-            },
+          const result = await prisma.user.createMany({
+            data: [session.user, session2.user],
+          })
+          return result
+        },
+        async 'db:seed-session'() {
+          // seed test user's session data
+          const result = await prisma.session.createMany({
+            data: [
+              {
+                sessionToken: session.sessionToken,
+                userId: session.user.id,
+                expires: new Date(session.expires),
+              },
+              {
+                sessionToken: session2.sessionToken,
+                userId: session2.user.id,
+                expires: new Date(session2.expires),
+              },
+            ],
           })
           return result
         },
         async 'db:reset-user'() {
           // delete test user data
-          const result = await prisma.user.delete({
+          const result = await prisma.user.deleteMany({
             where: {
-              id: 'clhep0xew0000ml08ri93zfr9',
+              OR: [
+                {
+                  id: session.user.id,
+                },
+                {
+                  email: session.user.email,
+                },
+                {
+                  id: session2.user.id,
+                },
+                {
+                  email: session2.user.email,
+                },
+              ],
+            },
+          })
+          return result
+        },
+        async 'db:find-user'(userId) {
+          const result = await prisma.user.findUnique({
+            where: {
+              id: userId,
             },
           })
           return result
@@ -33,7 +71,7 @@ export default defineConfig({
           // delete test user's tasks
           const result = await prisma.task.deleteMany({
             where: {
-              userId: 'clhep0xew0000ml08ri93zfr9',
+              userId: session.user.id,
             },
           })
           return result
@@ -53,6 +91,22 @@ export default defineConfig({
               priority: input.priority,
               archived: input.archived || false,
               createdAt: new Date(),
+            },
+          })
+          return result
+        },
+        async 'db:find-tasks'(userId) {
+          const result = await prisma.task.findMany({
+            where: {
+              userId: userId,
+            },
+          })
+          return result
+        },
+        async 'db:find-task'(taskId) {
+          const result = await prisma.task.findUnique({
+            where: {
+              id: taskId,
             },
           })
           return result

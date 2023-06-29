@@ -86,21 +86,21 @@ const AccountMenu = (props: AccoutMenuProps) => {
   `
   return (
     <div ref={menuRef} css={accountMenu}>
-      <div onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}>
+      <div data-cy='accountMenu' onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}>
         Account
       </div>
       {isAccountMenuOpen && (
-        <div css={accountToggleMenu}>
-          <div css={accountToggleMenuHeader}>{props.user?.email}</div>
-          <div onClick={handleAccountDeletion} css={accountToggleMenuItem}>
+        <div data-cy='accountToggleMenu' css={accountToggleMenu}>
+          <div data-cy='accountMenuHeader' css={accountToggleMenuHeader}>{props.user?.email}</div>
+          <div data-cy='deleteAccount' onClick={handleAccountDeletion} css={accountToggleMenuItem}>
             delete tas9 account
           </div>
         </div>
       )}
       <Modal
         isOpen={isModalOpen}
-        title="Delete Account"
-        content="Are you sure you want to delete your account?"
+        title='Delete Account'
+        content='Are you sure you want to delete your account?'
         isWarnStyle={true}
         onConfirm={handleConfirm}
         onCancel={handleCancel}
