@@ -50,7 +50,7 @@ const TaskDetail = ({
 }) => {
   const [title, setTitle] = useState(selectedTask.title)
   const [content, setContent] = useState(selectedTask.content || '')
-  const [isSaved, setIsSaved] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
   const [updateTaskContent] = useMutation<UpdateTaskContentMutation>(
     UpdateTaskContentDocument
   )
@@ -64,7 +64,7 @@ const TaskDetail = ({
       updateTaskContent({
         variables: { taskId: selectedTask.id, content: content },
       })
-      setIsSaved(true)
+      setIsSaving(false)
     }, 3000)
     return () => {
       clearTimeout(timeoutId)
@@ -85,7 +85,7 @@ const TaskDetail = ({
           },
         },
       })
-      setIsSaved(true)
+      setIsSaving(false)
     }, 3000)
     return () => {
       clearTimeout(timeoutId)
@@ -94,7 +94,7 @@ const TaskDetail = ({
 
   const handleChangeTaskTitle = (event: ContentEditableEvent) => {
     const titleInput = event.target.value || ''
-    setIsSaved(false)
+    setIsSaving(true)
     setTitle(titleInput)
   }
   const handleEnterOnTaskTitle = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -104,7 +104,7 @@ const TaskDetail = ({
     }
   }
   const handleChangeTaskContent = (event: ContentEditableEvent) => {
-    setIsSaved(false)
+    setIsSaving(true)
     setContent(event.target.value || '')
   }
 
@@ -134,7 +134,7 @@ const TaskDetail = ({
           innerRef={taskContentRef}
         />
       </div>
-      <div>{isSaved ? 'saved' : 'saving...'}</div>
+      <div>{isSaving ? 'saving...' : 'saved'}</div>
     </div>
   )
 }
