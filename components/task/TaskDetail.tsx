@@ -64,11 +64,9 @@ const TaskDetail = ({
       updateTaskContent({
         variables: { taskId: selectedTask.id, content: content },
       })
-      console.log('run update')
       setIsSaved(true)
     }, 3000)
     return () => {
-      console.log('run cleanup')
       clearTimeout(timeoutId)
     }
   }, [content])
@@ -87,11 +85,9 @@ const TaskDetail = ({
           },
         },
       })
-      console.log('run update')
       setIsSaved(true)
     }, 3000)
     return () => {
-      console.log('run cleanup')
       clearTimeout(timeoutId)
     }
   }, [title])
