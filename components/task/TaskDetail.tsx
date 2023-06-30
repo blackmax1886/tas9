@@ -8,6 +8,8 @@ import {
   TaskDetailsFragment,
   UpdateTaskContentMutation,
   UpdateTaskContentDocument,
+  UpdateTaskTitleMutation,
+  UpdateTaskTitleDocument,
 } from '@/graphql/types/client'
 import { dayjs, formatString } from '@/lib/day'
 
@@ -46,17 +48,21 @@ const TaskDetail = ({
 }: {
   selectedTask: TaskDetailsFragment
 }) => {
-  const [content, setContent] = useState(selectedTask?.content || '')
+  const [title, setTitle] = useState(selectedTask.title)
+  const [content, setContent] = useState(selectedTask.content || '')
   const [isSaved, setIsSaved] = useState(true)
   const [updateTaskContent] = useMutation<UpdateTaskContentMutation>(
     UpdateTaskContentDocument
+  )
+  const [updateTaskTitle] = useMutation<UpdateTaskTitleMutation>(
+    UpdateTaskTitleDocument
   )
   const taskContentRef = useRef<HTMLDivElement>(null)
 
   useUpdateEffect(() => {
     const timeoutId = setTimeout(() => {
       updateTaskContent({
-        variables: { taskId: selectedTask?.id, content: content },
+        variables: { taskId: selectedTask.id, content: content },
       })
       console.log('run update')
       setIsSaved(true)
@@ -67,9 +73,33 @@ const TaskDetail = ({
     }
   }, [content])
 
+  useUpdateEffect(() => {
+    const { id, title: _, ...rest } = selectedTask
+    const timeoutId = setTimeout(() => {
+      updateTaskTitle({
+        variables: { taskId: id, title: title },
+        optimisticResponse: {
+          updateTask: {
+            id: selectedTask.id,
+            title: title,
+            ...rest,
+            __typename: 'Task',
+          },
+        },
+      })
+      console.log('run update')
+      setIsSaved(true)
+    }, 3000)
+    return () => {
+      console.log('run cleanup')
+      clearTimeout(timeoutId)
+    }
+  }, [title])
+
   const handleChangeTaskTitle = (event: ContentEditableEvent) => {
-    //TODO: setTaskTitle
-    console.log(event.target.value || '')
+    const titleInput = event.target.value || ''
+    setIsSaved(false)
+    setTitle(titleInput)
   }
   const handleEnterOnTaskTitle = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -82,10 +112,10 @@ const TaskDetail = ({
     setContent(event.target.value || '')
   }
 
-  const start = selectedTask?.start
+  const start = selectedTask.start
     ? dayjs(selectedTask.start).format(formatString)
     : ''
-  const end = selectedTask?.end
+  const end = selectedTask.end
     ? dayjs(selectedTask.end).format(formatString)
     : ''
 
@@ -93,7 +123,7 @@ const TaskDetail = ({
     <div css={taskDetail} data-cy="taskDetail">
       <h1 css={taskName} data-cy="taskDetailTitle">
         <ContentEditable
-          html={selectedTask?.title}
+          html={title}
           onChange={handleChangeTaskTitle}
           onKeyDown={handleEnterOnTaskTitle}
         />

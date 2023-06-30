@@ -7,7 +7,10 @@
     "prettier"
   ],
   "rules": {
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "ignoreRestSiblings": true }
+    ],
     "@typescript-eslint/no-explicit-any": "error",
     "import/no-unresolved": "error",
     "import/order": [

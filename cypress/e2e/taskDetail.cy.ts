@@ -54,6 +54,18 @@ describe('taskDetail shows properties of task & edit them', () => {
       .should('eq', convertHTMLtoString(generalTask.content))
   })
 
+  describe('edit task detail', () => {
+    it('should focus task content when press enter key on task title', () => {
+      // TODO: implement test
+    })
+    it('should save task title when changed', () => {
+      // TODO: implement test
+    })
+    it('should save task content when changed', () => {
+      // TODO: implement test
+    })
+  })
+
   it('task should not be fetched by anyone but the owner', () => {
     cy.task('db:seed-task', {
       userId: session2.user.id,
