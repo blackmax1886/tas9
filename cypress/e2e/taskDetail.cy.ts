@@ -28,7 +28,7 @@ describe('taskDetail shows properties of task & edit them', () => {
   //     // do something
   //   })
 
-  it('shows selected task title on h1', () => {
+  it('shows selected task detail', () => {
     cy.dataCy('taskCard').should('have.length', 1)
     cy.dataCy('taskCardTitle').invoke('text').should('equal', generalTask.title)
     cy.dataCy('taskCard').click()

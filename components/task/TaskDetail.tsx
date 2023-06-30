@@ -5,7 +5,7 @@ import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
 import { useUpdateEffect } from 'react-use'
 
 import {
-  Task,
+  TaskDetailsFragment,
   UpdateTaskContentMutation,
   UpdateTaskContentDocument,
 } from '@/graphql/types/client'
@@ -44,7 +44,7 @@ const taskContent = css`
 const TaskDetail = ({
   selectedTask,
 }: {
-  selectedTask: Partial<Task> | null | undefined
+  selectedTask: TaskDetailsFragment
 }) => {
   const [content, setContent] = useState(selectedTask?.content || '')
   const [isSaved, setIsSaved] = useState(true)

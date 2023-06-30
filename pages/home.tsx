@@ -64,7 +64,7 @@ const Home: NextPage = () => {
     tasks = [...unassignedTasks, ...sortedAssignedTasks]
   }
 
-  const openTaskDetail = (taskId: string | undefined) => {
+  const openTaskDetail = (taskId: string) => {
     if (taskId) {
       setSelectedTaskId(taskId)
     }
@@ -102,11 +102,13 @@ const Home: NextPage = () => {
             )}
           </Board>
           <Board>
-            {selected && (
+            {selected?.task ? (
               <TaskDetail
                 selectedTask={selected.task}
-                key={selected.task?.id}
+                key={selected.task.id}
               ></TaskDetail>
+            ) : (
+              <></>
             )}
           </Board>
           <Board>
