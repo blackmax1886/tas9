@@ -79,7 +79,7 @@ const TaskDetail = ({
     : ''
 
   return (
-    <div css={taskDetail}>
+    <div css={taskDetail} data-cy="taskDetail">
       <h1 css={taskName} data-cy="taskDetailTitle">
         {selectedTask?.title}
       </h1>

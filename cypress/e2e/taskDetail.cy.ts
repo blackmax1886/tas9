@@ -24,9 +24,10 @@ describe('taskDetail shows properties of task & edit them', () => {
     })
   })
 
-  //   it('shows nothing when task is not selected', () => {
-  //     // do something
-  //   })
+  it('does not show TaskDetail when task is not selected', () => {
+    cy.dataCy('taskCard').should('have.length', 1)
+    cy.dataCy('taskDetail').should('not.exist')
+  })
 
   it('shows selected task detail', () => {
     cy.dataCy('taskCard').should('have.length', 1)
