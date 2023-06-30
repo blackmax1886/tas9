@@ -161,6 +161,14 @@ export type DeleteTaskMutationVariables = Exact<{
 
 export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'Task', id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } | null };
 
+export type UpdateTaskTitleMutationVariables = Exact<{
+  taskId: Scalars['ID'];
+  title: Scalars['String'];
+}>;
+
+
+export type UpdateTaskTitleMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', content?: string | null, due?: number | null, createdAt: number, id: string, userId: string, title: string, done: boolean, start?: number | null, end?: number | null, group?: string | null, type?: string | null, priority?: number | null, archived: boolean } };
+
 export type UpdateTaskContentMutationVariables = Exact<{
   taskId: Scalars['ID'];
   content: Scalars['String'];
@@ -377,6 +385,40 @@ export function useDeleteTaskMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteTaskMutationHookResult = ReturnType<typeof useDeleteTaskMutation>;
 export type DeleteTaskMutationResult = Apollo.MutationResult<DeleteTaskMutation>;
 export type DeleteTaskMutationOptions = Apollo.BaseMutationOptions<DeleteTaskMutation, DeleteTaskMutationVariables>;
+export const UpdateTaskTitleDocument = gql`
+    mutation UpdateTaskTitle($taskId: ID!, $title: String!) {
+  updateTask(id: $taskId, input: {title: $title}) {
+    ...TaskDetails
+  }
+}
+    ${TaskDetailsFragmentDoc}`;
+export type UpdateTaskTitleMutationFn = Apollo.MutationFunction<UpdateTaskTitleMutation, UpdateTaskTitleMutationVariables>;
+
+/**
+ * __useUpdateTaskTitleMutation__
+ *
+ * To run a mutation, you first call `useUpdateTaskTitleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTaskTitleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTaskTitleMutation, { data, loading, error }] = useUpdateTaskTitleMutation({
+ *   variables: {
+ *      taskId: // value for 'taskId'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useUpdateTaskTitleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTaskTitleMutation, UpdateTaskTitleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTaskTitleMutation, UpdateTaskTitleMutationVariables>(UpdateTaskTitleDocument, options);
+      }
+export type UpdateTaskTitleMutationHookResult = ReturnType<typeof useUpdateTaskTitleMutation>;
+export type UpdateTaskTitleMutationResult = Apollo.MutationResult<UpdateTaskTitleMutation>;
+export type UpdateTaskTitleMutationOptions = Apollo.BaseMutationOptions<UpdateTaskTitleMutation, UpdateTaskTitleMutationVariables>;
 export const UpdateTaskContentDocument = gql`
     mutation UpdateTaskContent($taskId: ID!, $content: String!) {
   updateTask(id: $taskId, input: {content: $content}) {
