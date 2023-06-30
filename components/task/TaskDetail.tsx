@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { css } from '@emotion/react'
-import { useState } from 'react'
+import { KeyboardEvent, useRef, useState } from 'react'
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
 import { useUpdateEffect } from 'react-use'
 
@@ -51,6 +51,7 @@ const TaskDetail = ({
   const [updateTaskContent] = useMutation<UpdateTaskContentMutation>(
     UpdateTaskContentDocument
   )
+  const taskContentRef = useRef<HTMLDivElement>(null)
 
   useUpdateEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -66,6 +67,16 @@ const TaskDetail = ({
     }
   }, [content])
 
+  const handleChangeTaskTitle = (event: ContentEditableEvent) => {
+    //TODO: setTaskTitle
+    console.log(event.target.value || '')
+  }
+  const handleEnterOnTaskTitle = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault() // prevent new line
+      taskContentRef.current?.focus()
+    }
+  }
   const handleChangeTaskContent = (event: ContentEditableEvent) => {
     setIsSaved(false)
     setContent(event.target.value || '')
@@ -81,7 +92,11 @@ const TaskDetail = ({
   return (
     <div css={taskDetail} data-cy="taskDetail">
       <h1 css={taskName} data-cy="taskDetailTitle">
-        {selectedTask?.title}
+        <ContentEditable
+          html={selectedTask?.title}
+          onChange={handleChangeTaskTitle}
+          onKeyDown={handleEnterOnTaskTitle}
+        />
       </h1>
       <div data-cy="taskDetailStart">start: {start}</div>
       <div data-cy="taskDetailEnd">end: {end}</div>
@@ -90,6 +105,7 @@ const TaskDetail = ({
           css={taskContent}
           html={content}
           onChange={handleChangeTaskContent}
+          innerRef={taskContentRef}
         />
       </div>
       <div>{isSaved ? 'saved' : 'saving...'}</div>
