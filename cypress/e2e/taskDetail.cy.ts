@@ -2,7 +2,11 @@ import { session2 } from '../fixtures/otherSessions.json'
 import session from '../fixtures/session.json'
 import { generalTask } from '../fixtures/tasks.json'
 import { convertHTMLtoString } from '../utils/content-editable-test-utils'
-import { aliasQuery, hasOperationName } from '../utils/graphql-test-utils'
+import {
+  aliasMutation,
+  aliasQuery,
+  hasOperationName,
+} from '../utils/graphql-test-utils'
 
 import { dayjs, formatString } from '@/lib/day'
 
@@ -56,51 +60,97 @@ describe('taskDetail shows properties of task & edit them', () => {
 
   describe('edit task detail', () => {
     it('should focus task content when press enter key on task title', () => {
-      // TODO: implement test
+      cy.dataCy('taskCard').should('have.length', 1)
+      cy.dataCy('taskCard').click()
+      cy.dataCy('editableTaskDetailTitle').focus().type('{moveToEnd}a{enter}')
+      cy.dataCy('editableTaskDetailContent').should('have.focus')
     })
     it('should save task title when changed', () => {
-      // TODO: implement test
+      cy.intercept('POST', '/api/graphql', (req) => {
+        aliasMutation(req, 'UpdateTaskTitle')
+      })
+      cy.dataCy('taskCard').should('have.length', 1)
+      cy.dataCy('taskCard').click()
+      cy.dataCy('editableTaskDetailTitle').focus().type('{moveToEnd}a')
+      // Wait for UpdateTaskTitle to be saved with a delay after it is entered.
+      cy.wait('@gqlUpdateTaskTitleMutation')
+      cy.get('@gqlUpdateTaskTitleMutation')
+        .its('request')
+        .its('body')
+        .its('variables')
+        .its('title')
+        .should('eq', generalTask.title + 'a')
+      cy.dataCy('taskDetailTitle')
+        .invoke('text')
+        .should('eq', generalTask.title + 'a')
+      cy.dataCy('taskCardTitle')
+        .invoke('text')
+        .should('eq', generalTask.title + 'a')
     })
     it('should save task content when changed', () => {
-      // TODO: implement test
+      cy.intercept('POST', '/api/graphql', (req) => {
+        aliasMutation(req, 'UpdateTaskContent')
+      })
+      cy.dataCy('taskCard').should('have.length', 1)
+      cy.dataCy('taskCard').click()
+      cy.dataCy('editableTaskDetailContent')
+        .focus()
+        .type('{moveToEnd}{enter}te{enter}st')
+      // Wait for UpdateTaskContent to be saved with a delay after it is entered.
+      cy.wait('@gqlUpdateTaskContentMutation')
+      cy.dataCy('editableTaskDetailContent')
+        .invoke('html')
+        .then((innerHTML) => {
+          const expectedHTML =
+            generalTask.content + '<div>te</div><div>st</div>'
+          expect(innerHTML).to.equal(expectedHTML)
+          cy.get('@gqlUpdateTaskContentMutation')
+            .its('request')
+            .its('body')
+            .its('variables')
+            .its('content')
+            .should('eq', expectedHTML)
+        })
     })
   })
 
-  it('task should not be fetched by anyone but the owner', () => {
-    cy.task('db:seed-task', {
-      userId: session2.user.id,
-      title: 'task of another user',
-    })
-      .its('id')
-      .as('taskId')
-    cy.get('@taskId').then((taskId) => {
-      cy.intercept('POST', '/api/graphql', (req) => {
-        aliasQuery(req, 'GetTask')
-        // get a task that does not belong to current user
-        if (hasOperationName(req, 'GetTask')) {
-          req.body.variables.taskId = taskId
-        }
+  describe('GraphQL should be protected by authorization shield', () => {
+    it('task should not be fetched by anyone but the owner', () => {
+      cy.task('db:seed-task', {
+        userId: session2.user.id,
+        title: 'task of another user',
       })
-    })
-    cy.dataCy('taskCard').click()
-    cy.get('@gqlGetTaskQuery')
-      .its('response')
-      .its('statusCode')
-      .should('eq', 200)
-    cy.get('@gqlGetTaskQuery')
-      .its('response')
-      .its('body')
-      .its('data')
-      .its('task')
-      .should('be.null')
+        .its('id')
+        .as('taskId')
+      cy.get('@taskId').then((taskId) => {
+        cy.intercept('POST', '/api/graphql', (req) => {
+          aliasQuery(req, 'GetTask')
+          // get a task that does not belong to current user
+          if (hasOperationName(req, 'GetTask')) {
+            req.body.variables.taskId = taskId
+          }
+        })
+      })
+      cy.dataCy('taskCard').click()
+      cy.get('@gqlGetTaskQuery')
+        .its('response')
+        .its('statusCode')
+        .should('eq', 200)
+      cy.get('@gqlGetTaskQuery')
+        .its('response')
+        .its('body')
+        .its('data')
+        .its('task')
+        .should('be.null')
 
-    cy.get('@gqlGetTaskQuery')
-      .its('response')
-      .its('body')
-      .its('errors')
-      .should('be.a', 'array')
-      .its(0)
-      .its('message')
-      .should('eq', 'You are not the owner of this task.')
+      cy.get('@gqlGetTaskQuery')
+        .its('response')
+        .its('body')
+        .its('errors')
+        .should('be.a', 'array')
+        .its(0)
+        .its('message')
+        .should('eq', 'You are not the owner of this task.')
+    })
   })
 })

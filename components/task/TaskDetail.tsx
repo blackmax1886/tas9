@@ -122,6 +122,7 @@ const TaskDetail = ({
           html={title}
           onChange={handleChangeTaskTitle}
           onKeyDown={handleEnterOnTaskTitle}
+          data-cy="editableTaskDetailTitle"
         />
       </h1>
       <div data-cy="taskDetailStart">start: {start}</div>
@@ -132,6 +133,7 @@ const TaskDetail = ({
           html={content}
           onChange={handleChangeTaskContent}
           innerRef={taskContentRef}
+          data-cy="editableTaskDetailContent"
         />
       </div>
       <div>{isSaving ? 'saving...' : 'saved'}</div>
